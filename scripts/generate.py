@@ -366,6 +366,8 @@ def collect_carriers() -> list[Carrier]:
 
 CARRIERS_INTRO = """\
 ---
+hide:
+  - navigation
 description: >-
   Every carrier you can track packages with in Home Assistant — PostNL, DHL,
   DPD, GLS, PostNord, Hermes, Packeta, Correos, Swiss Post and more.
@@ -463,6 +465,8 @@ def render_carriers(carriers: list[Carrier]) -> str:
 
 AUTOMATIONS_INTRO = """\
 ---
+hide:
+  - navigation
 description: >-
   Copy-paste Home Assistant automations for package tracking — delivery
   notifications, daily summaries and calendar entries, for any carrier.
@@ -493,6 +497,8 @@ next year without a single edit.
 
 DASHBOARDS_INTRO = """\
 ---
+hide:
+  - navigation
 description: >-
   Copy-paste Home Assistant dashboard cards for package tracking — a parcel
   table, a per-carrier breakdown and a next-delivery card, for any carrier.

@@ -88,6 +88,6 @@ nav:
   - Carriers: carriers.md
   - Getting started: install.md
   - Parcel contract: contract.md
-  - Automation cookbook: automations.md
-  - Dashboard cards: dashboards.md
+  - Automations: automations.md
+  - Dashboards: dashboards.md
   - Sponsor this project: sponsor.md

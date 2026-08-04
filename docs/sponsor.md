@@ -1,4 +1,6 @@
 ---
+hide:
+  - navigation
 description: >-
   Support the Home Assistant parcel integrations — through GitHub Sponsors or
   Buy me a coffee, or by reporting a carrier status the integrations do not
