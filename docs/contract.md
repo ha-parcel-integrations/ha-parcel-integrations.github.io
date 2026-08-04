@@ -1,3 +1,9 @@
+---
+description: >-
+  The shared contract behind every carrier: eight ParcelStatus values, one
+  package shape, four events — so one automation covers every carrier.
+---
+
 # The parcel contract
 
 Everything in this suite agrees on three things: **what a parcel looks like**,

@@ -298,6 +298,12 @@ def collect_carriers() -> list[Carrier]:
 # --------------------------------------------------------------------------
 
 CARRIERS_INTRO = """\
+---
+description: >-
+  Every carrier you can track packages with in Home Assistant — PostNL, DHL,
+  DPD, GLS, PostNord, Hermes, Packeta, Correos, Swiss Post and more.
+---
+
 # Carriers
 
 Every integration below speaks the same [parcel contract](contract.md): the same
@@ -346,8 +352,11 @@ def render_carriers(carriers: list[Carrier]) -> str:
     out.append("|---|---|---|---|---|---|")
 
     for c in carriers:
+        # Root-relative, not "assets/...": Material serves this page at
+        # /carriers/, and MkDocs does not rewrite src attributes inside raw
+        # HTML, so a relative path resolves to /carriers/assets/... and 404s.
         icon = (
-            f'<img src="assets/icons/{c.icon}" width="32" alt="{c.name}">'
+            f'<img src="/assets/icons/{c.icon}" width="32" alt="{c.name}">'
             if c.icon
             else ""
         )
@@ -383,6 +392,12 @@ def render_carriers(carriers: list[Carrier]) -> str:
 # --------------------------------------------------------------------------
 
 AUTOMATIONS_INTRO = """\
+---
+description: >-
+  Copy-paste Home Assistant automations and dashboard cards for package
+  tracking — notifications, delivery summaries and parcel dashboards.
+---
+
 # Automation cookbook
 
 Every snippet on this page is pulled straight from the [Parcel Aggregator's

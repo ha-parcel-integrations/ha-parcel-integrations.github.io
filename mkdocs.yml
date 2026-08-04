@@ -1,7 +1,8 @@
 site_name: Home Assistant parcel integrations
 site_description: >-
-  Track your parcels in Home Assistant across every carrier and country —
-  one canonical parcel contract, one set of automations.
+  Package and parcel tracking in Home Assistant, across every carrier and
+  country — PostNL, DHL, DPD, GLS, PostNord, Hermes and more, all speaking one
+  canonical parcel contract.
 site_url: https://ha-parcel-integrations.github.io/
 repo_url: https://github.com/ha-parcel-integrations
 repo_name: ha-parcel-integrations

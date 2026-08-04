@@ -1,14 +1,21 @@
 ---
 hide:
   - navigation
+description: >-
+  Package tracking in Home Assistant for every carrier — PostNL, DHL, DPD, GLS,
+  PostNord, Hermes, Packeta and more. Track parcels and packages with one set of
+  sensors, events and automations.
 ---
 
-# Track every parcel in Home Assistant
+# Package tracking in Home Assistant
 
 A suite of [Home Assistant](https://www.home-assistant.io/) custom integrations
-that follow your parcels across carriers and countries — every one of them
+that track your packages across carriers and countries — every one of them
 speaking the **same canonical parcel contract**, so your automations and
 dashboards work the same no matter who delivers.
+
+*Parcel* and *package* mean the same thing here; the integrations use "parcel"
+throughout because that is what most European carriers call it.
 
 [Browse the carriers :material-arrow-right:](carriers.md){ .md-button .md-button--primary }
 [Get started](install.md){ .md-button }

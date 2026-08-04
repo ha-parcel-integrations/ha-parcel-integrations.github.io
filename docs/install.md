@@ -1,3 +1,9 @@
+---
+description: >-
+  Install package tracking in Home Assistant via HACS — add the carriers that
+  deliver to you, then optionally merge them with the Parcel Aggregator.
+---
+
 # Getting started
 
 ## What you need
