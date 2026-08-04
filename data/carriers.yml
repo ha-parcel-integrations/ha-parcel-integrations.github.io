@@ -59,6 +59,14 @@ ha-dragonfly:
   directions: incoming
   blurb: Dragonfly Shipping — no account and not even a postal code needed
 
+ha-dynalogic:
+  region: Netherlands
+  countries: ["NL"]
+  auth: trackingnr
+  input: order number + postal code
+  directions: incoming
+  blurb: Dynalogic last-mile deliveries, including those sold as MediaMarkt, Samsung, Nespresso and Menken
+
 ha-gls:
   region: Netherlands
   countries: ["NL"]
