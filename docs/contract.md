@@ -76,9 +76,9 @@ A few notes that save debugging time:
 
 ## Events
 
-Each carrier fires four events, prefixed with its own domain. The aggregator
-subscribes to all of them and re-emits them under `parcel_aggregator_`, which is
-the prefix you normally want.
+Each carrier fires four events, prefixed with its own domain. If you also run the
+optional aggregator, it subscribes to all of them and re-emits them under
+`parcel_aggregator_`.
 
 | Event | Fires when | Extra payload |
 |---|---|---|
@@ -102,18 +102,7 @@ in the table, plus the account's `device_id`.
 
 ### Which prefix to use
 
-=== "Unified (recommended)"
-
-    ```yaml
-    triggers:
-      - trigger: event
-        event_type: parcel_aggregator_parcel_delivered
-    ```
-
-    Covers every carrier you have installed, and every carrier you install
-    later, with no edit.
-
-=== "One specific carrier"
+=== "One carrier"
 
     ```yaml
     triggers:
@@ -121,8 +110,22 @@ in the table, plus the account's `device_id`.
         event_type: postnl_parcel_delivered
     ```
 
-    Use the carrier's HA domain (`postnl`, `dhl_nl`, `swiss_post`, …). Worth it
-    only when you genuinely want one carrier, or need the `raw` payload.
+    Always available — no aggregator needed. Use the carrier's HA domain
+    (`postnl`, `dhl_nl`, `swiss_post`, …). This is also the only way to reach the
+    `raw` carrier payload, and the right choice when one carrier should behave
+    differently from the rest.
+
+=== "Every carrier at once"
+
+    ```yaml
+    triggers:
+      - trigger: event
+        event_type: parcel_aggregator_parcel_delivered
+    ```
+
+    Needs the [aggregator](install.md#2-optional-add-the-aggregator). Covers every
+    carrier you have installed, and every carrier you install later, with no edit.
+    Worth it from your second carrier onward.
 
 ## Sensors
 

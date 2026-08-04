@@ -15,16 +15,28 @@ dashboards work the same no matter who delivers.
 
 ---
 
-## Write the automation once
+## Pick one carrier, or all of them
 
-Without a shared contract, "tell me when a parcel is out for delivery" is one
-automation per carrier, each keyed to that carrier's own status strings. Here it
-is one automation, for all of them, forever:
+Every integration stands on its own. Install the one carrier that delivers to
+you, and you get its sensors, its events and its parcel data — nothing else
+required.
 
 ```yaml
 triggers:
   - trigger: event
-    event_type: parcel_aggregator_parcel_status_changed
+    event_type: postnl_parcel_status_changed
+    event_data:
+      new_status: out_for_delivery
+```
+
+Use several carriers, and the shared contract starts paying off: the optional
+**Parcel Aggregator** merges them into one event stream, so the same automation
+covers every carrier at once — including the one you install next year.
+
+```yaml
+triggers:
+  - trigger: event
+    event_type: parcel_aggregator_parcel_status_changed  # (1)!
     event_data:
       new_status: out_for_delivery
 
@@ -37,7 +49,8 @@ actions:
         {{ trigger.event.data.sender or 'your parcel' }} today.
 ```
 
-Install a new carrier next year and this keeps working — untouched.
+1.  The only line that differs from the single-carrier version above. The event
+    payload is identical either way.
 
 ## How the pieces fit
 
@@ -47,17 +60,17 @@ Install a new carrier next year and this keeps working — untouched.
 
     ---
 
-    One per carrier. Each talks to its own API and normalises the result into
-    the shared parcel shape and the shared `ParcelStatus` values.
+    One per carrier, each fully standalone. Talks to its own API and normalises
+    the result into the shared parcel shape and `ParcelStatus` values.
 
     [:octicons-arrow-right-24: See all carriers](carriers.md)
 
--   :material-set-merge: **Parcel Aggregator**
+-   :material-set-merge: **Parcel Aggregator** *(optional)*
 
     ---
 
-    Reads what the carriers publish and re-emits it merged: summed sensors, one
-    `next_delivery`, one unified event stream. Talks to no API itself.
+    Only if you run several carriers. Reads what they already publish and
+    re-emits it merged: summed sensors, one `next_delivery`, one event stream.
 
     [:octicons-arrow-right-24: On GitHub](https://github.com/ha-parcel-integrations/ha-parcel-aggregator)
 

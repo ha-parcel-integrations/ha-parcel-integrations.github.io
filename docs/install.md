@@ -26,7 +26,15 @@ What step 5 asks you for depends on the carrier: a tracking number, a tracking
 number plus postal code, or an account login. The **Connect with** column on the
 [carriers page](carriers.md) tells you which before you start.
 
-## 2. Add the aggregator
+At this point you are done. Each carrier integration is fully standalone: it
+gives you its own sensors, its own events and its own device page, and it needs
+nothing else installed to work.
+
+## 2. Optional: add the aggregator
+
+Only worth it if you use **more than one carrier** and would rather write one
+automation than one per carrier. It is not a dependency of anything — skip it
+and every carrier keeps working exactly as it does now.
 
 Do this once, after at least one carrier is set up.
 
@@ -62,6 +70,12 @@ entity if you would rather not see it.
 Head to the [cookbook](automations.md) for automations and dashboard cards you
 can paste as-is, or read the [parcel contract](contract.md) first if you would
 rather write your own.
+
+The cookbook's snippets use the aggregator's unified events and sensors. Without
+it, the same recipes work per carrier — swap `parcel_aggregator_` for the
+carrier's own domain (`postnl_`, `dhl_nl_`, …) and its own sensors. The parcel
+data inside is identical either way, which is the point of the
+[contract](contract.md).
 
 ## Polling and rate limits
 

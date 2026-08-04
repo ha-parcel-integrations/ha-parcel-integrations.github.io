@@ -301,28 +301,30 @@ CARRIERS_INTRO = """\
 # Carriers
 
 Every integration below speaks the same [parcel contract](contract.md): the same
-`ParcelStatus` values, the same parcel fields, the same events. Install the ones
-that deliver to you, add the [Parcel Aggregator](#parcel-aggregator), and your
-automations stop caring who is driving the van.
+`ParcelStatus` values, the same parcel fields, the same events. Install only the
+ones that deliver to you — each works on its own, and none of them depends on
+another.
 
 Install instructions live on [Getting started](install.md); each carrier's own
 README covers its options in full.
 """
 
 CARRIERS_FOOTER = """
-## Parcel Aggregator
+## Parcel Aggregator (optional)
 
-The [Parcel Aggregator]({aggregator_url}) is the piece that makes the suite more
-than a pile of integrations. It talks to no carrier API of its own — it reads the
-sensors and events the carriers already publish and re-emits them as one merged
-set:
+Running more than one carrier? The [Parcel Aggregator]({aggregator_url}) saves you
+from writing the same automation once per carrier. It talks to no carrier API of
+its own — it reads the sensors and events the carriers already publish and
+re-emits them as one merged set:
 
 - summed count sensors with a `by_carrier` breakdown
 - a single `parcel_aggregator_parcel_*` event stream
-- one `next_delivery` timestamp across every carrier
+- one `next_delivery` timestamp and one combined deliveries calendar
 
-Carriers you have not installed are skipped silently, and a carrier you add later
-is picked up automatically — no reload, no update here.
+It is genuinely optional: no carrier integration needs it, and skipping it costs
+you nothing but the merging. Carriers you have not installed are skipped
+silently, and a carrier you add later is picked up automatically — no reload, no
+update here.
 
 ## Missing your carrier?
 
@@ -392,6 +394,12 @@ They are carrier-agnostic on purpose: they trigger on canonical
 `parcel_aggregator_*` events, so the same automation covers a carrier you install
 next year without a single edit.
 
+!!! note "Not running the aggregator?"
+    These work per carrier too. Swap `parcel_aggregator_` for the carrier's own
+    domain (`postnl_parcel_status_changed`) and the aggregator's sensors for that
+    carrier's own. The parcel data inside is identical — see the
+    [contract](contract.md).
+
 !!! tip "Where these go"
     Automations paste into **Settings → Automations → ⋮ → Edit in YAML**.
     Dashboard cards paste into any card's **Show code editor**.
@@ -459,12 +467,14 @@ def render_automations() -> str:
 
     out.append("## Carrier-specific events\n")
     out.append(
-        "Prefer the unified stream above. When you genuinely need one carrier — "
-        "or the raw carrier payload the aggregator strips — subscribe to that "
-        "carrier's own event instead: `<domain>_parcel_registered`, "
+        "Every carrier fires its own events, whether or not the aggregator is "
+        "installed: `<domain>_parcel_registered`, "
         "`<domain>_parcel_status_changed`, `<domain>_parcel_delivered`, "
-        "`<domain>_parcel_delivery_time_changed`. See the "
-        "[parcel contract](contract.md#events) for the payload.\n"
+        "`<domain>_parcel_delivery_time_changed`. Use these when you run a "
+        "single carrier, when you want one carrier to behave differently from "
+        "the rest, or when you need the raw carrier payload the aggregator "
+        "strips. See the [parcel contract](contract.md#events) for the "
+        "payload.\n"
     )
     return "\n".join(out) + "\n"
 
@@ -498,7 +508,9 @@ someone who receives those parcels helps most.
 
 ## How they fit together
 
-Each carrier integration normalises its data to a shared `ParcelStatus` enum and a common parcel shape, and fires canonical events (`<carrier>_parcel_registered` / `_status_changed` / `_delivered` / `_delivery_time_changed`). The **Parcel Aggregator** subscribes to all of them and re-emits a unified stream — so you write one automation like *"when any parcel is out for delivery"* instead of one per carrier.
+Each carrier integration is standalone and normalises its data to a shared `ParcelStatus` enum and a common parcel shape, firing canonical events (`<carrier>_parcel_registered` / `_status_changed` / `_delivered` / `_delivery_time_changed`). Install just the carriers that deliver to you — nothing else is required.
+
+Running several? The optional **Parcel Aggregator** subscribes to all of them and re-emits a unified stream, so you write one automation like *"when any parcel is out for delivery"* instead of one per carrier.
 
 The full contract is documented at **[{site_host}]({site_url}contract/)**.
 
