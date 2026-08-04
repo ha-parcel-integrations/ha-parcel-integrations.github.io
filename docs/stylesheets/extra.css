@@ -1,0 +1,61 @@
+/* Home Assistant blue, in both schemes. */
+:root {
+  --md-primary-fg-color: #41bdf5;
+  --md-primary-fg-color--light: #6fcef8;
+  --md-primary-fg-color--dark: #2a9fd6;
+  --md-accent-fg-color: #ff9800;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #41bdf5;
+  --md-accent-fg-color: #ffa726;
+  --md-typeset-a-color: #6fcef8;
+}
+
+/* The header on a light scheme reads better dark than HA-blue. */
+[data-md-color-scheme="default"] .md-header,
+[data-md-color-scheme="default"] .md-tabs {
+  background-color: #1c1c1c;
+}
+
+/* Carrier table: icons are 32px, so keep that column tight and centred, and
+   let the carrier name column take the slack. */
+.md-typeset table:not([class]) td:first-child {
+  text-align: center;
+  padding-right: 0;
+}
+
+.md-typeset table:not([class]) img {
+  vertical-align: middle;
+}
+
+.md-typeset table:not([class]) small {
+  color: var(--md-default-fg-color--light);
+  line-height: 1.4;
+}
+
+/* Wide tables scroll inside themselves rather than pushing the page sideways
+   on a phone. */
+.md-typeset__table {
+  width: 100%;
+}
+
+.md-typeset__scrollwrap {
+  overflow-x: auto;
+}
+
+/* Grid cards on the landing page. */
+.md-typeset .grid.cards > ul > li {
+  border-radius: 0.4rem;
+  transition: border-color 125ms, box-shadow 125ms;
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-primary-fg-color);
+  box-shadow: 0 0 0.4rem rgba(65, 189, 245, 0.25);
+}
+
+/* The hero buttons sit tighter together than Material's default. */
+.md-typeset .md-button + .md-button {
+  margin-left: 0.4rem;
+}

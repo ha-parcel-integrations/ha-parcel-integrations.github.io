@@ -1,0 +1,20 @@
+# Build output
+site/
+
+# Generated at build time by scripts/generate.py — never commit these,
+# they are rebuilt from the GitHub API on every deploy.
+docs/carriers.md
+docs/automations.md
+docs/assets/icons/*.png
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Tooling / editors
+.claude/
+.DS_Store
+.idea/
+.vscode/

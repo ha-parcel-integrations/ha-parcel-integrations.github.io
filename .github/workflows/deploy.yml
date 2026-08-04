@@ -1,0 +1,62 @@
+name: Build & deploy
+
+on:
+  push:
+    branches: [main]
+  # A carrier release should be visible here without waiting for the nightly.
+  # Carrier repos can fire this from their own release workflow:
+  #   gh api repos/ha-parcel-integrations/ha-parcel-integrations.github.io/dispatches \
+  #     -f event_type=carrier-released
+  repository_dispatch:
+    types: [carrier-released]
+  schedule:
+    # Nightly, so a new carrier or a release published by hand still lands.
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # Reads every carrier repo in the org and writes docs/carriers.md,
+      # docs/automations.md and the carrier icons. Fails the build when the
+      # org and data/carriers.yml disagree — that is deliberate.
+      - name: Generate carrier pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/generate.py
+
+      - name: Build site
+        run: mkdocs build --strict
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

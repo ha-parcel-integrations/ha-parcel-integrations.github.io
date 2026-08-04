@@ -1,0 +1,81 @@
+site_name: Home Assistant parcel integrations
+site_description: >-
+  Track your parcels in Home Assistant across every carrier and country —
+  one canonical parcel contract, one set of automations.
+site_url: https://ha-parcel-integrations.github.io/
+repo_url: https://github.com/ha-parcel-integrations
+repo_name: ha-parcel-integrations
+edit_uri: ""
+
+theme:
+  name: material
+  language: en
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+    - toc.follow
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ha-parcel-integrations
+      name: The integrations on GitHub
+    - icon: fontawesome/solid/comments
+      link: https://community.home-assistant.io/t/packages-postnl-dhl-nl-dpd-and-gls-parcel-integration/112433/
+      name: Home Assistant community thread
+
+nav:
+  - Home: index.md
+  - Carriers: carriers.md
+  - Getting started: install.md
+  - Parcel contract: contract.md
+  - Automation cookbook: automations.md

@@ -1,0 +1,152 @@
+# Carrier facts that have NO machine-readable source in the repos themselves.
+#
+# Everything the repos already know — display name, domain, version, icon,
+# release date, repo URL — is read from the GitHub API by scripts/generate.py.
+# Do not repeat any of that here; it will be ignored and it will go stale.
+#
+# `scripts/generate.py` FAILS THE BUILD if the org has a carrier repo that is
+# missing from this file, or if this file lists a repo that no longer exists.
+# That hard failure is the whole point: it is what stops the site from
+# quietly falling behind the suite when a new carrier lands.
+#
+# Fields per repo:
+#   region     free-text coverage shown in the table ("Netherlands", "Nordics")
+#   countries  ISO 3166-1 alpha-2 codes, used for the flag column. ALWAYS quote
+#              them — YAML 1.1 reads a bare NO (Norway) as the boolean false,
+#              and the same trap waits for ON, OFF, Y and N.
+#   auth       "account" (user logs in) or "trackingnr" (no account needed)
+#   input      what the user types when auth is "trackingnr"
+#   blurb      one sentence, sentence case, no trailing period
+#   directions "incoming" or "incoming+outgoing"
+
+ha-cainiao:
+  region: Cross-border
+  countries: []
+  auth: trackingnr
+  input: Tracking number
+  directions: incoming
+  blurb: Alibaba's tracking layer for AliExpress, Temu, Shein and similar shops
+
+ha-correos:
+  region: Spain
+  countries: ["ES"]
+  auth: trackingnr
+  input: Tracking number
+  directions: incoming
+  blurb: Spain's national postal operator
+
+ha-dhl-nl:
+  region: Netherlands
+  countries: ["NL"]
+  auth: account
+  directions: incoming+outgoing
+  blurb: DHL eCommerce, tracked through your DHL account
+
+ha-dpd:
+  region: Netherlands
+  countries: ["NL"]
+  auth: account
+  directions: incoming+outgoing
+  blurb: DPD shipments, tracked through your myDPD account
+
+ha-dragonfly:
+  region: Netherlands
+  countries: ["NL"]
+  auth: trackingnr
+  input: Track & Trace code
+  directions: incoming
+  blurb: Dragonfly Shipping — Track & Trace code only, not even a postal code
+
+ha-gls:
+  region: Netherlands
+  countries: ["NL"]
+  auth: trackingnr
+  input: Tracking number + postal code
+  directions: incoming
+  blurb: GLS parcels, just like the gls-info.nl website
+
+ha-helthjem:
+  region: Norway
+  countries: ["NO"]
+  auth: trackingnr
+  input: Tracking number
+  directions: incoming
+  blurb: Helthjem — Norwegian home delivery
+
+ha-hermes:
+  region: Germany
+  countries: ["DE"]
+  auth: trackingnr
+  input: Tracking number
+  directions: incoming
+  blurb: Hermes Paket
+
+ha-oesterreichische-post:
+  region: Austria
+  countries: ["AT"]
+  auth: trackingnr
+  input: Tracking number
+  directions: incoming
+  blurb: Österreichische Post — Austria's national postal operator
+
+ha-packeta:
+  region: Central Europe
+  countries: ["CZ", "SK", "HU", "PL", "RO"]
+  auth: trackingnr
+  input: "\"Z\" tracking number"
+  directions: incoming
+  blurb: Packeta (Zásilkovna) — Central-European pickup-point and locker network
+
+ha-planzer:
+  region: Switzerland & Liechtenstein
+  countries: ["CH", "LI"]
+  auth: trackingnr
+  input: Shipment number or IKEA order number
+  directions: incoming
+  blurb: Planzer — the carrier behind IKEA Switzerland home deliveries
+
+ha-postnl:
+  region: Netherlands
+  countries: ["NL"]
+  auth: account
+  directions: incoming+outgoing
+  blurb: PostNL parcels plus announced MyMail letters
+
+ha-postnord:
+  region: Nordics
+  countries: ["SE", "DK", "NO", "FI"]
+  auth: trackingnr
+  input: Tracking number
+  directions: incoming
+  blurb: PostNord — the Nordic postal operator
+
+ha-sameday:
+  region: South-East Europe
+  countries: ["RO", "HU", "BG"]
+  auth: trackingnr
+  input: AWB number
+  directions: incoming
+  blurb: Sameday — the easybox locker network
+
+ha-swiss-post:
+  region: Switzerland
+  countries: ["CH"]
+  auth: trackingnr
+  input: Tracking number
+  directions: incoming
+  blurb: Swiss Post — Switzerland's national postal operator
+
+ha-trunkrs:
+  region: Netherlands
+  countries: ["NL"]
+  auth: trackingnr
+  input: Trunkrs number + postal code
+  directions: incoming
+  blurb: Trunkrs — same-day and next-day delivery
+
+ha-vinted-go:
+  region: Benelux & France
+  countries: ["NL", "BE", "LU", "FR"]
+  auth: account
+  directions: incoming+outgoing
+  blurb: Vinted Go (formerly Homerr) — passwordless e-mail login, locker and parcel-shop network
