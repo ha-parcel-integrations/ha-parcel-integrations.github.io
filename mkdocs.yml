@@ -34,6 +34,9 @@ theme:
     - navigation.instant
     - navigation.tracking
     - navigation.sections
+    # The landing page hides the sidebar, so the tabs are what makes the rest
+    # of the site visible from there.
+    - navigation.tabs
     - navigation.top
     - content.code.copy
     - content.code.annotate
