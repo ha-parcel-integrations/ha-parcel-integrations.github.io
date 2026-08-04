@@ -73,6 +73,12 @@ extra:
     - icon: fontawesome/solid/comments
       link: https://community.home-assistant.io/t/packages-postnl-dhl-nl-dpd-and-gls-parcel-integration/112433/
       name: Home Assistant community thread
+    - icon: simple/githubsponsors
+      link: https://github.com/sponsors/peternijssen
+      name: Sponsor the project on GitHub
+    - icon: simple/buymeacoffee
+      link: https://www.buymeacoffee.com/peternijssen
+      name: Buy me a coffee
 
 nav:
   - Home: index.md

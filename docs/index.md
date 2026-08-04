@@ -118,6 +118,16 @@ That is the most useful thing you can tell us.
 the status vocabulary is. A request from someone who actually receives those
 parcels is worth a great deal.
 
+## Support the project
+
+Every integration here is free and MIT-licensed, and stays that way. If the
+suite saves you a trip to a tracking page now and then, sponsoring helps cover
+the carriers that need a real account — and a paid parcel or two to reverse
+engineer a new one.
+
+[:simple-githubsponsors: Sponsor on GitHub](https://github.com/sponsors/peternijssen){ .md-button .md-button--primary }
+[:simple-buymeacoffee: Buy me a coffee](https://www.buymeacoffee.com/peternijssen){ .md-button }
+
 !!! info "Independent project"
     Community-built, MIT-licensed, with no affiliation with or endorsement by
     any parcel carrier.
