@@ -121,9 +121,8 @@ parcels is worth a great deal.
 ## Support the project
 
 Every integration here is free and MIT-licensed, and stays that way. Sponsoring
-buys no features and no priority — it covers what keeping the suite running
-actually costs, the Claude subscription a good part of this code is written
-with above all, and it says the work is worth continuing.
+covers what keeping the suite running actually costs — and if that is not for
+you, [the ways to help that cost nothing](sponsor.md) are worth as much.
 
 [:simple-githubsponsors: Sponsor on GitHub](https://github.com/sponsors/peternijssen){ .md-button .md-button--primary }
 [:simple-buymeacoffee: Buy me a coffee](https://www.buymeacoffee.com/peternijssen){ .md-button }
