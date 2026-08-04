@@ -47,6 +47,15 @@ jobs:
       - name: Build site
         run: mkdocs build --strict
 
+      # Writes to other repos in the org: the profile README and each carrier's
+      # homepage field. Skips itself with a notice when PROFILE_TOKEN is absent,
+      # so a fork or a first run still deploys the site.
+      - name: Sync org profile & repo homepages
+        if: github.event_name != 'pull_request'
+        env:
+          PROFILE_TOKEN: ${{ secrets.PROFILE_TOKEN }}
+        run: python scripts/sync_org.py
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

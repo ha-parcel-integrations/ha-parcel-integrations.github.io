@@ -1,5 +1,6 @@
 # Build output
 site/
+build/
 
 # Generated at build time by scripts/generate.py — never commit these,
 # they are rebuilt from the GitHub API on every deploy.

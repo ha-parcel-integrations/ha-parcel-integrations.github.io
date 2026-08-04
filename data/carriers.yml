@@ -15,7 +15,9 @@
 #              them — YAML 1.1 reads a bare NO (Norway) as the boolean false,
 #              and the same trap waits for ON, OFF, Y and N.
 #   auth       "account" (user logs in) or "trackingnr" (no account needed)
-#   input      what the user types when auth is "trackingnr"
+#   input      what the user types when auth is "trackingnr". Phrase it to sit
+#              mid-sentence ("tracking number", not "Tracking number") — the
+#              site capitalises it where it needs a capital.
 #   blurb      one sentence, sentence case, no trailing period
 #   directions "incoming" or "incoming+outgoing"
 
@@ -23,7 +25,7 @@ ha-cainiao:
   region: Cross-border
   countries: []
   auth: trackingnr
-  input: Tracking number
+  input: tracking number
   directions: incoming
   blurb: Alibaba's tracking layer for AliExpress, Temu, Shein and similar shops
 
@@ -31,7 +33,7 @@ ha-correos:
   region: Spain
   countries: ["ES"]
   auth: trackingnr
-  input: Tracking number
+  input: tracking number
   directions: incoming
   blurb: Spain's national postal operator
 
@@ -55,13 +57,13 @@ ha-dragonfly:
   auth: trackingnr
   input: Track & Trace code
   directions: incoming
-  blurb: Dragonfly Shipping — Track & Trace code only, not even a postal code
+  blurb: Dragonfly Shipping — no account and not even a postal code needed
 
 ha-gls:
   region: Netherlands
   countries: ["NL"]
   auth: trackingnr
-  input: Tracking number + postal code
+  input: tracking number + postal code
   directions: incoming
   blurb: GLS parcels, just like the gls-info.nl website
 
@@ -69,7 +71,7 @@ ha-helthjem:
   region: Norway
   countries: ["NO"]
   auth: trackingnr
-  input: Tracking number
+  input: tracking number
   directions: incoming
   blurb: Helthjem — Norwegian home delivery
 
@@ -77,7 +79,7 @@ ha-hermes:
   region: Germany
   countries: ["DE"]
   auth: trackingnr
-  input: Tracking number
+  input: tracking number
   directions: incoming
   blurb: Hermes Paket
 
@@ -85,7 +87,7 @@ ha-oesterreichische-post:
   region: Austria
   countries: ["AT"]
   auth: trackingnr
-  input: Tracking number
+  input: tracking number
   directions: incoming
   blurb: Österreichische Post — Austria's national postal operator
 
@@ -101,7 +103,7 @@ ha-planzer:
   region: Switzerland & Liechtenstein
   countries: ["CH", "LI"]
   auth: trackingnr
-  input: Shipment number or IKEA order number
+  input: shipment number or IKEA order number
   directions: incoming
   blurb: Planzer — the carrier behind IKEA Switzerland home deliveries
 
@@ -116,7 +118,7 @@ ha-postnord:
   region: Nordics
   countries: ["SE", "DK", "NO", "FI"]
   auth: trackingnr
-  input: Tracking number
+  input: tracking number
   directions: incoming
   blurb: PostNord — the Nordic postal operator
 
@@ -132,7 +134,7 @@ ha-swiss-post:
   region: Switzerland
   countries: ["CH"]
   auth: trackingnr
-  input: Tracking number
+  input: tracking number
   directions: incoming
   blurb: Swiss Post — Switzerland's national postal operator
 

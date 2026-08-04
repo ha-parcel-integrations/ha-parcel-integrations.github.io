@@ -15,12 +15,30 @@ rather than copying it.
 
 | Generated file | Built from |
 |---|---|
-| `docs/carriers.md` | Every `ha-*` repo in the org: manifest, version, icon |
+| `docs/carriers.md` | Every `ha-*` repo in the org: manifest, release, icon |
 | `docs/automations.md` | `ha-parcel-aggregator/examples/**` |
 | `docs/assets/icons/*.png` | Each carrier's `custom_components/<domain>/brand/icon.png` |
+| `build/profile-README.md` | The same carrier data, in the org profile's format |
 
-All three are gitignored. A committed copy is worse than none, because the suite
-gains carriers faster than anyone remembers to update a table.
+All of them are gitignored. A committed copy is worse than none, because the
+suite gains carriers faster than anyone remembers to update a table.
+
+Repos are included when they are **public and have a published release**.
+Private repos and repos that have never shipped are skipped automatically — you
+can develop a new carrier in the open without touching this repo.
+
+## What this repo writes elsewhere
+
+`scripts/sync_org.py` runs after a successful build and pushes two things out:
+
+| Target | What |
+|---|---|
+| `.github` → `profile/README.md` | The generated carrier table, so github.com/ha-parcel-integrations never disagrees with the site |
+| Every carrier repo's `homepage` | Set to the docs site, so the About box links here |
+
+Both need a PAT in the `PROFILE_TOKEN` secret (`contents:write` on `.github`,
+`administration:write` on the org). Without it the step prints a notice and the
+site still deploys — it never blocks a release.
 
 The one hand-maintained input is [`data/carriers.yml`](data/carriers.yml) —
 coverage, how you authenticate, one-line blurb. Nothing else belongs there.
