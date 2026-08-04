@@ -28,6 +28,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -234,6 +235,19 @@ class Carrier:
         return f"{label}<br><small>{detail}</small>"
 
 
+def _alpha_key(carrier: Carrier) -> tuple[str, str]:
+    """Sort key that files accented names where a reader looks for them.
+
+    Plain code-point order puts "Österreichische Post" after Z, because ö is
+    U+00F6. Stripping the combining marks (NFKD, then drop non-ASCII) files it
+    under O instead. The original name is the tiebreaker, so two carriers that
+    fold to the same ASCII still get a stable order.
+    """
+    folded = unicodedata.normalize("NFKD", carrier.name)
+    ascii_only = folded.encode("ascii", "ignore").decode()
+    return (ascii_only.lower(), carrier.name.lower())
+
+
 def _flag(code: object) -> str:
     """ISO 3166-1 alpha-2 → regional-indicator flag emoji."""
     if not isinstance(code, str):
@@ -342,7 +356,7 @@ def collect_carriers() -> list[Carrier]:
             )
         )
 
-    carriers.sort(key=lambda c: c.name.lower())
+    carriers.sort(key=_alpha_key)
     return carriers
 
 
