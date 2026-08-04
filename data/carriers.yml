@@ -21,6 +21,14 @@
 #   blurb      one sentence, sentence case, no trailing period
 #   directions "incoming" or "incoming+outgoing"
 
+ha-budbee:
+  region: Nordics and Benelux
+  countries: ["SE", "NL", "BE", "DK", "FI", "NO"]
+  auth: trackingnr
+  input: tracking or order number
+  directions: incoming+outgoing
+  blurb: Budbee home deliveries and Budbee Box lockers, without the e-mail address their tracking page asks for
+
 ha-cainiao:
   region: Cross-border
   countries: []
