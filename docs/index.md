@@ -97,7 +97,8 @@ actions:
     Ready-to-paste automations and dashboard cards, generated from the examples
     that ship with the aggregator.
 
-    [:octicons-arrow-right-24: Open the cookbook](automations.md)
+    [:octicons-arrow-right-24: Automations](automations.md)
+    · [:octicons-arrow-right-24: Dashboard cards](dashboards.md)
 
 </div>
 

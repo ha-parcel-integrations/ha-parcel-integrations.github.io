@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Generate the pages that must never be hand-written.
 
-Two pages on this site describe things that already have a source of truth
+Three pages on this site describe things that already have a source of truth
 somewhere else in the org:
 
 * ``docs/carriers.md``    — every carrier repo, its version and its icon
-* ``docs/automations.md`` — the aggregator's ``examples/`` folder
+* ``docs/automations.md`` — the aggregator's ``examples/automations/`` folder
+* ``docs/dashboards.md``  — the aggregator's ``examples/dashboards/`` folder
 
-Both are rebuilt from the GitHub API on every deploy. Nothing here is
+All of them are rebuilt from the GitHub API on every deploy. Nothing here is
 committed; a stale copy in git is worse than no copy at all, because the
 suite gains carriers faster than anyone remembers to update a table.
 
@@ -56,6 +57,58 @@ NOT_A_CARRIER = {
 AUTH_LABEL = {
     "account": "Account login",
     "trackingnr": "Tracking number",
+}
+
+# Finished Lovelace cards, built by other people, that read this suite's
+# sensors on their own. Every carrier README links these two under "Community
+# Lovelace cards"; the site says the same thing in one place so the credit is
+# not buried in 23 READMEs. Keep this list in step with the READMEs and with
+# ha-carrier-template/scaffold/README.md.
+COMMUNITY_CARDS = [
+    (
+        "HKI Parcels Card",
+        "jonisnet/hki-parcels-card",
+        "jonisnet",
+        (
+            "Every carrier you run in one card, with tabs for in transit, "
+            "delivered, sent and PostNL letterbox scans, a per-parcel delivery "
+            "tracker, and a **+ Add parcel** control for the account-less "
+            "carriers. Visual editor, no YAML."
+        ),
+    ),
+    (
+        "Package Tracker Card",
+        "klaptafel/ha-package-tracker-card",
+        "klaptafel",
+        (
+            "Drop it on a dashboard with no configuration at all and it finds "
+            "every parcel sensor you have, deduplicated when the same parcel "
+            "arrives through two sources, with an expandable event timeline "
+            "per package and filters per carrier, status or direction."
+        ),
+    ),
+]
+
+# Lovelace plugins our example dashboards lean on — helpers inside a card,
+# not cards in their own right. Keyed by the string as it appears after
+# ``custom:`` in YAML, because that is what _custom_cards matches against.
+CUSTOM_CARDS = {
+    "auto-entities": (
+        "thomasloven/lovelace-auto-entities",
+        "Thomas Lovén",
+        (
+            "Fills a card's entity list from a filter instead of a hand-written "
+            "list, so parcels that only exist tomorrow still show up"
+        ),
+    ),
+    "template-entity-row": (
+        "thomasloven/lovelace-template-entity-row",
+        "Thomas Lovén",
+        (
+            "Renders a template as an entities-card row — how you get a value "
+            "that lives on an attribute onto its own line"
+        ),
+    ),
 }
 
 
@@ -388,21 +441,25 @@ def render_carriers(carriers: list[Carrier]) -> str:
 
 
 # --------------------------------------------------------------------------
-# Page: automation cookbook
+# Pages: automation cookbook & dashboard cards
+#
+# Both are the same machinery over a different examples/ subfolder, so they
+# share everything below except their own intro.
 # --------------------------------------------------------------------------
 
 AUTOMATIONS_INTRO = """\
 ---
 description: >-
-  Copy-paste Home Assistant automations and dashboard cards for package
-  tracking — notifications, delivery summaries and parcel dashboards.
+  Copy-paste Home Assistant automations for package tracking — delivery
+  notifications, daily summaries and calendar entries, for any carrier.
 ---
 
 # Automation cookbook
 
-Every snippet on this page is pulled straight from the [Parcel Aggregator's
-`examples/` folder]({examples_url}) when this site is built, so it always matches
-the version that is actually shipped.
+Every automation on this page is pulled straight from the [Parcel Aggregator's
+`examples/automations/` folder]({examples_url}/automations) when this site is
+built, so it always matches the version that is actually shipped. Looking for
+[dashboard cards](dashboards.md)? They have their own page.
 
 They are carrier-agnostic on purpose: they trigger on canonical
 [`ParcelStatus`](contract.md#parcelstatus) values and the unified
@@ -416,9 +473,76 @@ next year without a single edit.
     [contract](contract.md).
 
 !!! tip "Where these go"
-    Automations paste into **Settings → Automations → ⋮ → Edit in YAML**.
-    Dashboard cards paste into any card's **Show code editor**.
+    **Settings → Automations & scenes → Create automation → Create new
+    automation**, then **⋮ → Edit in YAML** and paste over what is there.
 """
+
+DASHBOARDS_INTRO = """\
+---
+description: >-
+  Copy-paste Home Assistant dashboard cards for package tracking — a parcel
+  table, a per-carrier breakdown and a next-delivery card, for any carrier.
+---
+
+# Dashboard cards
+
+Cards that put your parcels on a dashboard: what is on its way, from whom, and
+when it lands. Each one is pulled straight from the [Parcel Aggregator's
+`examples/dashboards/` folder]({examples_url}/dashboards) when this site is
+built, so it always matches the version that is actually shipped. For
+notifications and other logic, see the [automation cookbook](automations.md).
+
+Like the automations, they are carrier-agnostic: they read the aggregator's
+merged sensors and the canonical parcel fields, so a card keeps working when you
+add a carrier — no new rows to write.
+
+Would rather not write YAML at all? Two community projects package all of this
+into a finished card that finds your sensors by itself — see [ready-made parcel
+cards](#ready-made-parcel-cards) below.
+
+!!! note "Not running the aggregator?"
+    These work per carrier too. Swap the aggregator's sensors for the carrier's
+    own (`sensor.postnl_incoming_parcels`, …). The `parcels` attribute holds the
+    same fields either way — see the [contract](contract.md#the-parcel-shape).
+    Several carriers also ship dashboard examples of their own, in that repo's
+    `examples/dashboards/` folder.
+
+!!! tip "Where these go"
+    Open your dashboard, **✏️ → + Add card → Manual**, and paste over the
+    contents. On a card that already exists: **⋮ → Edit → Show code editor**.
+"""
+
+COMMUNITY_CARDS_SECTION = """\
+## Ready-made parcel cards
+
+The snippets above are deliberately plain — they use cards Home Assistant already
+ships, so nothing extra has to be installed. If you would rather have a finished
+parcel card, two community projects build one on top of these same sensors and
+detect your carriers automatically:
+
+{cards}
+
+Install either through **HACS → Custom repositories**, category **Dashboard**.
+
+Both are independent projects, built and maintained by their authors and not by
+this org. The credit for them is theirs — and so are the bug reports and feature
+requests, which belong in their own trackers rather than in a carrier repo here.
+
+## Plugins the snippets use
+
+A snippet that needs more than a built-in card reaches for one of these two
+Lovelace plugins instead. They are helpers *inside* a card rather than cards of
+their own, also installed through HACS:
+
+| Plugin | By | What it adds |
+|---|---|---|
+{rows}
+
+Neither is required. Every snippet that uses one says in its comments what to
+fall back to, and the parcel data sits on the sensor's attributes either way.
+"""
+
+CUSTOM_RE = re.compile(r"custom:([a-z0-9_-]+)")
 
 TITLE_RE = re.compile(r"^(?:alias|title):\s*(.+?)\s*$", re.MULTILINE)
 
@@ -457,28 +581,44 @@ def _snippets(folder: str) -> list[tuple[str, str, str, str]]:
     return items
 
 
+def _render_snippets(
+    snippets: list[tuple[str, str, str, str]], folder: str, examples_url: str
+) -> list[str]:
+    out: list[str] = []
+    for title, description, source, filename in snippets:
+        out.append(f'??? example "{title}"')
+        if description:
+            out.append(f"    {description}\n")
+        out.append("    ```yaml")
+        out.extend(f"    {line}" if line.strip() else "" for line in source.splitlines())
+        out.append("    ```\n")
+        out.append(f"    [View on GitHub]({examples_url}/{folder}/{filename})\n")
+    return out
+
+
+def _custom_cards(sources: list[str]) -> list[str]:
+    """Every ``custom:`` card the snippets reference, credited.
+
+    An unknown one fails the build on purpose: a card that needs a HACS plugin
+    nobody named is a snippet that silently does not render for the reader.
+    """
+    used = sorted({m for source in sources for m in CUSTOM_RE.findall(source)})
+    unknown = [name for name in used if name not in CUSTOM_CARDS]
+    if unknown:
+        raise GenerateError(
+            "These custom Lovelace cards appear in the aggregator's examples "
+            "but are not in CUSTOM_CARDS — add them (repo, author, what it "
+            "adds) so the docs can credit and link them:\n    "
+            + "\n    ".join(unknown)
+        )
+    return used
+
+
 def render_automations() -> str:
     examples_url = f"https://github.com/{ORG}/{AGGREGATOR}/tree/main/examples"
     out = [AUTOMATIONS_INTRO.format(examples_url=examples_url), ""]
-
-    sections = [
-        ("automations", "Automations", "Paste into the automation YAML editor."),
-        ("dashboards", "Dashboard cards", "Paste into a card's code editor."),
-    ]
-    for folder, heading, blurb in sections:
-        snippets = _snippets(folder)
-        if not snippets:
-            continue
-        out.append(f"## {heading}\n")
-        out.append(f"{blurb}\n")
-        for title, description, source, filename in snippets:
-            out.append(f'??? example "{title}"')
-            if description:
-                out.append(f"    {description}\n")
-            out.append("    ```yaml")
-            out.extend(f"    {line}" if line.strip() else "" for line in source.splitlines())
-            out.append("    ```\n")
-            out.append(f"    [View on GitHub]({examples_url}/{folder}/{filename})\n")
+    out.append("## Automations\n")
+    out.extend(_render_snippets(_snippets("automations"), "automations", examples_url))
 
     out.append("## Carrier-specific events\n")
     out.append(
@@ -491,6 +631,33 @@ def render_automations() -> str:
         "strips. See the [parcel contract](contract.md#events) for the "
         "payload.\n"
     )
+    return "\n".join(out) + "\n"
+
+
+def render_dashboards() -> str:
+    examples_url = f"https://github.com/{ORG}/{AGGREGATOR}/tree/main/examples"
+    snippets = _snippets("dashboards")
+    out = [DASHBOARDS_INTRO.format(examples_url=examples_url), ""]
+    out.append("## Cards\n")
+    out.extend(_render_snippets(snippets, "dashboards", examples_url))
+
+    # Credit the plugins the snippets above actually reach for. Carrier repos
+    # use the same two in their own examples, so both stay listed even when
+    # only one turns up in the aggregator's — see CUSTOM_CARDS.
+    _custom_cards([source for _, _, source, _ in snippets])
+    rows = [
+        f"| [`custom:{name}`](https://github.com/{repo}) "
+        f"| [{author}](https://github.com/{repo.split('/')[0]}) | {does} |"
+        for name, (repo, author, does) in sorted(CUSTOM_CARDS.items())
+    ]
+    # A card list wants room for a sentence about each one; the plugins below
+    # fit a table because there is only one thing to say about them.
+    cards = "\n\n".join(
+        f"-   **[{name}](https://github.com/{repo})** — by "
+        f"[{author}](https://github.com/{author})\n\n    {does}"
+        for name, repo, author, does in COMMUNITY_CARDS
+    )
+    out.append(COMMUNITY_CARDS_SECTION.format(cards=cards, rows="\n".join(rows)))
     return "\n".join(out) + "\n"
 
 
@@ -510,7 +677,7 @@ PROFILE_HEADER = """\
 
 A suite of [Home Assistant](https://www.home-assistant.io/) custom integrations that track your parcels across carriers and countries — every one speaking the same canonical parcel contract, so your automations and dashboards work the same no matter who delivers.
 
-📖 **[Read the docs]({site_url})** — carrier list, the parcel contract, and a copy-paste automation cookbook.
+📖 **[Read the docs]({site_url})** — carrier list, the parcel contract, and copy-paste automations and dashboard cards.
 
 ## Integrations
 """
@@ -660,6 +827,7 @@ def main() -> int:
         carriers = collect_carriers()
         (DOCS / "carriers.md").write_text(render_carriers(carriers), encoding="utf-8")
         (DOCS / "automations.md").write_text(render_automations(), encoding="utf-8")
+        (DOCS / "dashboards.md").write_text(render_dashboards(), encoding="utf-8")
         BUILD.mkdir(parents=True, exist_ok=True)
         (BUILD / "profile-README.md").write_text(render_profile(carriers), encoding="utf-8")
         # Consumed by scripts/sync_org.py to point each repo's About box here.
@@ -673,6 +841,7 @@ def main() -> int:
 
     print(f"✓ docs/carriers.md          ({len(carriers)} carriers)")
     print("✓ docs/automations.md")
+    print("✓ docs/dashboards.md")
     print("✓ build/profile-README.md   (pushed by scripts/sync_org.py)")
     return 0
 

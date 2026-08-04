@@ -73,11 +73,12 @@ entity if you would rather not see it.
 
 ## 3. Build something
 
-Head to the [cookbook](automations.md) for automations and dashboard cards you
-can paste as-is, or read the [parcel contract](contract.md) first if you would
+Head to the [automation cookbook](automations.md) for notifications and
+summaries, or [dashboard cards](dashboards.md) to put your parcels on screen —
+both are paste-as-is. Read the [parcel contract](contract.md) first if you would
 rather write your own.
 
-The cookbook's snippets use the aggregator's unified events and sensors. Without
+Those snippets use the aggregator's unified events and sensors. Without
 it, the same recipes work per carrier — swap `parcel_aggregator_` for the
 carrier's own domain (`postnl_`, `dhl_nl_`, …) and its own sensors. The parcel
 data inside is identical either way, which is the point of the

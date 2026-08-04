@@ -16,7 +16,8 @@ rather than copying it.
 | Generated file | Built from |
 |---|---|
 | `docs/carriers.md` | Every `ha-*` repo in the org: manifest, release, icon |
-| `docs/automations.md` | `ha-parcel-aggregator/examples/**` |
+| `docs/automations.md` | `ha-parcel-aggregator/examples/automations/**` |
+| `docs/dashboards.md` | `ha-parcel-aggregator/examples/dashboards/**` |
 | `docs/assets/icons/*.png` | Each carrier's `custom_components/<domain>/brand/icon.png` |
 | `build/profile-README.md` | The same carrier data, in the org profile's format |
 
@@ -45,6 +46,11 @@ coverage, how you authenticate, one-line blurb. Nothing else belongs there.
 
 **If the org has a carrier repo that `data/carriers.yml` does not list, the build
 fails.** That is the tripwire that keeps this site honest; do not soften it.
+
+The same applies to community Lovelace cards: an example dashboard that uses a
+`custom:` card missing from `CUSTOM_CARDS` in `scripts/generate.py` fails the
+build, so no snippet can quietly depend on a HACS plugin the page never names
+or credits.
 
 ## Local preview
 
