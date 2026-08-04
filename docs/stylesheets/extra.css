@@ -55,6 +55,12 @@
   box-shadow: 0 0 0.4rem rgba(65, 189, 245, 0.25);
 }
 
+/* The one nav entry that leaves the docs (the sponsor link) says so. */
+.md-nav--primary .md-nav__link[href^="http"] .md-ellipsis::after {
+  content: " ↗";
+  opacity: 0.55;
+}
+
 /* The hero buttons sit tighter together than Material's default. */
 .md-typeset .md-button + .md-button {
   margin-left: 0.4rem;
