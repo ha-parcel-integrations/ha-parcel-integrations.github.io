@@ -146,6 +146,14 @@ ha-sameday:
   directions: incoming
   blurb: Sameday — the easybox locker network
 
+ha-sunyou:
+  region: Cross-border
+  countries: []
+  auth: trackingnr
+  input: tracking number
+  directions: incoming
+  blurb: SunYou (SYPost) — cross-border tracking for Asia-to-Europe e-commerce parcels, ahead of the local carrier that delivers them
+
 ha-swiss-post:
   region: Switzerland
   countries: ["CH"]
