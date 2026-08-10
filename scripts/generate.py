@@ -726,6 +726,15 @@ All integrations are distributed via [HACS](https://hacs.xyz/). See
 **[Getting started]({site_url}install/)** for the walkthrough, or each
 repository's README for its own options.
 
+## Support this project
+
+Every integration here is free and MIT-licensed, and stays that way. Sponsoring
+buys no features and no priority — it just says the work is worth continuing. See
+**[the ways to help]({site_url}sponsor/)**, including ones that cost nothing.
+
+[![Sponsor on GitHub](https://img.shields.io/badge/-Sponsor-EA4AAA?style=flat-square&logo=github-sponsors&logoColor=white)](https://github.com/sponsors/peternijssen)
+[![Buy me a coffee](https://img.shields.io/badge/-Buy%20me%20a%20coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=black)](https://www.buymeacoffee.com/peternijssen)
+
 ## Community
 
 💬 Questions or feedback? Join the discussion on the [Home Assistant community]({community_url}).
