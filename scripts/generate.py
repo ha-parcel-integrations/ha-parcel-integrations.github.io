@@ -442,6 +442,10 @@ def render_carriers(carriers: list[Carrier]) -> str:
             f"[![](https://img.shields.io/github/v/release/{ORG}/{c.repo}"
             f"?style=flat-square&label=&color=41BDF5)]({c.url}/releases)"
         )
+        if c.early:
+            badge += (
+                "<br>![](https://img.shields.io/badge/-BETA-orange?style=flat-square)"
+            )
         out.append(f"| {icon} | {name} | {coverage} | {c.connect} | {tracks} | {badge} |")
 
     out.append(

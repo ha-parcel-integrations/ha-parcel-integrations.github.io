@@ -45,6 +45,14 @@ ha-correos:
   directions: incoming
   blurb: Spain's national postal operator
 
+ha-delhivery:
+  region: India
+  countries: ["IN"]
+  auth: trackingnr
+  input: AWB (waybill) number
+  directions: incoming
+  blurb: Delhivery — India's e-commerce delivery network, tracked by AWB number without an account
+
 ha-dhl-nl:
   region: Netherlands
   countries: ["NL"]
