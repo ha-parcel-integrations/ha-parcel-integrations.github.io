@@ -21,6 +21,13 @@
 #   blurb      one sentence, sentence case, no trailing period
 #   directions "incoming" or "incoming+outgoing"
 
+ha-an-post:
+  region: Ireland
+  countries: ["IE"]
+  auth: account
+  directions: incoming
+  blurb: An Post — Ireland's national postal operator, with a watchlist for parcels not yet linked to your account
+
 ha-budbee:
   region: Nordics and Benelux
   countries: ["SE", "NL", "BE", "DK", "FI", "NO"]
@@ -153,6 +160,14 @@ ha-postnord:
   input: tracking number
   directions: incoming
   blurb: PostNord — the Nordic postal operator
+
+ha-quickpac:
+  region: Switzerland
+  countries: ["CH"]
+  auth: trackingnr
+  input: shipment number
+  directions: incoming
+  blurb: Quickpac — the delivery arm for Galaxus/Digitec and other Swiss e-commerce
 
 ha-sameday:
   region: South-East Europe
