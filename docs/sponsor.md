@@ -9,10 +9,10 @@ description: >-
 
 # Sponsor this project
 
-Every integration here is free and MIT-licensed, and stays that way. Sponsoring
-buys no features and no priority — it covers what keeping the suite running
-actually costs, the Claude subscription a good part of this code is written
-with above all, and it says the work is worth continuing.
+I maintain this suite in my own time, alongside a day job. A Claude
+subscription writes a good part of the code these days, and that's the real
+recurring cost sponsoring covers. Beyond that it buys nothing — no priority
+support, no early access — it just tells me the work is worth keeping up.
 
 [:simple-githubsponsors: Sponsor on GitHub](https://github.com/sponsors/peternijssen){ .md-button .md-button--primary }
 [:simple-buymeacoffee: Buy me a coffee](https://www.buymeacoffee.com/peternijssen){ .md-button }
