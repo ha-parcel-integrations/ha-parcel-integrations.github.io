@@ -71,7 +71,8 @@ A few notes that save debugging time:
 
 - **`null` is normal.** Carriers expose wildly different amounts of detail.
   Guard your templates (`{{ parcel.weight or '—' }}`) rather than assuming a
-  field is populated.
+  field is populated. See the [capability comparison](capabilities.md) for
+  which carrier gives you what.
 - **`history` is opt-in.** It stays `null` unless you enable *Parcel history* in
   that carrier's options — it is off by default because it grows the attribute
   payload considerably.

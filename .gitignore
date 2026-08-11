@@ -5,6 +5,7 @@ build/
 # Generated at build time by scripts/generate.py — never commit these,
 # they are rebuilt from the GitHub API on every deploy.
 docs/carriers.md
+docs/capabilities.md
 docs/automations.md
 docs/dashboards.md
 docs/assets/icons/*.png

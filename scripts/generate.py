@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Generate the pages that must never be hand-written.
 
-Three pages on this site describe things that already have a source of truth
+Four pages on this site describe things that already have a source of truth
 somewhere else in the org:
 
-* ``docs/carriers.md``    — every carrier repo, its version and its icon
-* ``docs/automations.md`` — the aggregator's ``examples/automations/`` folder
-* ``docs/dashboards.md``  — the aggregator's ``examples/dashboards/`` folder
+* ``docs/carriers.md``      — every carrier repo, its version and its icon
+* ``docs/capabilities.md``  — which optional contract fields each carrier's
+  own ``const.py`` declares it populates
+* ``docs/automations.md``   — the aggregator's ``examples/automations/`` folder
+* ``docs/dashboards.md``    — the aggregator's ``examples/dashboards/`` folder
 
 All of them are rebuilt from the GitHub API on every deploy. Nothing here is
 committed; a stale copy in git is worse than no copy at all, because the
@@ -59,6 +61,27 @@ AUTH_LABEL = {
     "account": "Account login",
     "trackingnr": "Tracking number",
 }
+
+# The optional parcel-contract fields a carrier may or may not populate. Order
+# here is display order on docs/capabilities.md. Keep the keys in sync with
+# ha-carrier-template's KNOWN_CAPABILITIES — that is the copy every carrier
+# repo's own CAPABILITIES constant is validated against, this is only used to
+# label and order them on the page.
+CAPABILITY_LABELS = {
+    "delivery_window": ("Delivery window", "`planned_from` / `planned_to`"),
+    "pickup_point": ("Pickup point name", "`pickup_point`"),
+    "weight": ("Weight", "`weight`"),
+    "dimensions": ("Dimensions", "`dimensions`"),
+    "url": ("Tracking link", "`url`"),
+    "history": ("Status history", "opt-in `history`"),
+}
+
+# ``^`` anchors to the start of a line (with MULTILINE) so this does not also
+# match inside ``KNOWN_CAPABILITIES = frozenset({...})``, which contains
+# "CAPABILITIES = frozenset(" as a literal substring.
+CAPABILITIES_RE = re.compile(
+    r"^CAPABILITIES\s*=\s*frozenset\(\s*\{(.*?)\}\s*\)", re.DOTALL | re.MULTILINE
+)
 
 # Finished Lovelace cards, built by other people, that read this suite's
 # sensors on their own. Every carrier README links these two under "Community
@@ -211,6 +234,7 @@ class Carrier:
     directions: str
     blurb: str
     icon: str | None
+    capabilities: frozenset[str] | None
 
     @property
     def early(self) -> bool:
@@ -263,6 +287,23 @@ def _domain_of(repo: str) -> str | None:
     entries = gh_dir(repo, "custom_components")
     dirs = [e["name"] for e in entries if e.get("type") == "dir"]
     return dirs[0] if len(dirs) == 1 else None
+
+
+def _capabilities_of(repo: str, domain: str) -> frozenset[str] | None:
+    """Parse ``CAPABILITIES`` out of the carrier's const.py.
+
+    Returns ``None`` — not an empty set — when the constant is absent, so the
+    page can say "not yet documented" instead of lying that the carrier
+    supports nothing. Not every carrier repo has migrated to declaring this
+    yet; that is not a build failure the way a missing manifest.json is.
+    """
+    raw = gh_file(repo, f"custom_components/{domain}/const.py")
+    if raw is None:
+        return None
+    match = CAPABILITIES_RE.search(raw.decode("utf-8"))
+    if not match:
+        return None
+    return frozenset(re.findall(r'"([^"]+)"', match.group(1)))
 
 
 def _reconcile(found: set[str], declared: set[str]) -> None:
@@ -353,6 +394,7 @@ def collect_carriers() -> list[Carrier]:
                 directions=meta.get("directions", "incoming"),
                 blurb=meta["blurb"],
                 icon=icon_name,
+                capabilities=_capabilities_of(repo, domain),
             )
         )
 
@@ -379,6 +421,10 @@ Every integration below speaks the same [parcel contract](contract.md): the same
 `ParcelStatus` values, the same parcel fields, the same events. Install only the
 ones that deliver to you — each works on its own, and none of them depends on
 another.
+
+Not every carrier's API exposes every optional field the contract allows —
+`null` for those is normal, not a bug. See the
+[capability comparison](capabilities.md) for which carrier gives you what.
 
 Install instructions live on [Getting started](install.md); each carrier's own
 README covers its options in full.
@@ -457,6 +503,67 @@ def render_carriers(carriers: list[Carrier]) -> str:
             ),
         )
     )
+    return "\n".join(out) + "\n"
+
+
+# --------------------------------------------------------------------------
+# Page: capabilities
+# --------------------------------------------------------------------------
+
+CAPABILITIES_INTRO = """\
+---
+hide:
+  - navigation
+description: >-
+  Which optional parcel contract fields each carrier actually populates —
+  weight, dimensions, delivery window, pickup point, tracking link and status
+  history — so a null value reads as "this carrier doesn't have it" rather
+  than "something is broken".
+---
+
+# Capability comparison
+
+Every carrier publishes the same [parcel shape](contract.md#the-parcel-shape),
+but the fields marked optional there are only as complete as the carrier's own
+API. A `null` on one of these is not a bug — it means the carrier itself never
+told us. This page is generated from each carrier's own source, so it changes
+the moment a carrier starts (or stops) exposing something new.
+"""
+
+CAPABILITIES_FOOTER = """
+**{count} of {total} carriers** have declared their capabilities so far — the
+rest show "?" until their own repo migrates. This is an ongoing rollout, not a
+claim that the undeclared ones support nothing.
+
+## Reading this table
+
+- ✓ — the carrier's own tests prove this field comes back non-null for at
+  least some parcels.
+- Blank — the carrier's API does not expose this, so the field is always
+  `null`. Nothing to configure or work around.
+- ? — this carrier has not declared its capabilities yet.
+
+See the [parcel contract](contract.md#the-parcel-shape) for what each column
+actually means on the wire.
+"""
+
+
+def render_capabilities(carriers: list[Carrier]) -> str:
+    keys = list(CAPABILITY_LABELS)
+    out = [CAPABILITIES_INTRO, ""]
+    out.append("| Carrier | " + " | ".join(CAPABILITY_LABELS[k][0] for k in keys) + " |")
+    out.append("|---|" + "---|" * len(keys))
+
+    declared = 0
+    for c in carriers:
+        if c.capabilities is None:
+            cells = " | ".join("?" for _ in keys)
+        else:
+            declared += 1
+            cells = " | ".join("✓" if k in c.capabilities else "" for k in keys)
+        out.append(f"| [{c.name}]({c.url}) | {cells} |")
+
+    out.append(CAPABILITIES_FOOTER.format(count=declared, total=len(carriers)))
     return "\n".join(out) + "\n"
 
 
@@ -849,6 +956,7 @@ def _aggregator_carrier() -> Carrier | None:
         directions="incoming+outgoing",
         blurb="",
         icon=None,
+        capabilities=None,
     )
 
 
@@ -859,6 +967,7 @@ def main() -> int:
     try:
         carriers = collect_carriers()
         (DOCS / "carriers.md").write_text(render_carriers(carriers), encoding="utf-8")
+        (DOCS / "capabilities.md").write_text(render_capabilities(carriers), encoding="utf-8")
         (DOCS / "automations.md").write_text(render_automations(), encoding="utf-8")
         (DOCS / "dashboards.md").write_text(render_dashboards(), encoding="utf-8")
         BUILD.mkdir(parents=True, exist_ok=True)
@@ -873,6 +982,7 @@ def main() -> int:
         return 1
 
     print(f"✓ docs/carriers.md          ({len(carriers)} carriers)")
+    print("✓ docs/capabilities.md")
     print("✓ docs/automations.md")
     print("✓ docs/dashboards.md")
     print("✓ build/profile-README.md   (pushed by scripts/sync_org.py)")
