@@ -84,8 +84,8 @@ ha-dynalogic:
   blurb: Dynalogic last-mile deliveries, including those sold as MediaMarkt, Samsung, Nespresso and Menken
 
 ha-gls:
-  region: Netherlands
-  countries: ["NL"]
+  region: Netherlands & Germany
+  countries: ["NL", "DE"]
   auth: trackingnr
   input: tracking number + postal code
   directions: incoming
