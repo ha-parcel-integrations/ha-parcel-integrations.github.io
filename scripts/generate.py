@@ -537,15 +537,20 @@ claim that the undeclared ones support nothing.
 
 ## Reading this table
 
-- ✓ — the carrier's own tests prove this field comes back non-null for at
+- 🟢 — the carrier's own tests prove this field comes back non-null for at
   least some parcels.
-- Blank — the carrier's API does not expose this, so the field is always
-  `null`. Nothing to configure or work around.
+- 🔴 — the carrier's API does not expose this, so the field is always `null`.
+  Nothing to configure or work around.
 - ? — this carrier has not declared its capabilities yet.
 
 See the [parcel contract](contract.md#the-parcel-shape) for what each column
 actually means on the wire.
 """
+
+
+SUPPORTED = "🟢"
+UNSUPPORTED = "🔴"
+UNDECLARED = "?"
 
 
 def render_capabilities(carriers: list[Carrier]) -> str:
@@ -557,10 +562,12 @@ def render_capabilities(carriers: list[Carrier]) -> str:
     declared = 0
     for c in carriers:
         if c.capabilities is None:
-            cells = " | ".join("?" for _ in keys)
+            cells = " | ".join(UNDECLARED for _ in keys)
         else:
             declared += 1
-            cells = " | ".join("✓" if k in c.capabilities else "" for k in keys)
+            cells = " | ".join(
+                SUPPORTED if k in c.capabilities else UNSUPPORTED for k in keys
+            )
         out.append(f"| [{c.name}]({c.url}) | {cells} |")
 
     out.append(CAPABILITIES_FOOTER.format(count=declared, total=len(carriers)))
