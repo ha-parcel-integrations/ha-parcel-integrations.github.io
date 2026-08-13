@@ -68,8 +68,8 @@ ha-dhl-nl:
   blurb: DHL eCommerce, tracked through your DHL account
 
 ha-dpd:
-  region: Netherlands
-  countries: ["NL"]
+  region: Netherlands and 14 more countries on DPD's shared myDPD network
+  countries: ["NL", "AR", "BE", "HR", "CZ", "EE", "FR", "HU", "IT", "LV", "LT", "LU", "PT", "SK", "SI"]
   auth: account
   directions: incoming+outgoing
   blurb: DPD shipments, tracked through your myDPD account
