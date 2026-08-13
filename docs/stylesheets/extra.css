@@ -59,3 +59,29 @@
 .md-typeset .md-button + .md-button {
   margin-left: 0.4rem;
 }
+
+/* Carrier-page country filter. */
+.md-typeset .carriers-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.md-typeset .carriers-filter label {
+  font-weight: 600;
+}
+
+.md-typeset .carriers-filter select {
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.2rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  background-color: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .carriers-filter #carrier-country-count {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.7rem;
+}

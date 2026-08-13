@@ -62,6 +62,47 @@ AUTH_LABEL = {
     "trackingnr": "Tracking number",
 }
 
+# English names for every ISO 3166-1 alpha-2 code that appears in
+# data/carriers.yml's `countries` lists — used to label the carriers-page
+# country filter. Only the codes actually in use need to be here; render_carriers
+# fails the build if a carrier uses a code this map does not, so the filter
+# never silently mislabels or drops a country.
+COUNTRY_NAMES = {
+    "AR": "Argentina",
+    "AT": "Austria",
+    "BE": "Belgium",
+    "BG": "Bulgaria",
+    "CH": "Switzerland",
+    "CZ": "Czechia",
+    "DE": "Germany",
+    "DK": "Denmark",
+    "EE": "Estonia",
+    "ES": "Spain",
+    "FI": "Finland",
+    "FR": "France",
+    "GB": "United Kingdom",
+    "HR": "Croatia",
+    "HU": "Hungary",
+    "IE": "Ireland",
+    "IN": "India",
+    "IT": "Italy",
+    "LI": "Liechtenstein",
+    "LT": "Lithuania",
+    "LU": "Luxembourg",
+    "LV": "Latvia",
+    "MD": "Moldova",
+    "NL": "Netherlands",
+    "NO": "Norway",
+    "PL": "Poland",
+    "PT": "Portugal",
+    "RO": "Romania",
+    "SE": "Sweden",
+    "SI": "Slovenia",
+    "SK": "Slovakia",
+    "UA": "Ukraine",
+    "US": "United States",
+}
+
 # The optional parcel-contract fields a carrier may or may not populate. Order
 # here is display order on docs/capabilities.md. Keep the keys in sync with
 # ha-carrier-template's KNOWN_CAPABILITIES — that is the copy every carrier
@@ -460,8 +501,40 @@ please use it.
 """
 
 
+def _country_filter_options(carriers: list[Carrier]) -> str:
+    """<option> tags for every country any carrier lists, sorted by name.
+
+    Raises the same GenerateError style as ``_reconcile`` when a carrier uses
+    a code COUNTRY_NAMES does not know — the filter must never silently
+    mislabel a country or, worse, drop it from the dropdown.
+    """
+    codes = {code for c in carriers for code in c.countries}
+    unknown = sorted(codes - set(COUNTRY_NAMES))
+    if unknown:
+        raise GenerateError(
+            "data/carriers.yml uses country code(s) not in generate.py's "
+            f"COUNTRY_NAMES: {', '.join(unknown)}. Add them there."
+        )
+    ordered = sorted(codes, key=lambda code: COUNTRY_NAMES[code])
+    return "\n".join(
+        f'<option value="{code}">{_flag(code)} {COUNTRY_NAMES[code]}</option>'
+        for code in ordered
+    )
+
+
 def render_carriers(carriers: list[Carrier]) -> str:
     out = [CARRIERS_INTRO, ""]
+    out.append(f'<div id="carriers-block" markdown="1">\n')
+    out.append(
+        '<div class="carriers-filter">\n'
+        '<label for="carrier-country-filter">Filter by country</label>\n'
+        '<select id="carrier-country-filter">\n'
+        '<option value="">All countries</option>\n'
+        f"{_country_filter_options(carriers)}\n"
+        "</select>\n"
+        '<span id="carrier-country-count" role="status"></span>\n'
+        "</div>\n"
+    )
     out.append(f"**{len(carriers)} carriers** and counting.\n")
     out.append("| | Carrier | Coverage | Connect with | Tracks | Version |")
     out.append("|---|---|---|---|---|---|")
@@ -493,6 +566,15 @@ def render_carriers(carriers: list[Carrier]) -> str:
                 "<br>![](https://img.shields.io/badge/-BETA-orange?style=flat-square)"
             )
         out.append(f"| {icon} | {name} | {coverage} | {c.connect} | {tracks} | {badge} |")
+
+    # Row order here must match the <tr> order above exactly — carriers-filter.js
+    # zips this against the table's tbody rows by index, not by carrier name.
+    out.append(
+        '\n<script type="application/json" id="carriers-country-data">'
+        + json.dumps([c.countries for c in carriers])
+        + "</script>\n"
+        "</div>\n"
+    )
 
     out.append(
         CARRIERS_FOOTER.format(

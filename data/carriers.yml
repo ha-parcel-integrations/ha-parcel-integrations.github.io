@@ -147,8 +147,8 @@ ha-planzer:
   blurb: Planzer — the carrier behind IKEA Switzerland home deliveries
 
 ha-postnl:
-  region: Netherlands
-  countries: ["NL"]
+  region: Netherlands & Belgium
+  countries: ["NL", "BE"]
   auth: account
   directions: incoming+outgoing
   blurb: PostNL parcels plus announced MyMail letters
