@@ -202,8 +202,8 @@ ha-trunkrs:
   blurb: Trunkrs — same-day and next-day delivery
 
 ha-vinted-go:
-  region: Benelux & France
-  countries: ["NL", "BE", "LU", "FR"]
+  region: Netherlands, Belgium, France, Spain & Portugal
+  countries: ["NL", "BE", "FR", "ES", "PT"]
   auth: account
   directions: incoming+outgoing
   blurb: Vinted Go (formerly Homerr) — passwordless e-mail login, locker and parcel-shop network
