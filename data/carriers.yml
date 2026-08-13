@@ -83,8 +83,8 @@ ha-dragonfly:
   blurb: Dragonfly Shipping — no account and not even a postal code needed
 
 ha-dynalogic:
-  region: Netherlands
-  countries: ["NL"]
+  region: Netherlands & Belgium
+  countries: ["NL", "BE"]
   auth: trackingnr
   input: order number + postal code
   directions: incoming
@@ -131,8 +131,8 @@ ha-oesterreichische-post:
   blurb: Österreichische Post — Austria's national postal operator
 
 ha-packeta:
-  region: Central Europe
-  countries: ["CZ", "SK", "HU", "PL", "RO"]
+  region: Central Europe, Germany & Slovenia
+  countries: ["CZ", "SK", "HU", "PL", "RO", "DE", "SI"]
   auth: trackingnr
   input: "\"Z\" tracking number"
   directions: incoming
