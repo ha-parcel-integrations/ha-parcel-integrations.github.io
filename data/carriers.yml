@@ -115,12 +115,12 @@ ha-hermes:
   blurb: Hermes Paket
 
 ha-nova-post:
-  region: Ukraine and cross-border
-  countries: ["UA"]
+  region: Ukraine, Europe and the US
+  countries: ["UA", "MD", "PL", "LT", "CZ", "RO", "DE", "SK", "EE", "LV", "HU", "IT", "FI", "GB", "FR", "ES", "AT", "NL", "US"]
   auth: trackingnr
-  input: 14-digit tracking number (TTN)
+  input: tracking number
   directions: incoming
-  blurb: Nova Post (Nova Poshta) — Ukraine's largest parcel-locker and courier network
+  blurb: Nova Post (Nova Poshta) — Ukraine's largest parcel-locker and courier network, with cross-border delivery across Europe and the US
 
 ha-oesterreichische-post:
   region: Austria
