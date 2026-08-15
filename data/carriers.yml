@@ -21,6 +21,14 @@
 #   blurb      one sentence, sentence case, no trailing period
 #   directions "incoming" or "incoming+outgoing"
 
+ha-ampere:
+  region: Netherlands
+  countries: ["NL"]
+  auth: trackingnr
+  input: tracking link from the shipping e-mail
+  directions: incoming
+  blurb: Ampère — bol.com's own last-mile delivery brand, tracked from the link in their shipping e-mail
+
 ha-an-post:
   region: Ireland
   countries: ["IE"]
