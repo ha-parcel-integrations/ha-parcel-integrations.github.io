@@ -122,6 +122,13 @@ ha-hermes:
   directions: incoming
   blurb: Hermes Paket
 
+ha-inpost:
+  region: Poland & Italy
+  countries: ["PL", "IT"]
+  auth: account
+  directions: incoming
+  blurb: InPost Paczkomat lockers, tracked through your InPost account — a parcel ready for pickup shows the locker's name
+
 ha-nova-post:
   region: Ukraine, Europe and the US
   countries: ["UA", "MD", "PL", "LT", "CZ", "RO", "DE", "SK", "EE", "LV", "HU", "IT", "FI", "GB", "FR", "ES", "AT", "NL", "US"]
