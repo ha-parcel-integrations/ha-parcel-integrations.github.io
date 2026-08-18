@@ -192,6 +192,14 @@ ha-sameday:
   directions: incoming
   blurb: Sameday — the easybox locker network
 
+ha-shopee-xpress:
+  region: Brazil, Indonesia, Malaysia, the Philippines, Thailand & Vietnam
+  countries: ["BR", "ID", "MY", "PH", "TH", "VN"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Shopee Xpress (SPX) — Shopee's own in-house last-mile carrier for its Southeast Asian and South American markets
+
 ha-sunyou:
   region: Cross-border
   countries: []
