@@ -26,6 +26,12 @@
 #              primary entry). Use when one repo answers to two names a user
 #              would search separately (e.g. a carrier's own locker/pickup
 #              brand); it is not a second integration.
+#   name       optional override of the manifest's display name, for this
+#              site's primary row only. The manifest name stays the source of
+#              truth everywhere else (HA UI, HACS, README) — use this only
+#              when the manifest name carries scope an alias entry already
+#              covers (e.g. "X, including Y" once Y has its own alias row)
+#              and the shorter form reads better as a site listing.
 
 ha-ampere:
   region: Netherlands
@@ -59,6 +65,7 @@ ha-cainiao:
   blurb: Alibaba's tracking layer for AliExpress, Temu, Shein and similar shops
 
 ha-ceska-posta:
+  name: Ceska Posta
   region: Czech Republic
   countries: ["CZ"]
   auth: trackingnr

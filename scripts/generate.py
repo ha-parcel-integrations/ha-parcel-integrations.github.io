@@ -441,7 +441,8 @@ def collect_carriers() -> list[Carrier]:
             capabilities=_capabilities_of(repo, domain),
         )
 
-        carriers.append(Carrier(name=manifest.get("name", repo), blurb=meta["blurb"], **shared))
+        name = meta.get("name") or manifest.get("name", repo)
+        carriers.append(Carrier(name=name, blurb=meta["blurb"], **shared))
 
         # A repo answering to a second brand name (e.g. a carrier's own
         # locker network) gets its own row everywhere carriers are listed —
