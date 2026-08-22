@@ -423,27 +423,31 @@ def collect_carriers() -> list[Carrier]:
             icon_name = f"{domain}.png"
             (ICONS / icon_name).write_bytes(icon_bytes)
 
-        carriers.append(
-            Carrier(
-                repo=repo,
-                name=manifest.get("name", repo),
-                domain=domain,
-                # The released tag, not the manifest on main — main may carry
-                # an unreleased bump, and what matters here is what a user can
-                # actually install today. Tags carry no "v" prefix by
-                # convention, but tolerate one.
-                version=releases[repo].lstrip("v"),
-                url=f"https://github.com/{ORG}/{repo}",
-                region=meta["region"],
-                countries=meta.get("countries") or [],
-                auth=meta["auth"],
-                input=meta.get("input"),
-                directions=meta.get("directions", "incoming"),
-                blurb=meta["blurb"],
-                icon=icon_name,
-                capabilities=_capabilities_of(repo, domain),
-            )
+        shared = dict(
+            repo=repo,
+            domain=domain,
+            # The released tag, not the manifest on main — main may carry
+            # an unreleased bump, and what matters here is what a user can
+            # actually install today. Tags carry no "v" prefix by
+            # convention, but tolerate one.
+            version=releases[repo].lstrip("v"),
+            url=f"https://github.com/{ORG}/{repo}",
+            region=meta["region"],
+            countries=meta.get("countries") or [],
+            auth=meta["auth"],
+            input=meta.get("input"),
+            directions=meta.get("directions", "incoming"),
+            icon=icon_name,
+            capabilities=_capabilities_of(repo, domain),
         )
+
+        carriers.append(Carrier(name=manifest.get("name", repo), blurb=meta["blurb"], **shared))
+
+        # A repo answering to a second brand name (e.g. a carrier's own
+        # locker network) gets its own row everywhere carriers are listed —
+        # same repo link/version/icon, its own name and blurb.
+        for alias in meta.get("aliases") or []:
+            carriers.append(Carrier(name=alias["name"], blurb=alias["blurb"], **shared))
 
     carriers.sort(key=_alpha_key)
     return carriers
@@ -1068,8 +1072,10 @@ def main() -> int:
         BUILD.mkdir(parents=True, exist_ok=True)
         (BUILD / "profile-README.md").write_text(render_profile(carriers), encoding="utf-8")
         # Consumed by scripts/sync_org.py to point each repo's About box here.
+        # dict.fromkeys dedupes repos that carry more than one alias row above,
+        # preserving first-seen order.
         (BUILD / "repos.json").write_text(
-            json.dumps([c.repo for c in carriers] + [AGGREGATOR], indent=2),
+            json.dumps(list(dict.fromkeys(c.repo for c in carriers)) + [AGGREGATOR], indent=2),
             encoding="utf-8",
         )
     except GenerateError as err:

@@ -20,6 +20,12 @@
 #              site capitalises it where it needs a capital.
 #   blurb      one sentence, sentence case, no trailing period
 #   directions "incoming" or "incoming+outgoing"
+#   aliases    optional list of {name, blurb} — an extra site/profile listing
+#              for the same repo under a second brand name (own row, own
+#              blurb, same repo link/version/icon/region/capabilities as the
+#              primary entry). Use when one repo answers to two names a user
+#              would search separately (e.g. a carrier's own locker/pickup
+#              brand); it is not a second integration.
 
 ha-ampere:
   region: Netherlands
@@ -51,6 +57,17 @@ ha-cainiao:
   input: tracking number
   directions: incoming
   blurb: Alibaba's tracking layer for AliExpress, Temu, Shein and similar shops
+
+ha-ceska-posta:
+  region: Czech Republic
+  countries: ["CZ"]
+  auth: trackingnr
+  input: tracking number
+  directions: incoming
+  blurb: Czech Republic's national postal operator, whose pickup-point and locker network operates under the Balikovna brand
+  aliases:
+    - name: Balikovna
+      blurb: Balikovna — Ceska Posta's own pickup-point and locker network, same backend and tracking numbers
 
 ha-correos:
   region: Spain
