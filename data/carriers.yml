@@ -200,6 +200,13 @@ ha-postnord:
   directions: incoming
   blurb: PostNord — the Nordic postal operator
 
+ha-ppl-cz:
+  region: Czechia
+  countries: ["CZ"]
+  auth: account
+  directions: incoming+outgoing
+  blurb: PPL — one of Czechia's two dominant private carriers, passwordless e-mail + PIN login
+
 ha-quickpac:
   region: Switzerland
   countries: ["CH"]
