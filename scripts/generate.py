@@ -130,6 +130,22 @@ CAPABILITIES_RE = re.compile(
     r"^CAPABILITIES\s*=\s*frozenset\(\s*\{(.*?)\}\s*\)", re.DOTALL | re.MULTILINE
 )
 
+# A carrier with more than one backend (a country-specific transport, not
+# just a config option) declares CAPABILITIES_BY_VARIANT instead of the flat
+# CAPABILITIES above — one frozenset per backend/country, so a field only
+# some backends populate doesn't get silently intersected away (or
+# overclaimed) for the carrier as a whole. See ha-dpd's or ha-gls's
+# const.py. Matched as its own statement (anchored, non-greedy up to the
+# closing brace of the outer dict) rather than reusing CAPABILITIES_RE,
+# because the nested ``frozenset({...})`` calls would confuse a single
+# regex written to stop at the first ``}``.
+CAPABILITIES_BY_VARIANT_RE = re.compile(
+    r"^CAPABILITIES_BY_VARIANT\s*=\s*\{(.*?)\n\}", re.DOTALL | re.MULTILINE
+)
+CAPABILITIES_VARIANT_ENTRY_RE = re.compile(
+    r'"([^"]+)"\s*:\s*frozenset\(\s*\{(.*?)\}\s*\)', re.DOTALL
+)
+
 # Finished Lovelace cards, built by other people, that read this suite's
 # sensors on their own. Every carrier README links these two under "Community
 # Lovelace cards"; the site says the same thing in one place so the credit is
@@ -281,7 +297,11 @@ class Carrier:
     directions: str
     blurb: str
     icon: str | None
-    capabilities: frozenset[str] | None
+    # A single frozenset for a single-backend carrier, a dict of
+    # {variant_label: frozenset} for a multi-backend one (declared as
+    # CAPABILITIES_BY_VARIANT in that carrier's own const.py — see
+    # _capabilities_of), or None when undeclared.
+    capabilities: frozenset[str] | dict[str, frozenset[str]] | None
 
     @property
     def early(self) -> bool:
@@ -336,18 +356,39 @@ def _domain_of(repo: str) -> str | None:
     return dirs[0] if len(dirs) == 1 else None
 
 
-def _capabilities_of(repo: str, domain: str) -> frozenset[str] | None:
-    """Parse ``CAPABILITIES`` out of the carrier's const.py.
+def _capabilities_of(
+    repo: str, domain: str
+) -> frozenset[str] | dict[str, frozenset[str]] | None:
+    """Parse ``CAPABILITIES`` (or ``CAPABILITIES_BY_VARIANT``) out of const.py.
 
-    Returns ``None`` — not an empty set — when the constant is absent, so the
-    page can say "not yet documented" instead of lying that the carrier
-    supports nothing. Not every carrier repo has migrated to declaring this
-    yet; that is not a build failure the way a missing manifest.json is.
+    Returns ``None`` — not an empty set — when neither constant is present,
+    so the page can say "not yet documented" instead of lying that the
+    carrier supports nothing. Not every carrier repo has migrated to
+    declaring this yet; that is not a build failure the way a missing
+    manifest.json is.
+
+    A carrier that declares the multi-backend form gets a ``dict`` back,
+    keyed by variant label in declaration order (a plain dict, so that order
+    survives — see render_capabilities). Tried first: a carrier is expected
+    to declare exactly one of the two forms, never both.
     """
     raw = gh_file(repo, f"custom_components/{domain}/const.py")
     if raw is None:
         return None
-    match = CAPABILITIES_RE.search(raw.decode("utf-8"))
+    text = raw.decode("utf-8")
+
+    variant_match = CAPABILITIES_BY_VARIANT_RE.search(text)
+    if variant_match:
+        variants = {
+            label: frozenset(re.findall(r'"([^"]+)"', fields))
+            for label, fields in CAPABILITIES_VARIANT_ENTRY_RE.findall(
+                variant_match.group(1)
+            )
+        }
+        if variants:
+            return variants
+
+    match = CAPABILITIES_RE.search(text)
     if not match:
         return None
     return frozenset(re.findall(r'"([^"]+)"', match.group(1)))
@@ -621,6 +662,11 @@ but the fields marked optional there are only as complete as the carrier's own
 API. A `null` on one of these is not a bug — it means the carrier itself never
 told us. This page is generated from each carrier's own source, so it changes
 the moment a carrier starts (or stops) exposing something new.
+
+A carrier that runs more than one backend — a country-specific API, not just a
+setup option — gets one row per backend instead of one row overall, so a field
+only some of its countries populate is not silently averaged away, and one a
+single country lacks does not look like the whole carrier lacks it.
 """
 
 CAPABILITIES_FOOTER = """
@@ -656,12 +702,23 @@ def render_capabilities(carriers: list[Carrier]) -> str:
     for c in carriers:
         if c.capabilities is None:
             cells = " | ".join(UNDECLARED for _ in keys)
+            out.append(f"| [{c.name}]({c.url}) | {cells} |")
+            continue
+
+        declared += 1
+        if isinstance(c.capabilities, dict):
+            # One row per backend, grouped directly under each other in the
+            # order the carrier declared them (its own country/backend
+            # dropdown order) — not re-sorted alphabetically, since that
+            # order is usually meaningful (e.g. "Germany, Other").
+            for variant, fields in c.capabilities.items():
+                cells = " | ".join(SUPPORTED if k in fields else UNSUPPORTED for k in keys)
+                out.append(f"| [{c.name}]({c.url}) — {variant} | {cells} |")
         else:
-            declared += 1
             cells = " | ".join(
                 SUPPORTED if k in c.capabilities else UNSUPPORTED for k in keys
             )
-        out.append(f"| [{c.name}]({c.url}) | {cells} |")
+            out.append(f"| [{c.name}]({c.url}) | {cells} |")
 
     out.append(CAPABILITIES_FOOTER.format(count=declared, total=len(carriers)))
     return "\n".join(out) + "\n"
