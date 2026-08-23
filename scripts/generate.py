@@ -664,9 +664,10 @@ told us. This page is generated from each carrier's own source, so it changes
 the moment a carrier starts (or stops) exposing something new.
 
 A carrier that runs more than one backend — a country-specific API, not just a
-setup option — gets one row per backend instead of one row overall, so a field
-only some of its countries populate is not silently averaged away, and one a
-single country lacks does not look like the whole carrier lacks it.
+setup option — gets its own blank parent row plus one indented sub-row per
+backend, so a field only some of its countries populate is not silently
+averaged away, and one a single country lacks does not look like the whole
+carrier lacks it.
 """
 
 CAPABILITIES_FOOTER = """
@@ -707,13 +708,17 @@ def render_capabilities(carriers: list[Carrier]) -> str:
 
         declared += 1
         if isinstance(c.capabilities, dict):
-            # One row per backend, grouped directly under each other in the
-            # order the carrier declared them (its own country/backend
-            # dropdown order) — not re-sorted alphabetically, since that
-            # order is usually meaningful (e.g. "Germany, Other").
+            # A blank parent row (name only, no per-field claim — the
+            # carrier as a whole doesn't have one answer) followed by one
+            # indented sub-row per backend, in the order the carrier
+            # declared them (its own country/backend dropdown order) — not
+            # re-sorted alphabetically, since that order is usually
+            # meaningful (e.g. "Germany, Other").
+            blanks = " | ".join("" for _ in keys)
+            out.append(f"| **[{c.name}]({c.url})** | {blanks} |")
             for variant, fields in c.capabilities.items():
                 cells = " | ".join(SUPPORTED if k in fields else UNSUPPORTED for k in keys)
-                out.append(f"| [{c.name}]({c.url}) — {variant} | {cells} |")
+                out.append(f"| ↳ {variant} | {cells} |")
         else:
             cells = " | ".join(
                 SUPPORTED if k in c.capabilities else UNSUPPORTED for k in keys
