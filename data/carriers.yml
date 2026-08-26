@@ -66,12 +66,12 @@ ha-cainiao:
 
 ha-ceska-posta:
   name: Ceska Posta
-  region: Czech Republic
+  region: Czechia
   countries: ["CZ"]
   auth: trackingnr
   input: tracking number
   directions: incoming
-  blurb: Czech Republic's national postal operator, whose pickup-point and locker network operates under the Balikovna brand
+  blurb: Czechia's national postal operator, whose pickup-point and locker network operates under the Balikovna brand
   aliases:
     - name: Balikovna
       blurb: Balikovna — Ceska Posta's own pickup-point and locker network, same backend and tracking numbers
@@ -107,12 +107,15 @@ ha-dpd:
   blurb: DPD shipments, tracked through your myDPD account
 
 ha-dragonfly:
-  region: Netherlands
-  countries: ["NL"]
+  region: Netherlands, Australia & Canada — the same Intelcom backend under a different brand per country
+  countries: ["NL", "AU", "CA"]
   auth: trackingnr
   input: Track & Trace code
   directions: incoming
-  blurb: Dragonfly Shipping — no account and not even a postal code needed
+  blurb: Dragonfly Shipping — no account and not even a postal code needed, also known as Intelcom in Canada
+  aliases:
+    - name: Intelcom
+      blurb: Intelcom — the same carrier group as Dragonfly Shipping, tracked under its Canadian and Australian brand name
 
 ha-dynalogic:
   region: Netherlands & Belgium
@@ -123,7 +126,7 @@ ha-dynalogic:
   blurb: Dynalogic last-mile deliveries, including those sold as MediaMarkt, Samsung, Nespresso and Menken
 
 ha-gls:
-  region: Netherlands, Germany and 7 more countries on GLS's shared pan-EU tracker — Czech Republic, Austria, Ireland, France, Slovenia, Croatia and Italy
+  region: Netherlands, Germany and 7 more countries on GLS's shared pan-EU tracker — Czechia, Austria, Ireland, France, Slovenia, Croatia and Italy
   countries: ["NL", "DE", "CZ", "AT", "IE", "FR", "SI", "HR", "IT"]
   auth: trackingnr
   input: tracking number + postal code
@@ -175,7 +178,10 @@ ha-packeta:
   auth: trackingnr
   input: "\"Z\" tracking number"
   directions: incoming
-  blurb: Packeta (Zásilkovna) — Central-European pickup-point and locker network
+  blurb: Packeta's Central-European pickup-point and locker network, known as Zásilkovna in Czechia
+  aliases:
+    - name: Zásilkovna
+      blurb: Zásilkovna — Packeta's own brand name in Czechia, same backend and "Z" tracking numbers
 
 ha-planzer:
   region: Switzerland & Liechtenstein

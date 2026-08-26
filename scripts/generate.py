@@ -70,9 +70,11 @@ AUTH_LABEL = {
 COUNTRY_NAMES = {
     "AR": "Argentina",
     "AT": "Austria",
+    "AU": "Australia",
     "BE": "Belgium",
     "BG": "Bulgaria",
     "BR": "Brazil",
+    "CA": "Canada",
     "CH": "Switzerland",
     "CZ": "Czechia",
     "DE": "Germany",
