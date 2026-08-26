@@ -489,9 +489,14 @@ def collect_carriers() -> list[Carrier]:
 
         # A repo answering to a second brand name (e.g. a carrier's own
         # locker network) gets its own row everywhere carriers are listed —
-        # same repo link/version/icon, its own name and blurb.
+        # same repo link/version/icon, its own name and blurb. region/countries
+        # default to the primary entry's but may be narrowed when the two
+        # brands don't cover the same territory (e.g. one brand per country).
         for alias in meta.get("aliases") or []:
-            carriers.append(Carrier(name=alias["name"], blurb=alias["blurb"], **shared))
+            alias_shared = shared | {
+                k: alias[k] for k in ("region", "countries") if k in alias
+            }
+            carriers.append(Carrier(name=alias["name"], blurb=alias["blurb"], **alias_shared))
 
     carriers.sort(key=_alpha_key)
     return carriers

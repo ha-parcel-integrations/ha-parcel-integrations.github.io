@@ -20,12 +20,16 @@
 #              site capitalises it where it needs a capital.
 #   blurb      one sentence, sentence case, no trailing period
 #   directions "incoming" or "incoming+outgoing"
-#   aliases    optional list of {name, blurb} — an extra site/profile listing
-#              for the same repo under a second brand name (own row, own
-#              blurb, same repo link/version/icon/region/capabilities as the
-#              primary entry). Use when one repo answers to two names a user
-#              would search separately (e.g. a carrier's own locker/pickup
-#              brand); it is not a second integration.
+#   aliases    optional list of {name, blurb, region?, countries?} — an extra
+#              site/profile listing for the same repo under a second brand
+#              name (own row, own blurb, same repo link/version/icon/
+#              capabilities as the primary entry). Use when one repo answers
+#              to two names a user would search separately (e.g. a carrier's
+#              own locker/pickup brand); it is not a second integration.
+#              region/countries default to the primary entry's — set them on
+#              the alias only when the two brands don't cover the same
+#              territory (e.g. one brand name per country within the repo's
+#              overall coverage).
 #   name       optional override of the manifest's display name, for this
 #              site's primary row only. The manifest name stays the source of
 #              truth everywhere else (HA UI, HACS, README) — use this only
@@ -107,15 +111,17 @@ ha-dpd:
   blurb: DPD shipments, tracked through your myDPD account
 
 ha-dragonfly:
-  region: Netherlands, Australia & Canada — the same Intelcom backend under a different brand per country
-  countries: ["NL", "AU", "CA"]
+  region: Netherlands & Australia
+  countries: ["NL", "AU"]
   auth: trackingnr
   input: Track & Trace code
   directions: incoming
-  blurb: Dragonfly Shipping — no account and not even a postal code needed, also known as Intelcom in Canada
+  blurb: Dragonfly Shipping — no account and not even a postal code needed
   aliases:
     - name: Intelcom
-      blurb: Intelcom — the same carrier group as Dragonfly Shipping, tracked under its Canadian and Australian brand name
+      region: Canada
+      countries: ["CA"]
+      blurb: Intelcom — the same carrier group as Dragonfly Shipping, tracked under its Canadian brand name
 
 ha-dynalogic:
   region: Netherlands & Belgium
@@ -181,6 +187,8 @@ ha-packeta:
   blurb: Packeta's Central-European pickup-point and locker network, known as Zásilkovna in Czechia
   aliases:
     - name: Zásilkovna
+      region: Czechia
+      countries: ["CZ"]
       blurb: Zásilkovna — Packeta's own brand name in Czechia, same backend and "Z" tracking numbers
 
 ha-planzer:
