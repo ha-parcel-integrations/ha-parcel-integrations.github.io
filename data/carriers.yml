@@ -37,6 +37,14 @@
 #              covers (e.g. "X, including Y" once Y has its own alias row)
 #              and the shorter form reads better as a site listing.
 
+ha-4px:
+  region: Cross-border
+  countries: []
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: 4PX's tracking layer for cross-border parcels shipped from China
+
 ha-ampere:
   region: Netherlands
   countries: ["NL"]
@@ -51,6 +59,14 @@ ha-an-post:
   auth: account
   directions: incoming
   blurb: An Post — Ireland's national postal operator, with a watchlist for parcels not yet linked to your account
+
+ha-better-trucks:
+  region: United States
+  countries: ["US"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Better Trucks — US last-mile package delivery, tracked without an account
 
 ha-budbee:
   region: Nordics and Benelux
@@ -67,6 +83,14 @@ ha-cainiao:
   input: tracking number
   directions: incoming
   blurb: Alibaba's tracking layer for AliExpress, Temu, Shein and similar shops
+
+ha-canpar:
+  region: Canada
+  countries: ["CA"]
+  auth: trackingnr
+  input: tracking number
+  directions: incoming
+  blurb: Canpar Express — Canadian parcel delivery and pickup-point tracking
 
 ha-ceska-posta:
   name: Ceska Posta
@@ -162,6 +186,15 @@ ha-inpost:
   directions: incoming
   blurb: InPost Paczkomat lockers, tracked through your InPost account — a parcel ready for pickup shows the locker's name
 
+ha-laposte:
+  name: La Poste
+  region: France
+  countries: ["FR"]
+  auth: trackingnr
+  input: tracking number
+  directions: incoming
+  blurb: La Poste tracking for Colissimo and Chronopost parcels, without an account
+
 ha-nova-post:
   region: Ukraine, Europe and the US
   countries: ["UA", "MD", "PL", "LT", "CZ", "RO", "DE", "SK", "EE", "LV", "HU", "IT", "FI", "GB", "FR", "ES", "AT", "NL", "US"]
@@ -177,6 +210,22 @@ ha-oesterreichische-post:
   input: tracking number
   directions: incoming
   blurb: Österreichische Post — Austria's national postal operator
+
+ha-ontrac:
+  region: United States
+  countries: ["US"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: OnTrac — US regional parcel delivery across the West and Midwest
+
+ha-speedx:
+  region: United States
+  countries: ["US"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: SpeedX package tracking without an account
 
 ha-packeta:
   region: Central Europe, Germany & Slovenia
@@ -268,6 +317,14 @@ ha-trunkrs:
   input: Trunkrs number + postal code
   directions: incoming
   blurb: Trunkrs — same-day and next-day delivery
+
+ha-uniuni:
+  region: Canada & United States
+  countries: ["CA", "US"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: UniUni — e-commerce last-mile delivery across Canada and the US, tracked without an account
 
 ha-vinted-go:
   region: Netherlands, Belgium, France, Spain & Portugal
