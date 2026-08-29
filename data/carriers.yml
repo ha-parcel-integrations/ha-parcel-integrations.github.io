@@ -219,6 +219,14 @@ ha-ontrac:
   directions: incoming
   blurb: OnTrac — US regional parcel delivery across the West and Midwest
 
+ha-orlen-paczka:
+  region: Poland
+  countries: ["PL"]
+  auth: trackingnr
+  input: tracking number
+  directions: incoming
+  blurb: ORLEN Paczka — Poland's parcel locker network, tracked without an account
+
 ha-speedx:
   region: United States
   countries: ["US"]
