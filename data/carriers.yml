@@ -256,6 +256,14 @@ ha-planzer:
   directions: incoming
   blurb: Planzer — the carrier behind IKEA Switzerland home deliveries
 
+ha-poste-italiane:
+  region: Italy
+  countries: ["IT"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Poste Italiane — Italy's national postal operator, tracked without an account
+
 ha-postnl:
   region: Netherlands & Belgium
   countries: ["NL", "BE"]
