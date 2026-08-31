@@ -167,6 +167,14 @@ ha-dynalogic:
   directions: incoming
   blurb: Dynalogic last-mile deliveries, including those sold as MediaMarkt, Samsung, Nespresso and Menken
 
+ha-econt:
+  region: Bulgaria
+  countries: ["BG"]
+  auth: trackingnr
+  input: shipment number
+  directions: incoming
+  blurb: Econt — Bulgaria's largest private courier, tracked without an account
+
 ha-gls:
   region: Netherlands, Germany and 7 more countries on GLS's shared pan-EU tracker — Czechia, Austria, Ireland, France, Slovenia, Croatia and Italy
   countries: ["NL", "DE", "CZ", "AT", "IE", "FR", "SI", "HR", "IT"]
