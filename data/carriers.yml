@@ -133,6 +133,11 @@ ha-dpd:
   auth: account
   directions: incoming+outgoing
   blurb: DPD shipments, tracked through your myDPD account
+  aliases:
+    - name: BRT
+      region: Italy
+      countries: ["IT"]
+      blurb: BRT — DPD's brand name in Italy
 
 ha-dragonfly:
   region: Netherlands & Australia
