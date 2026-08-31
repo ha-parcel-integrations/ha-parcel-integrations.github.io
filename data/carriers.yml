@@ -120,6 +120,13 @@ ha-delhivery:
   directions: incoming
   blurb: Delhivery — India's e-commerce delivery network, tracked by AWB number without an account
 
+ha-dhl:
+  region: Germany
+  countries: ["DE"]
+  auth: account
+  directions: incoming
+  blurb: DHL Paket, Germany's largest parcel carrier, tracked through your DHL account
+
 ha-dhl-nl:
   region: Netherlands
   countries: ["NL"]
