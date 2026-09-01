@@ -184,8 +184,8 @@ ha-econt:
   blurb: Econt — Bulgaria's largest private courier, tracked without an account
 
 ha-gls:
-  region: Netherlands, Germany and 7 more countries on GLS's shared pan-EU tracker — Czechia, Austria, Ireland, France, Slovenia, Croatia and Italy
-  countries: ["NL", "DE", "CZ", "AT", "IE", "FR", "SI", "HR", "IT"]
+  region: Netherlands, Germany and 8 more countries on GLS's shared pan-EU tracker — Czechia, Slovakia, Austria, Ireland, France, Slovenia, Croatia and Italy
+  countries: ["NL", "DE", "CZ", "SK", "AT", "IE", "FR", "SI", "HR", "IT"]
   auth: trackingnr
   input: tracking number + postal code
   directions: incoming
