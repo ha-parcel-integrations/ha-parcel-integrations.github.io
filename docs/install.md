@@ -88,10 +88,25 @@ data inside is identical either way, which is the point of the
 
 ## Polling and rate limits
 
-Each carrier integration polls on an interval you can change in its **Configure**
-dialog. The defaults are chosen to be polite to the carrier's API — turning them
-way down mostly gets you rate-limited, not faster updates. Delivery-day
-precision comes from the carrier's own data, not from how often you ask.
+Each carrier integration polls automatically — there is no fixed interval to
+tune. How often it checks adjusts to what your parcels are actually doing:
+
+- No polling between 00:00–06:00 local time, aside from one catch-up check
+  right at each end of that window, so an overnight update is never missed.
+- Checks every 15 minutes while a tracked parcel is out for delivery today,
+  starting an hour before its delivery window opens.
+- Checks every 30–60 minutes otherwise — for a carrier you log into with an
+  account, this is also the minimum cadence, since it's the only way to
+  discover a new shipment that appeared on your account without you doing
+  anything.
+- For carriers you add by tracking number, polling stops entirely once every
+  tracked parcel has been delivered (or none are tracked) — adding a parcel
+  back starts it again immediately.
+
+Delivery-day precision comes from the carrier's own data, not from how often
+you ask, and the cadence above is chosen to be polite to the carrier's own
+API — asking more often than that would just get you rate-limited, not
+faster updates.
 
 ## When something looks wrong
 
