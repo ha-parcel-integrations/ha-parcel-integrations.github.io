@@ -60,6 +60,14 @@ ha-an-post:
   directions: incoming
   blurb: An Post — Ireland's national postal operator, with a watchlist for parcels not yet linked to your account
 
+ha-aramex:
+  region: Australia and New Zealand
+  countries: ["AU", "NZ"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Aramex's keyless AU/NZ consumer tracking network
+
 ha-better-trucks:
   region: United States
   countries: ["US"]
@@ -222,6 +230,14 @@ ha-nova-post:
   input: tracking number
   directions: incoming
   blurb: Nova Post (Nova Poshta) — Ukraine's largest parcel-locker and courier network, with cross-border delivery across Europe and the US
+
+ha-nz-post:
+  region: New Zealand
+  countries: ["NZ"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: New Zealand's national postal operator
 
 ha-oesterreichische-post:
   region: Austria

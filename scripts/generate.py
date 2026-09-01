@@ -98,6 +98,7 @@ COUNTRY_NAMES = {
     "MY": "Malaysia",
     "NL": "Netherlands",
     "NO": "Norway",
+    "NZ": "New Zealand",
     "PH": "Philippines",
     "PL": "Poland",
     "PT": "Portugal",
