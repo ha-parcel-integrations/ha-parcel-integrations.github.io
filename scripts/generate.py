@@ -84,6 +84,7 @@ COUNTRY_NAMES = {
     "FI": "Finland",
     "FR": "France",
     "GB": "United Kingdom",
+    "GR": "Greece",
     "HR": "Croatia",
     "HU": "Hungary",
     "ID": "Indonesia",

@@ -76,6 +76,22 @@ ha-better-trucks:
   directions: incoming
   blurb: Better Trucks — US last-mile package delivery, tracked without an account
 
+ha-boxnow:
+  region: Greece
+  countries: ["GR"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: BoxNow locker/pickup-point parcels, tracked the same way as on boxnow.gr
+
+ha-bpost:
+  region: Belgium
+  countries: ["BE"]
+  auth: trackingnr
+  input: barcode + postal code
+  directions: incoming
+  blurb: bpost parcels, Belgium's national postal service
+
 ha-budbee:
   region: Nordics and Benelux
   countries: ["SE", "NL", "BE", "DK", "FI", "NO"]
@@ -353,6 +369,14 @@ ha-shopee-xpress:
   input: tracking code
   directions: incoming
   blurb: Shopee Xpress (SPX) — Shopee's own in-house last-mile carrier for its Southeast Asian and South American markets
+
+ha-slovenska-posta:
+  region: Slovakia
+  countries: ["SK"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Slovenská Pošta parcels, tracked the same way as on posta.sk
 
 ha-sunyou:
   region: Cross-border
