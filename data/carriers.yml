@@ -183,6 +183,14 @@ ha-econt:
   directions: incoming
   blurb: Econt — Bulgaria's largest private courier, tracked without an account
 
+ha-fan-courier:
+  region: Romania
+  countries: ["RO"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: FAN Courier — Romania's parcel network, tracked without an account
+
 ha-gls:
   region: Netherlands, Germany and 8 more countries on GLS's shared pan-EU tracker — Czechia, Slovakia, Austria, Ireland, France, Slovenia, Croatia and Italy
   countries: ["NL", "DE", "CZ", "SK", "AT", "IE", "FR", "SI", "HR", "IT"]
