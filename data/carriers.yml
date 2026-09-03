@@ -324,6 +324,13 @@ ha-poste-italiane:
   directions: incoming
   blurb: Poste Italiane — Italy's national postal operator, tracked without an account
 
+ha-posten-bring:
+  region: Norway, Sweden and Denmark
+  countries: ["NO", "SE", "DK"]
+  auth: account
+  directions: incoming+outgoing
+  blurb: Posten or Bring parcels, tracked through your own consumer account
+
 ha-postnl:
   region: Netherlands & Belgium
   countries: ["NL", "BE"]

@@ -76,6 +76,7 @@ COUNTRY_NAMES = {
     "BR": "Brazil",
     "CA": "Canada",
     "CH": "Switzerland",
+    "CY": "Cyprus",
     "CZ": "Czechia",
     "DE": "Germany",
     "DK": "Denmark",
