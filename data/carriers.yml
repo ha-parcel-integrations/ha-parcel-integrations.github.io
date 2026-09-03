@@ -77,12 +77,12 @@ ha-better-trucks:
   blurb: Better Trucks — US last-mile package delivery, tracked without an account
 
 ha-boxnow:
-  region: Greece
-  countries: ["GR"]
+  region: Bulgaria, Greece, Croatia and Cyprus — pick your country's BoxNow backend at setup
+  countries: ["BG", "GR", "HR", "CY"]
   auth: trackingnr
   input: tracking code
   directions: incoming
-  blurb: BoxNow locker/pickup-point parcels, tracked the same way as on boxnow.gr
+  blurb: BoxNow locker/pickup-point parcels, tracked the same way as on the BoxNow website
 
 ha-bpost:
   region: Belgium
