@@ -105,6 +105,7 @@ COUNTRY_NAMES = {
     "PL": "Poland",
     "PT": "Portugal",
     "RO": "Romania",
+    "RS": "Serbia",
     "SE": "Sweden",
     "SI": "Slovenia",
     "SK": "Slovakia",
