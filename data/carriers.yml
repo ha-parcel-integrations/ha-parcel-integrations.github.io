@@ -208,8 +208,8 @@ ha-fan-courier:
   blurb: FAN Courier — Romania's parcel network, tracked without an account
 
 ha-gls:
-  region: Netherlands, Germany and 8 more countries on GLS's shared pan-EU tracker — Czechia, Slovakia, Austria, Ireland, France, Slovenia, Croatia and Italy
-  countries: ["NL", "DE", "CZ", "SK", "AT", "IE", "FR", "SI", "HR", "IT"]
+  region: Netherlands, Germany and 14 more countries on GLS's shared pan-EU tracker — Austria, Belgium, Croatia, Czechia, Denmark, Finland, France, Hungary, Ireland, Italy, Luxembourg, Serbia, Slovakia and Slovenia
+  countries: ["NL", "DE", "AT", "BE", "HR", "CZ", "DK", "FI", "FR", "HU", "IE", "IT", "LU", "RS", "SK", "SI"]
   auth: trackingnr
   input: tracking number + postal code
   directions: incoming
