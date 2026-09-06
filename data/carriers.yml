@@ -136,6 +136,14 @@ ha-correos:
   directions: incoming
   blurb: Spain's national postal operator
 
+ha-ctt:
+  region: Portugal
+  countries: ["PT"]
+  auth: trackingnr
+  input: tracking number
+  directions: incoming
+  blurb: Portugal's national postal operator, tracked through its public keyless tracker
+
 ha-delhivery:
   region: India
   countries: ["IN"]
