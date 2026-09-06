@@ -1031,49 +1031,45 @@ COMMUNITY_URL = (
 REQUEST_URL = f"https://github.com/{ORG}/.github/discussions/new?category=carrier-requests"
 
 
-def _profile_row(c: Carrier, icon_url: str, tracks: str) -> str:
-    icon = f'<img src="{icon_url}" width="32" alt="{c.name}">'
-    badge = (
-        f"![](https://img.shields.io/github/v/release/{ORG}/{c.repo}"
-        "?style=flat-square&label=&color=41BDF5)"
-    )
-    return f"| {icon} | [{c.repo}]({c.url}) | {badge} | {tracks} |"
+def _profile_row(
+    c: Carrier,
+    icon_url: str,
+    *,
+    coverage: str | None = None,
+    connect: str | None = None,
+) -> str:
+    """One table row, same six columns as the site's carrier list.
 
-
-def _tracks(c: Carrier) -> str:
-    """The prose cell in the profile README's table.
-
-    Regions keep their capitals (they are proper nouns) and are dropped when
-    the blurb already names the country — "Spain's national postal operator
-    (Spain)" helps nobody.
+    github.com renders neither Material icons nor this site's asset paths, so
+    the flask is an emoji and the icon a raw.githubusercontent URL — the rest
+    of the cell content is identical to render_carriers on purpose.
     """
-    sentence = c.blurb
-    if c.region and c.region.split()[0].lower() not in c.blurb.lower():
-        sentence += f" ({c.region})"
-
-    if c.auth == "account":
-        access = "account-based"
-    elif c.input:
-        access = f"account-less, {c.input} only" if "+" not in c.input else f"account-less, {c.input}"
-    else:
-        access = "account-less"
-    if c.directions == "incoming+outgoing":
-        access += ", incoming & outgoing parcels"
-
-    tracks = f"{sentence}; {access}."
+    icon = f'<img src="{icon_url}" width="32" alt="{c.name}">'
+    name = f"**[{c.name}]({c.url})**<br><small>{c.blurb}</small>"
     if c.early:
-        tracks += (
-            " **Early release:** the status mapping is still being confirmed "
-            "against real parcels, "
-            f"[help wanted]({c.url}/issues/new?template=unrecognised_status.yml)"
+        name += "<br>🧪 *Early release — status mapping unconfirmed*"
+    tracks = (
+        "Incoming & outgoing" if c.directions == "incoming+outgoing" else "Incoming"
+    )
+    badge = (
+        f"[![](https://img.shields.io/github/v/release/{ORG}/{c.repo}"
+        f"?style=flat-square&label=&color=41BDF5)]({c.url}/releases)"
+    )
+    if c.early:
+        badge += (
+            "<br>![](https://img.shields.io/badge/-BETA-orange?style=flat-square)"
         )
-    return tracks
+    if coverage is None:
+        coverage = f"{c.flags} {c.region}".strip()
+    if connect is None:
+        connect = c.connect
+    return f"| {icon} | {name} | {coverage} | {connect} | {tracks} | {badge} |"
 
 
 def render_profile(carriers: list[Carrier]) -> str:
     out = [PROFILE_HEADER.format(site_url=SITE_URL)]
-    out.append("| | Integration | Latest | Tracks |")
-    out.append("|---|---|---|---|")
+    out.append("| | Carrier | Coverage | Connect with | Tracks | Latest |")
+    out.append("|---|---|---|---|---|---|")
 
     for c in carriers:
         # Raw GitHub URLs, because the profile README renders on github.com and
@@ -1082,7 +1078,7 @@ def render_profile(carriers: list[Carrier]) -> str:
             f"https://raw.githubusercontent.com/{ORG}/{c.repo}/main/"
             f"custom_components/{c.domain}/brand/icon.png"
         )
-        out.append(_profile_row(c, icon_url, _tracks(c)))
+        out.append(_profile_row(c, icon_url))
 
     aggregator = _aggregator_carrier()
     if aggregator:
@@ -1094,8 +1090,8 @@ def render_profile(carriers: list[Carrier]) -> str:
             _profile_row(
                 aggregator,
                 icon_url,
-                "Rolls every carrier above into one unified set of sensors, a "
-                "combined deliveries calendar, and a single event stream",
+                coverage="Every carrier above",
+                connect="No setup input",
             )
         )
 
@@ -1127,7 +1123,10 @@ def _aggregator_carrier() -> Carrier | None:
         auth="none",
         input=None,
         directions="incoming+outgoing",
-        blurb="",
+        blurb=(
+            "Rolls every carrier above into one unified set of sensors, a "
+            "combined deliveries calendar, and a single event stream"
+        ),
         icon=None,
         capabilities=None,
     )
