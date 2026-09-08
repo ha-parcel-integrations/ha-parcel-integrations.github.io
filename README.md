@@ -19,7 +19,7 @@ rather than copying it.
 | `docs/automations.md` | `ha-parcel-aggregator/examples/automations/**` |
 | `docs/dashboards.md` | `ha-parcel-aggregator/examples/dashboards/**` |
 | `docs/assets/icons/*.png` | Each carrier's `custom_components/<domain>/brand/icon.png` |
-| `build/profile-README.md` | The same carrier data, in the org profile's format |
+| `build/profile-README.md` | A general project introduction with links to the website |
 
 All of them are gitignored. A committed copy is worse than none, because the
 suite gains carriers faster than anyone remembers to update a table.
@@ -34,7 +34,7 @@ can develop a new carrier in the open without touching this repo.
 
 | Target | What |
 |---|---|
-| `.github` → `profile/README.md` | The generated carrier table, so github.com/ha-parcel-integrations never disagrees with the site |
+| `.github` → `profile/README.md` | A general project introduction directing visitors to the website |
 | Every carrier repo's `homepage` | Set to the docs site, so the About box links here |
 
 Both need a PAT in the `PROFILE_TOKEN` secret (`contents:write` on `.github`,
@@ -62,6 +62,20 @@ GITHUB_TOKEN=$(gh auth token) .venv/bin/python scripts/generate.py
 
 `GITHUB_TOKEN` is optional but the unauthenticated rate limit (60/h) does not
 cover a full run.
+
+## Carrier click analytics
+
+Umami records clicks on carrier names and release badges in the carrier table,
+and on carrier links in the capability comparison. Each click sends one custom
+event named `carrier-click:<repo>`, for example `carrier-click:ha-postnl`.
+Aliases pointing to the same integration share a counter. In Umami, select the
+website and date range, then view Events to compare the counts per integration.
+These are clicks, not completed installations, and collection starts after deploy.
+
+This uses standard custom events supported by the free Hobby plan, without
+extra event properties. Clicks count towards the plan's quota along with
+pageviews; blocked analytics will not be counted. See the
+[Umami Cloud usage FAQ](https://docs.umami.is/docs/cloud/faq).
 
 ## Deploys
 

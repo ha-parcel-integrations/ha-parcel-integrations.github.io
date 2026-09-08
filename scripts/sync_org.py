@@ -4,7 +4,7 @@
 Two jobs, both writing to *other* repositories:
 
 1. **The org profile README.** ``scripts/generate.py`` renders
-   ``build/profile-README.md`` from the same data as the site's carrier page;
+   ``build/profile-README.md`` as a general introduction linking to the website;
    this commits it to ``ha-parcel-integrations/.github`` at
    ``profile/README.md``, which is what github.com/ha-parcel-integrations
    displays.
@@ -87,7 +87,7 @@ def push_profile(token: str) -> int:
             raise
 
     payload = {
-        "message": "Regenerate carrier list from the org site",
+        "message": "Update org profile from the documentation site",
         "content": base64.b64encode(content).decode(),
         "committer": {
             "name": "ha-parcel-integrations bot",
