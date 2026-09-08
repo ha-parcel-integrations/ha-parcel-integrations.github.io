@@ -429,6 +429,14 @@ ha-uniuni:
   directions: incoming
   blurb: UniUni — e-commerce last-mile delivery across Canada and the US, tracked without an account
 
+ha-ups:
+  region: Worldwide
+  countries: []
+  auth: trackingnr
+  input: tracking number
+  directions: incoming
+  blurb: UPS parcels worldwide, tracked without a UPS account — updates arrive slowly, because UPS answers a home connection only a few times an hour
+
 ha-vinted-go:
   region: Netherlands, Belgium, France, Spain & Portugal
   countries: ["NL", "BE", "FR", "ES", "PT"]
