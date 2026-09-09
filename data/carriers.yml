@@ -156,7 +156,7 @@ ha-dhl:
   region: Germany
   countries: ["DE"]
   auth: account
-  directions: incoming
+  directions: incoming+outgoing
   blurb: DHL Paket, Germany's largest parcel carrier, tracked through your DHL account
 
 ha-dhl-nl:
