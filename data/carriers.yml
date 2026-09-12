@@ -144,6 +144,13 @@ ha-ctt:
   directions: incoming
   blurb: Portugal's national postal operator, tracked through its public keyless tracker
 
+ha-dao:
+  region: Denmark
+  countries: ["DK"]
+  auth: account
+  directions: incoming
+  blurb: DAO — sign in once and every parcel DAO's own app or site already links to your account shows up automatically
+
 ha-delhivery:
   region: India
   countries: ["IN"]
