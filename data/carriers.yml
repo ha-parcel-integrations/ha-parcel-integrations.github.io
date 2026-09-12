@@ -153,11 +153,11 @@ ha-delhivery:
   blurb: Delhivery — India's e-commerce delivery network, tracked by AWB number without an account
 
 ha-dhl:
-  region: Germany
-  countries: ["DE"]
+  region: Germany and Poland
+  countries: ["DE", "PL"]
   auth: account
-  directions: incoming+outgoing
-  blurb: DHL Paket, Germany's largest parcel carrier, tracked through your DHL account
+  directions: incoming+outgoing (DE); incoming+observed (PL)
+  blurb: DHL Paket (DE) and DHL Parcel Polska (PL), tracked through your own DHL account
 
 ha-dhl-nl:
   region: Netherlands
@@ -167,6 +167,7 @@ ha-dhl-nl:
   blurb: DHL eCommerce, tracked through your DHL account
 
 ha-dpd:
+  name: DPD
   region: Netherlands and 17 more countries — Germany on its own separate backend, the rest sharing DPD's myDPD network
   countries: ["NL", "AR", "BE", "HR", "CZ", "CH", "DE", "EE", "FR", "GB", "HU", "IT", "LV", "LT", "LU", "PT", "SK", "SI"]
   auth: account
@@ -179,6 +180,7 @@ ha-dpd:
       blurb: BRT — DPD's brand name in Italy
 
 ha-dragonfly:
+  name: Dragonfly
   region: Netherlands & Australia
   countries: ["NL", "AU"]
   auth: trackingnr
@@ -216,10 +218,10 @@ ha-fan-courier:
   blurb: FAN Courier — Romania's parcel network, tracked without an account
 
 ha-gls:
-  region: Netherlands, Germany and 14 more countries on GLS's shared pan-EU tracker — Austria, Belgium, Croatia, Czechia, Denmark, Finland, France, Hungary, Ireland, Italy, Luxembourg, Serbia, Slovakia and Slovenia
-  countries: ["NL", "DE", "AT", "BE", "HR", "CZ", "DK", "FI", "FR", "HU", "IE", "IT", "LU", "RS", "SK", "SI"]
+  region: Netherlands, Germany and 14 more countries on GLS's shared pan-EU tracker — Austria, Belgium, Croatia, Czechia, Denmark, Finland, France, Hungary, Ireland, Italy, Luxembourg, Serbia, Slovakia and Slovenia — plus Canada, the United States and Poland on their own national backends
+  countries: ["NL", "DE", "AT", "BE", "HR", "CZ", "DK", "FI", "FR", "HU", "IE", "IT", "LU", "RS", "SK", "SI", "CA", "US", "PL"]
   auth: trackingnr
-  input: tracking number + postal code
+  input: tracking number + postal code (US and PL need only the tracking number)
   directions: incoming
   blurb: GLS parcels, just like the gls-info.nl website
 
@@ -304,6 +306,7 @@ ha-speedx:
   blurb: SpeedX package tracking without an account
 
 ha-packeta:
+  name: Packeta
   region: Central Europe, Germany & Slovenia
   countries: ["CZ", "SK", "HU", "PL", "RO", "DE", "SI"]
   auth: trackingnr
