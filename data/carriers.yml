@@ -256,6 +256,11 @@ ha-laposte:
   input: tracking number
   directions: incoming
   blurb: La Poste tracking for Colissimo and Chronopost parcels, without an account
+  aliases:
+    - name: Chronopost
+      blurb: Chronopost — La Poste's express brand, same tracking lookup
+    - name: Colissimo
+      blurb: Colissimo — La Poste's parcel brand, same tracking lookup
 
 ha-nova-post:
   region: Ukraine, Europe and the US
