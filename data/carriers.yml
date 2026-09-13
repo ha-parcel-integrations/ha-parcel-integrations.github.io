@@ -216,6 +216,14 @@ ha-econt:
   directions: incoming
   blurb: Econt — Bulgaria's largest private courier, tracked without an account
 
+ha-elta-courier:
+  region: Greece
+  countries: ["GR"]
+  auth: trackingnr
+  input: tracking number
+  directions: incoming
+  blurb: ELTA Courier — the courier arm of Greece's national post, tracked without an account
+
 ha-fan-courier:
   region: Romania
   countries: ["RO"]
@@ -419,6 +427,14 @@ ha-shopee-xpress:
   input: tracking code
   directions: incoming
   blurb: Shopee Xpress (SPX) — Shopee's own in-house last-mile carrier for its Southeast Asian and South American markets
+
+ha-slovak-parcel-service:
+  region: Slovakia
+  countries: ["SK"]
+  auth: trackingnr
+  input: tracking number + postal code
+  directions: incoming
+  blurb: Slovak Parcel Service (SPS) — Slovakia's largest private parcel network, tracked without an account
 
 ha-slovenska-posta:
   region: Slovakia
