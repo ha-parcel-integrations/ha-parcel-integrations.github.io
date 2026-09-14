@@ -347,7 +347,7 @@ ha-packeta:
   countries: ["CZ", "SK", "HU", "PL", "RO", "DE", "SI"]
   auth: trackingnr
   input: "\"Z\" tracking number"
-  directions: incoming
+  directions: incoming+outgoing
   blurb: Packeta's Central-European pickup-point and locker network, known as Zásilkovna in Czechia
   aliases:
     - name: Zásilkovna
