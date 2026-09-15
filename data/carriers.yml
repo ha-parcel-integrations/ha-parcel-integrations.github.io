@@ -232,6 +232,14 @@ ha-fan-courier:
   directions: incoming
   blurb: FAN Courier — Romania's parcel network, tracked without an account
 
+ha-fedex:
+  region: Worldwide
+  countries: []
+  auth: apikey
+  input: tracking number
+  directions: incoming
+  blurb: FedEx parcels worldwide, through FedEx's official tracking API with a developer key you provide yourself
+
 ha-gls:
   region: 20 countries — Austria, Belgium, Croatia, Czechia, Denmark, Finland, France, Hungary, Ireland, Italy, Luxembourg, Serbia, Slovakia, Slovenia and Switzerland share GLS's pan-EU tracker; Canada, Germany, the Netherlands, Poland and the United States use national backends
   countries: ["NL", "DE", "AT", "BE", "CH", "HR", "CZ", "DK", "FI", "FR", "HU", "IE", "IT", "LU", "RS", "SK", "SI", "CA", "US", "PL"]
