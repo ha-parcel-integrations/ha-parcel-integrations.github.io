@@ -104,8 +104,8 @@ actions:
 
 ## No account, in most cases
 
-Most carriers here need nothing but a tracking number — no login, no API key, no
-developer portal. You add the number the way you would on the carrier's own
+Most carriers here need nothing but a tracking code — no login, no API key, no
+developer portal. You add the code the way you would on the carrier's own
 tracking page, and Home Assistant takes it from there. Where a carrier does offer
 an account (PostNL, DHL, DPD, Vinted Go), logging in gets you every parcel
 automatically, including the ones you send.

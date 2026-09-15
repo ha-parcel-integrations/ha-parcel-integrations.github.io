@@ -16,7 +16,7 @@
 #              and the same trap waits for ON, OFF, Y and N.
 #   auth       "account" (user logs in) or "trackingnr" (no account needed)
 #   input      what the user types when auth is "trackingnr". Phrase it to sit
-#              mid-sentence ("tracking number", not "Tracking number") — the
+#              mid-sentence ("tracking code", not "Tracking code") — the
 #              site capitalises it where it needs a capital.
 #   blurb      one sentence, sentence case, no trailing period
 #   directions "incoming" or "incoming+outgoing"
@@ -88,7 +88,7 @@ ha-bpost:
   region: Belgium
   countries: ["BE"]
   auth: trackingnr
-  input: barcode + postal code
+  input: tracking code + postal code
   directions: incoming
   blurb: bpost parcels, Belgium's national postal service
 
@@ -96,7 +96,7 @@ ha-budbee:
   region: Nordics and Benelux
   countries: ["SE", "NL", "BE", "DK", "FI", "NO"]
   auth: trackingnr
-  input: tracking or order number
+  input: tracking code or order number
   directions: incoming+outgoing
   blurb: Budbee home deliveries and Budbee Box lockers, without the e-mail address their tracking page asks for
 
@@ -104,7 +104,7 @@ ha-cainiao:
   region: Cross-border
   countries: []
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Alibaba's tracking layer for AliExpress, Temu, Shein and similar shops
 
@@ -112,7 +112,7 @@ ha-canpar:
   region: Canada
   countries: ["CA"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Canpar Express — Canadian parcel delivery and pickup-point tracking
 
@@ -121,18 +121,18 @@ ha-ceska-posta:
   region: Czechia
   countries: ["CZ"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Czechia's national postal operator, whose pickup-point and locker network operates under the Balikovna brand
   aliases:
     - name: Balikovna
-      blurb: Balikovna — Ceska Posta's own pickup-point and locker network, same backend and tracking numbers
+      blurb: Balikovna — Ceska Posta's own pickup-point and locker network, same backend and tracking codes
 
 ha-correos:
   region: Spain
   countries: ["ES"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Spain's national postal operator
 
@@ -140,7 +140,7 @@ ha-ctt:
   region: Portugal
   countries: ["PT"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Portugal's national postal operator, tracked through its public keyless tracker
 
@@ -155,9 +155,9 @@ ha-delhivery:
   region: India
   countries: ["IN"]
   auth: trackingnr
-  input: AWB (waybill) number
+  input: tracking code
   directions: incoming
-  blurb: Delhivery — India's e-commerce delivery network, tracked by AWB number without an account
+  blurb: Delhivery — India's e-commerce delivery network, tracked by tracking code, no account needed
 
 ha-dhl:
   region: Germany and Poland
@@ -191,7 +191,7 @@ ha-dragonfly:
   region: Netherlands & Australia
   countries: ["NL", "AU"]
   auth: trackingnr
-  input: Track & Trace code
+  input: tracking code
   directions: incoming
   blurb: Dragonfly Shipping — no account and not even a postal code needed
   aliases:
@@ -212,7 +212,7 @@ ha-econt:
   region: Bulgaria
   countries: ["BG"]
   auth: trackingnr
-  input: shipment number
+  input: tracking code
   directions: incoming
   blurb: Econt — Bulgaria's largest private courier, tracked without an account
 
@@ -220,7 +220,7 @@ ha-elta-courier:
   region: Greece
   countries: ["GR"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: ELTA Courier — the courier arm of Greece's national post, tracked without an account
 
@@ -236,7 +236,7 @@ ha-fedex:
   region: Worldwide
   countries: []
   auth: apikey
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: FedEx parcels worldwide, through FedEx's official tracking API with a developer key you provide yourself
 
@@ -244,7 +244,7 @@ ha-gls:
   region: 20 countries — Austria, Belgium, Croatia, Czechia, Denmark, Finland, France, Hungary, Ireland, Italy, Luxembourg, Serbia, Slovakia, Slovenia and Switzerland share GLS's pan-EU tracker; Canada, Germany, the Netherlands, Poland and the United States use national backends
   countries: ["NL", "DE", "AT", "BE", "CH", "HR", "CZ", "DK", "FI", "FR", "HU", "IE", "IT", "LU", "RS", "SK", "SI", "CA", "US", "PL"]
   auth: trackingnr
-  input: tracking number + postal code (US and PL need only the tracking number)
+  input: tracking code + postal code (US and PL need only the tracking code)
   directions: incoming
   blurb: GLS parcels, just like the gls-info.nl website
 
@@ -252,7 +252,7 @@ ha-gofo:
   region: United States, Canada, Italy, France, Spain and the Netherlands
   countries: ["US", "CA", "IT", "FR", "ES", "NL"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: GOFO Express (CIRRO Parcel in Europe) — cross-border e-commerce last-mile tracking
 
@@ -260,7 +260,7 @@ ha-helthjem:
   region: Norway
   countries: ["NO"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Helthjem — Norwegian home delivery
 
@@ -268,23 +268,23 @@ ha-hermes:
   region: Germany
   countries: ["DE"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Hermes Paket
 
 ha-inpost:
-  region: Poland, plus keyless barcode tracking in Italy, Portugal and the United Kingdom
+  region: Poland, plus keyless tracking in Italy, Portugal and the United Kingdom
   countries: ["PL", "IT", "PT", "GB"]
   auth: account
   directions: incoming
-  blurb: InPost Paczkomat lockers, tracked through your InPost account in Poland or by barcode elsewhere — a parcel ready for pickup shows the locker's name
+  blurb: InPost Paczkomat lockers, tracked through your InPost account in Poland or by tracking code elsewhere — a parcel ready for pickup shows the locker's name
 
 ha-laposte:
   name: La Poste
   region: France
   countries: ["FR"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: La Poste tracking for Colissimo and Chronopost parcels, without an account
   aliases:
@@ -297,7 +297,7 @@ ha-matkahuolto:
   region: Finland
   countries: ["FI"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Matkahuolto — Finnish parcel and logistics tracking, without an account
 
@@ -305,7 +305,7 @@ ha-nova-post:
   region: Ukraine, Europe and the US
   countries: ["UA", "MD", "PL", "LT", "CZ", "RO", "DE", "SK", "EE", "LV", "HU", "IT", "FI", "GB", "FR", "ES", "AT", "NL", "US"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Nova Post (Nova Poshta) — Ukraine's largest parcel-locker and courier network, with cross-border delivery across Europe and the US
 
@@ -321,7 +321,7 @@ ha-oesterreichische-post:
   region: Austria
   countries: ["AT"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Österreichische Post — Austria's national postal operator
 
@@ -337,7 +337,7 @@ ha-orlen-paczka:
   region: Poland
   countries: ["PL"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: ORLEN Paczka — Poland's parcel locker network, tracked without an account
 
@@ -354,20 +354,20 @@ ha-packeta:
   region: Central Europe, Germany & Slovenia
   countries: ["CZ", "SK", "HU", "PL", "RO", "DE", "SI"]
   auth: trackingnr
-  input: "\"Z\" tracking number"
+  input: tracking code
   directions: incoming+outgoing
   blurb: Packeta's Central-European pickup-point and locker network, known as Zásilkovna in Czechia
   aliases:
     - name: Zásilkovna
       region: Czechia
       countries: ["CZ"]
-      blurb: Zásilkovna — Packeta's own brand name in Czechia, same backend and "Z" tracking numbers
+      blurb: Zásilkovna — Packeta's own brand name in Czechia, same backend and "Z" tracking codes
 
 ha-planzer:
   region: Switzerland & Liechtenstein
   countries: ["CH", "LI"]
   auth: trackingnr
-  input: shipment number or IKEA order number
+  input: tracking code or IKEA order number
   directions: incoming
   blurb: Planzer — the carrier behind IKEA Switzerland home deliveries
 
@@ -401,7 +401,7 @@ ha-postnord:
   region: Nordics
   countries: ["SE", "DK", "NO", "FI"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: PostNord — the Nordic postal operator
 
@@ -416,7 +416,7 @@ ha-quickpac:
   region: Switzerland
   countries: ["CH"]
   auth: trackingnr
-  input: shipment number
+  input: tracking code
   directions: incoming
   blurb: Quickpac — the delivery arm for Galaxus/Digitec and other Swiss e-commerce
 
@@ -424,7 +424,7 @@ ha-sameday:
   region: South-East Europe
   countries: ["RO", "HU", "BG"]
   auth: trackingnr
-  input: AWB number
+  input: tracking code
   directions: incoming
   blurb: Sameday — the easybox locker network
 
@@ -440,7 +440,7 @@ ha-slovak-parcel-service:
   region: Slovakia
   countries: ["SK"]
   auth: trackingnr
-  input: tracking number + postal code
+  input: tracking code + postal code
   directions: incoming
   blurb: Slovak Parcel Service (SPS) — Slovakia's largest private parcel network, tracked without an account
 
@@ -456,7 +456,7 @@ ha-sunyou:
   region: Cross-border
   countries: []
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: SunYou (SYPost) — cross-border tracking for Asia-to-Europe e-commerce parcels, ahead of the local carrier that delivers them
 
@@ -464,7 +464,7 @@ ha-swiss-post:
   region: Switzerland
   countries: ["CH"]
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: Swiss Post — Switzerland's national postal operator
 
@@ -472,7 +472,7 @@ ha-trunkrs:
   region: Netherlands
   countries: ["NL"]
   auth: trackingnr
-  input: Trunkrs number + postal code
+  input: tracking code + postal code
   directions: incoming
   blurb: Trunkrs — same-day and next-day delivery
 
@@ -488,7 +488,7 @@ ha-ups:
   region: Worldwide
   countries: []
   auth: trackingnr
-  input: tracking number
+  input: tracking code
   directions: incoming
   blurb: UPS parcels worldwide, tracked without a UPS account — updates arrive slowly, because UPS answers a home connection only a few times an hour
 

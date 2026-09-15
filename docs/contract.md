@@ -51,7 +51,7 @@ has the same top-level keys.
 | Key | Type | Meaning |
 |---|---|---|
 | `carrier` | string | Display name of the source carrier (`"PostNL"`, `"DHL"`, …) |
-| `barcode` | string | Tracking number |
+| `barcode` | string | Tracking code |
 | `sender` | string \| null | Sender name, often the webshop |
 | `receiver` | string \| null | Recipient name |
 | `status` | `ParcelStatus` | Canonical status — see above |

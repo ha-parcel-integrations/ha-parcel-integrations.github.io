@@ -30,8 +30,8 @@ here](carriers.md).
 5. Go to **Settings → Devices & Services → Add Integration** and search for the
    carrier
 
-What step 5 asks you for depends on the carrier: a tracking number, a tracking
-number plus postal code, or an account login. The **Connect with** column on the
+What step 5 asks you for depends on the carrier: a tracking code, a tracking
+code plus postal code, or an account login. The **Connect with** column on the
 [carriers page](carriers.md) tells you which before you start.
 
 At this point you are done. Each carrier integration is fully standalone: it
@@ -99,7 +99,7 @@ tune. How often it checks adjusts to what your parcels are actually doing:
   account, this is also the minimum cadence, since it's the only way to
   discover a new shipment that appeared on your account without you doing
   anything.
-- For carriers you add by tracking number, polling stops entirely once every
+- For carriers you add by tracking code, polling stops entirely once every
   tracked parcel has been delivered (or none are tracked) — adding a parcel
   back starts it again immediately.
 

@@ -59,7 +59,7 @@ NOT_A_CARRIER = {
 
 AUTH_LABEL = {
     "account": "Account login",
-    "trackingnr": "Tracking number",
+    "trackingnr": "Tracking code",
     "apikey": "Official API key",
 }
 
@@ -323,7 +323,7 @@ class Carrier:
     def connect(self) -> str:
         label = AUTH_LABEL.get(self.auth, self.auth)
         # data/carriers.yml stores `input` in mid-sentence form ("tracking
-        # number"); this column starts a line, so it gets a capital here.
+        # code"); this column starts a line, so it gets a capital here.
         if not self.input:
             return label
         detail = self.input[0].upper() + self.input[1:]

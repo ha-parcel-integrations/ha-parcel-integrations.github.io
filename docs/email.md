@@ -3,24 +3,24 @@ hide:
   - navigation
 description: >-
   Let Home Assistant read the shipping confirmations in your mailbox over IMAP
-  and start tracking each parcel automatically — no tracking number typed by
+  and start tracking each parcel automatically — no tracking code typed by
   hand.
 ---
 
-# Tracking numbers straight from your e-mail
+# Tracking codes straight from your e-mail
 
-Every shop mails you the tracking number the moment your order ships, and typing
+Every shop mails you the tracking code the moment your order ships, and typing
 it over is the last manual step left in this suite. Home Assistant's built-in
 **IMAP** integration can do it for you.
 
 > Shipping mail arrives :material-arrow-right: `imap_content` fires
-> :material-arrow-right: your automation lifts the number out
+> :material-arrow-right: your automation lifts the code out
 > :material-arrow-right: `carrier.track_parcel`.
 
-!!! info "Only for tracking-number carriers"
+!!! info "Only for tracking-code carriers"
     PostNL, DHL, DPD and Vinted Go log into your account and pull in every parcel
     by themselves. This page is for the carriers whose **Connect with** column on
-    the [carriers page](carriers.md) says a tracking number.
+    the [carriers page](carriers.md) says a tracking code.
 
 ## 1. Set up IMAP
 
@@ -186,7 +186,7 @@ Three ways to give it less, best first:
     does not match is never fetched:
     `UnSeen UnDeleted FROM "no-reply@gls-group.eu"`.
 3. **Message text off** once your pattern works. The template still gets the full
-    body; traces and database then hold a tracking number instead of a letter.
+    body; traces and database then hold a tracking code instead of a letter.
 
 ## Share what worked
 
