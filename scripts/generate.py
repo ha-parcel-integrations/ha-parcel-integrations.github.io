@@ -60,6 +60,7 @@ NOT_A_CARRIER = {
 AUTH_LABEL = {
     "account": "Account login",
     "trackingnr": "Tracking number",
+    "apikey": "Official API key",
 }
 
 # English names for every ISO 3166-1 alpha-2 code that appears in
