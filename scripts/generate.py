@@ -640,10 +640,15 @@ def render_carriers(carriers: list[Carrier]) -> str:
 
     # Row order here must match the <tr> order above exactly — carriers-filter.js
     # zips this against the table's tbody rows by index, not by carrier name.
+    #
+    # A <div>, not <script>: navigation.instant strips <script> tags from the
+    # content it swaps in on SPA navigation, which silently dropped this data
+    # (and broke the filter) on every navigation into the page that wasn't a
+    # full reload.
     out.append(
-        '\n<script type="application/json" id="carriers-country-data">'
+        '\n<div id="carriers-country-data" hidden>'
         + json.dumps([c.countries for c in carriers])
-        + "</script>\n"
+        + "</div>\n"
         "</div>\n"
     )
 
