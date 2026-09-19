@@ -290,6 +290,21 @@ def org_repos() -> list[dict]:
 # --------------------------------------------------------------------------
 
 
+@dataclass(frozen=True)
+class Connection:
+    """One way to connect a carrier: an auth kind and what the user types.
+
+    ``variant`` is None for the single-source carriers (almost all of them)
+    and the backend's label for a carrier whose sources authenticate
+    differently — USPS signs in to Informed Delivery but wants a developer
+    key for API Tracking, and one "Connect with" answer would be a lie.
+    """
+
+    auth: str
+    input: str | None
+    variant: str | None = None
+
+
 @dataclass
 class Carrier:
     repo: str
@@ -299,8 +314,7 @@ class Carrier:
     url: str
     region: str
     countries: list[str]
-    auth: str
-    input: str | None
+    connections: tuple[Connection, ...]
     directions: str
     blurb: str
     icon: str | None
@@ -321,14 +335,22 @@ class Carrier:
 
     @property
     def connect(self) -> str:
-        label = AUTH_LABEL.get(self.auth, self.auth)
+        return "<br>".join(self._connect_line(c) for c in self.connections)
+
+    @staticmethod
+    def _connect_line(conn: Connection) -> str:
+        label = AUTH_LABEL[conn.auth]
+        # A carrier whose backends authenticate differently names each one,
+        # so the row says which answer belongs to which source.
+        if conn.variant:
+            label = f"**{conn.variant}** — {label}"
         # data/carriers.yml stores `input` in mid-sentence form ("tracking
         # code"); this column starts a line, so it gets a capital here.
-        if not self.input:
+        if not conn.input:
             return label
-        detail = self.input[0].upper() + self.input[1:]
+        detail = conn.input[0].upper() + conn.input[1:]
         # The sub-line only earns its space when it says more than the label.
-        if detail == label:
+        if detail == AUTH_LABEL[conn.auth]:
             return label
         return f"{label}<br><small>{detail}</small>"
 
@@ -401,6 +423,69 @@ def _capabilities_of(
     return frozenset(re.findall(r'"([^"]+)"', match.group(1)))
 
 
+def _connections_of(
+    repo: str,
+    meta: dict,
+    capabilities: frozenset[str] | dict[str, frozenset[str]] | None,
+) -> tuple[Connection, ...]:
+    """Read `auth`/`input` out of one carriers.yml entry.
+
+    Scalar `auth` is the common form. A mapping is the variant-keyed form,
+    keyed by the same backend labels the carrier declares in its own
+    CAPABILITIES_BY_VARIANT, so carriers.md and capabilities.md name the
+    sources identically — a mismatch fails the build rather than quietly
+    listing a backend under two different names on two pages.
+    """
+    auth = meta["auth"]
+
+    if isinstance(auth, str):
+        return (Connection(auth=_checked_auth(repo, auth), input=meta.get("input")),)
+
+    if not isinstance(auth, dict) or not auth:
+        raise GenerateError(
+            f"{repo}: `auth` must be an auth kind or a non-empty mapping of "
+            "backend label -> {kind, input}"
+        )
+    if meta.get("input") is not None:
+        raise GenerateError(
+            f"{repo}: `input` belongs inside each backend when `auth` is "
+            "variant-keyed, not next to it"
+        )
+    if isinstance(capabilities, dict):
+        unknown = sorted(set(auth) - set(capabilities))
+        if unknown:
+            raise GenerateError(
+                f"{repo}: `auth` names backend(s) {', '.join(unknown)}, which "
+                "CAPABILITIES_BY_VARIANT in the carrier's const.py does not "
+                f"declare (it has {', '.join(capabilities)})"
+            )
+
+    connections = []
+    for label, spec in auth.items():
+        if not isinstance(spec, dict) or "kind" not in spec:
+            raise GenerateError(
+                f"{repo}: backend {label} needs a mapping with a `kind` "
+                "(and optionally an `input`)"
+            )
+        connections.append(
+            Connection(
+                auth=_checked_auth(repo, spec["kind"]),
+                input=spec.get("input"),
+                variant=label,
+            )
+        )
+    return tuple(connections)
+
+
+def _checked_auth(repo: str, auth: str) -> str:
+    if auth not in AUTH_LABEL:
+        raise GenerateError(
+            f"{repo}: unknown auth kind {auth!r} — expected one of "
+            f"{', '.join(AUTH_LABEL)}"
+        )
+    return auth
+
+
 def _reconcile(found: set[str], declared: set[str]) -> None:
     missing = sorted(found - declared)
     stale = sorted(declared - found)
@@ -464,6 +549,7 @@ def collect_carriers() -> list[Carrier]:
             raise GenerateError(f"{repo}: custom_components/{domain}/manifest.json is missing")
         manifest = json.loads(raw)
         meta = declared[repo]
+        capabilities = _capabilities_of(repo, domain)
 
         icon_bytes = gh_file(repo, f"custom_components/{domain}/brand/icon.png")
         icon_name = None
@@ -482,11 +568,10 @@ def collect_carriers() -> list[Carrier]:
             url=f"https://github.com/{ORG}/{repo}",
             region=meta["region"],
             countries=meta.get("countries") or [],
-            auth=meta["auth"],
-            input=meta.get("input"),
             directions=meta.get("directions", "incoming"),
             icon=icon_name,
-            capabilities=_capabilities_of(repo, domain),
+            capabilities=capabilities,
+            connections=_connections_of(repo, meta, capabilities),
         )
 
         name = meta.get("name") or manifest.get("name", repo)

@@ -14,10 +14,26 @@
 #   countries  ISO 3166-1 alpha-2 codes, used for the flag column. ALWAYS quote
 #              them — YAML 1.1 reads a bare NO (Norway) as the boolean false,
 #              and the same trap waits for ON, OFF, Y and N.
-#   auth       "account" (user logs in) or "trackingnr" (no account needed)
+#   auth       "account" (user logs in), "trackingnr" (no account needed) or
+#              "apikey" (the user brings their own official API credentials).
+#              A carrier whose backends authenticate differently writes a
+#              mapping instead, keyed by the SAME backend labels its own
+#              const.py declares in CAPABILITIES_BY_VARIANT (a label that is
+#              not in there fails the build, so the two pages can never name
+#              the same backend differently):
+#                  auth:
+#                    Informed Delivery:
+#                      kind: account
+#                    API Tracking:
+#                      kind: apikey
+#                      input: tracking code
+#              Only reach for that when the auth kinds genuinely differ —
+#              one backend needing an extra field is `input` prose, not a
+#              second entry.
 #   input      what the user types when auth is "trackingnr". Phrase it to sit
 #              mid-sentence ("tracking code", not "Tracking code") — the
-#              site capitalises it where it needs a capital.
+#              site capitalises it where it needs a capital. With the mapping
+#              form of `auth` it goes inside each backend, never next to it.
 #   blurb      one sentence, sentence case, no trailing period
 #   directions "incoming" or "incoming+outgoing"
 #   aliases    optional list of {name, blurb, region?, countries?} — an extra
