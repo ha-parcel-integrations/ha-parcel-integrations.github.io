@@ -51,6 +51,12 @@ extra_css:
 extra_javascript:
   - javascripts/carriers-filter.js
 
+# Appends a content hash to the two files above. Without it, a deploy's new
+# HTML can be served alongside the stylesheet a returning visitor cached ten
+# minutes earlier — see hooks/cachebust.py.
+hooks:
+  - hooks/cachebust.py
+
 markdown_extensions:
   - admonition
   - attr_list
