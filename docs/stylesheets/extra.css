@@ -18,13 +18,6 @@
   background-color: #1c1c1c;
 }
 
-/* Carrier table: icons are 32px, so keep that column tight and centred, and
-   let the carrier name column take the slack. */
-.md-typeset table:not([class]) td:first-child {
-  text-align: center;
-  padding-right: 0;
-}
-
 .md-typeset table:not([class]) img {
   vertical-align: middle;
 }
@@ -60,28 +53,531 @@
   margin-left: 0.4rem;
 }
 
-/* Carrier-page country filter. */
-.md-typeset .carriers-filter {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin: 1rem 0;
+/* ------------------------------------------------------------------ *
+ * Carrier directory (docs/carriers.md)
+ *
+ * The grid is the page: logos first, then how you connect and where the
+ * carrier runs. Selecting a card opens the detail dialog, which is where the
+ * capability table lives — it used to be its own comparison page.
+ * ------------------------------------------------------------------ */
+
+:root {
+  /* One hue per connection mechanism, held apart from the HA-blue accent so
+     a filter chip and a connection badge never read as the same thing. */
+  --carrier-account: #2f6ca8;
+  --carrier-trackingnr: #1f7a5c;
+  --carrier-apikey: #96591a;
+  --carrier-card-bg: var(--md-default-bg-color);
+  --carrier-line: var(--md-default-fg-color--lightest);
+  /* Carrier logos are drawn for a light background and most are dark on
+     transparent, so the plate stays light in both schemes. */
+  --carrier-plate: #ffffff;
+  --carrier-beta: #e07800;
 }
 
-.md-typeset .carriers-filter label {
-  font-weight: 600;
+[data-md-color-scheme="slate"] {
+  --carrier-account: #8db8ea;
+  --carrier-trackingnr: #6fd0a6;
+  --carrier-apikey: #e6b06a;
+  --carrier-card-bg: var(--md-code-bg-color);
+  --carrier-line: var(--md-default-fg-color--lighter);
+  --carrier-plate: #f4f6f8;
+  --carrier-beta: #ffa726;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* --- filter bar ---------------------------------------------------- */
+
+.md-typeset .carriers-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.8rem;
+  margin: 1.2rem 0 0.8rem;
+}
+
+/* Country first: it is the question almost every visitor arrives with. */
+.md-typeset .carriers-filter__country {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
 }
 
 .md-typeset .carriers-filter select {
-  font-size: 0.7rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 0.2rem;
-  border: 1px solid var(--md-default-fg-color--lightest);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.3rem;
+  border: 2px solid var(--md-primary-fg-color);
   background-color: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  min-width: 11rem;
+}
+
+.md-typeset .carriers-filter__kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.md-typeset .carrier-chip {
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 0.3rem 0.7rem;
+  border-radius: 1rem;
+  border: 1px solid var(--carrier-line);
+  background: var(--carrier-card-bg);
+  color: var(--md-default-fg-color--light);
+  cursor: pointer;
+  transition: background-color 125ms, color 125ms, border-color 125ms;
+}
+
+.md-typeset .carrier-chip:hover {
+  border-color: var(--md-primary-fg-color);
   color: var(--md-default-fg-color);
 }
 
-.md-typeset .carriers-filter #carrier-country-count {
+.md-typeset .carrier-chip[aria-pressed="true"] {
+  background: var(--md-primary-fg-color);
+  border-color: var(--md-primary-fg-color);
+  color: #06222f;
+}
+
+.md-typeset .carriers-count {
   color: var(--md-default-fg-color--light);
+  font-size: 0.72rem;
+  margin: 0 0 1rem;
+}
+
+.md-typeset .carriers-count strong {
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .carriers-empty {
+  border: 1px dashed var(--carrier-line);
+  border-radius: 0.4rem;
+  padding: 1.2rem;
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+}
+
+/* --- the grid ------------------------------------------------------ */
+
+.md-typeset .carriers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.7rem;
+}
+
+.md-typeset .carrier-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6rem;
+  text-align: left;
+  font: inherit;
+  padding: 0.8rem;
+  border: 1px solid var(--carrier-line);
+  border-radius: 0.5rem;
+  background: var(--carrier-card-bg);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+  transition: border-color 125ms, box-shadow 125ms, transform 125ms;
+}
+
+/* An author `display` beats the UA stylesheet's `[hidden] { display: none }`,
+   so without this the filters set .hidden on cards that stayed visible. */
+.md-typeset .carrier-card[hidden] {
+  display: none;
+}
+
+.md-typeset .carrier-card:hover {
+  border-color: var(--md-primary-fg-color);
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .carrier-card {
+    transition: none;
+  }
+  .md-typeset .carrier-card:hover {
+    transform: none;
+  }
+}
+
+.md-typeset .carrier-plate {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 2;
+  border-radius: 0.35rem;
+  border: 1px solid var(--carrier-line);
+  background: var(--carrier-plate);
+}
+
+.md-typeset .carrier-plate img {
+  width: 62%;
+  max-height: 76%;
+  object-fit: contain;
+}
+
+.md-typeset .carrier-initial {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.md-typeset .carrier-beta {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.15rem;
+  background: var(--carrier-beta);
+  color: #2a1800;
+}
+
+.md-typeset .carrier-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.md-typeset .carrier-version {
+  font-size: 0.62rem;
+  font-weight: 400;
+  color: var(--md-default-fg-color--light);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.md-typeset .carrier-kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.md-typeset .carrier-pill {
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 0.05rem 0.35rem;
+  border-radius: 0.2rem;
+  border: 1px solid currentcolor;
+  white-space: nowrap;
+}
+
+.md-typeset .carrier-pill--account {
+  color: var(--carrier-account);
+}
+
+.md-typeset .carrier-pill--trackingnr {
+  color: var(--carrier-trackingnr);
+}
+
+.md-typeset .carrier-pill--apikey {
+  color: var(--carrier-apikey);
+}
+
+.md-typeset .carrier-where {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.35rem;
+  margin-top: auto;
+  font-size: 0.66rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .carrier-flags {
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+/* The blurb is what site search matches on and what a screen reader reads as
+   part of the card's label; the card itself shows it in the dialog instead. */
+.md-typeset .carrier-blurb {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* --- legend -------------------------------------------------------- */
+
+.md-typeset .carriers-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.4rem;
+  margin: 1.4rem 0 0;
+  font-size: 0.68rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .carriers-legend > div {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.md-typeset .carriers-legend dd {
+  margin: 0;
+}
+
+/* --- detail dialog ------------------------------------------------- */
+
+.carrier-dialog {
+  width: min(47rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  padding: 0;
+  border: 1px solid var(--carrier-line);
+  border-radius: 0.6rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  box-shadow: 0 0.6rem 2rem rgba(0, 0, 0, 0.3);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.carrier-dialog:focus {
+  outline: none;
+}
+
+.md-typeset .carrier-caps abbr {
+  text-decoration: none;
+  border-bottom: 1px dotted var(--md-default-fg-color--lighter);
+}
+
+.carrier-dialog::backdrop {
+  background: rgba(10, 18, 24, 0.55);
+}
+
+.carrier-dialog__head {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  padding: 1rem 1rem 0;
+}
+
+.md-typeset .carrier-dialog .carrier-plate {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 4.4rem;
+  aspect-ratio: 1;
+}
+
+.carrier-dialog__title {
+  min-width: 0;
+}
+
+.md-typeset .carrier-dialog__title h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.2rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.md-typeset .carrier-dialog__title p {
+  margin: 0;
+  color: var(--md-default-fg-color--light);
+}
+
+/* The way out to the repo is the one thing people come here to click, so it
+   sits with the title rather than in a footer. */
+.md-typeset .carrier-dialog .carrier-repo {
+  display: inline-block;
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.carrier-dialog__close {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  color: var(--md-default-fg-color--light);
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+  cursor: pointer;
+}
+
+.carrier-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.8rem 1.2rem;
+  margin: 0;
+  padding: 1rem;
+}
+
+.md-typeset .carrier-facts dt {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: 0.25rem;
+}
+
+.md-typeset .carrier-facts dd {
+  margin: 0;
+}
+
+/* Grid and flex children default to min-width:auto, which lets a long word
+   (a region sentence, a repo name) widen the track instead of wrapping. */
+.md-typeset .carrier-facts > div,
+.carrier-dialog__title,
+.carrier-capabilities {
+  min-width: 0;
+}
+
+.md-typeset .carrier-connections {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.carrier-connections li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+}
+
+.carrier-variant {
+  font-weight: 700;
   font-size: 0.7rem;
+}
+
+.carrier-input,
+.carrier-region {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.carrier-capabilities {
+  padding: 0 1rem 0.4rem;
+}
+
+.md-typeset .carrier-capabilities h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.md-typeset .carrier-note {
+  margin: 0 0 0.6rem;
+  font-size: 0.68rem;
+  color: var(--md-default-fg-color--light);
+}
+
+.carrier-table {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid var(--carrier-line);
+  border-radius: 0.4rem;
+}
+
+/* The class is load-bearing: Material styles `table:not([class])` into its
+   own inline-block scroll container with max-width:100%, which caps the box
+   but lets the rows spill out — the whole dialog then scrolled sideways.
+   Naming the table opts out of that and leaves the scrolling to the wrapper. */
+.md-typeset .carrier-table table.carrier-caps {
+  display: table;
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  font-size: 0.7rem;
+  background: none;
+}
+
+.md-typeset .carrier-caps th,
+.md-typeset .carrier-caps td {
+  padding: 0.4rem 0.6rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.md-typeset .carrier-caps thead th {
+  font-weight: 600;
+  color: var(--md-default-fg-color--light);
+  border-bottom: 1px solid var(--carrier-line);
+}
+
+.md-typeset .carrier-caps tbody th {
+  text-align: left;
+  font-weight: 700;
+}
+
+.md-typeset .carrier-caps tbody tr + tr > * {
+  border-top: 1px solid var(--carrier-line);
+}
+
+.md-typeset .carrier-caps .is-yes {
+  color: var(--carrier-trackingnr);
+  font-size: 0.85rem;
+}
+
+.md-typeset .carrier-caps .is-no {
+  color: var(--md-default-fg-color--lighter);
+}
+
+.md-typeset .carrier-dialog__foot {
+  margin: 0;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--carrier-line);
+  font-size: 0.68rem;
+  color: var(--md-default-fg-color--light);
+}
+
+@media screen and (max-width: 30em) {
+  .md-typeset .carriers-grid {
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  }
+
+  .md-typeset .carriers-filter select {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .md-typeset .carriers-filter__country {
+    width: 100%;
+  }
+
+  .carrier-dialog__head {
+    flex-wrap: wrap;
+  }
 }

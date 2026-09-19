@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Generate the pages that must never be hand-written.
 
-Four pages on this site describe things that already have a source of truth
+Three pages on this site describe things that already have a source of truth
 somewhere else in the org:
 
-* ``docs/carriers.md``      — every carrier repo, its version and its icon
-* ``docs/capabilities.md``  — which optional contract fields each carrier's
-  own ``const.py`` declares it populates
+* ``docs/carriers.md``      — every carrier repo, its version and its icon,
+  plus the capabilities its own ``const.py`` declares, shown per carrier
 * ``docs/automations.md``   — the aggregator's ``examples/automations/`` folder
 * ``docs/dashboards.md``    — the aggregator's ``examples/dashboards/`` folder
 
@@ -46,6 +45,7 @@ DOCS = ROOT / "docs"
 BUILD = ROOT / "build"
 ICONS = DOCS / "assets" / "icons"
 CARRIER_DATA = ROOT / "data" / "carriers.yml"
+ALIAS_ICONS = ROOT / "data" / "icons"
 
 # Repos in the org that are not carrier integrations. The aggregator is a
 # real integration but gets its own section rather than a table row.
@@ -61,6 +61,16 @@ AUTH_LABEL = {
     "account": "Account login",
     "trackingnr": "Tracking code",
     "apikey": "Official API key",
+}
+
+# The same three mechanisms as a one-word badge on the carrier tile, where
+# there is no room for the sentence AUTH_LABEL spells out. Both maps are
+# keyed by the auth kinds data/carriers.yml declares, so a kind can never
+# have a badge and no label (or the reverse).
+AUTH_PILL = {
+    "account": "Account",
+    "trackingnr": "Tracking",
+    "apikey": "API",
 }
 
 # English names for every ISO 3166-1 alpha-2 code that appears in
@@ -117,13 +127,13 @@ COUNTRY_NAMES = {
 }
 
 # The optional parcel-contract fields a carrier may or may not populate. Order
-# here is display order on docs/capabilities.md. Keep the keys in sync with
+# here is the column order in each carrier's capability table. Keep the keys in sync with
 # ha-carrier-template's KNOWN_CAPABILITIES — that is the copy every carrier
 # repo's own CAPABILITIES constant is validated against, this is only used to
 # label and order them on the page.
 CAPABILITY_LABELS = {
     "delivery_window": ("Delivery window", "`planned_from` / `planned_to`"),
-    "pickup_point": ("Pickup point name", "`pickup_point`"),
+    "pickup_point": ("Pickup point", "`pickup_point`"),
     "weight": ("Weight", "`weight`"),
     "dimensions": ("Dimensions", "`dimensions`"),
     "url": ("Tracking link", "`url`"),
@@ -398,7 +408,7 @@ def _capabilities_of(
 
     A carrier that declares the multi-backend form gets a ``dict`` back,
     keyed by variant label in declaration order (a plain dict, so that order
-    survives — see render_capabilities). Tried first: a carrier is expected
+    survives — see _payload). Tried first: a carrier is expected
     to declare exactly one of the two forms, never both.
     """
     raw = gh_file(repo, f"custom_components/{domain}/const.py")
@@ -432,9 +442,9 @@ def _connections_of(
 
     Scalar `auth` is the common form. A mapping is the variant-keyed form,
     keyed by the same backend labels the carrier declares in its own
-    CAPABILITIES_BY_VARIANT, so carriers.md and capabilities.md name the
-    sources identically — a mismatch fails the build rather than quietly
-    listing a backend under two different names on two pages.
+    CAPABILITIES_BY_VARIANT, so a carrier's connection detail and its
+    capability table name the sources identically — a mismatch fails the
+    build rather than quietly listing a backend under two different names.
     """
     auth = meta["auth"]
 
@@ -579,13 +589,20 @@ def collect_carriers() -> list[Carrier]:
 
         # A repo answering to a second brand name (e.g. a carrier's own
         # locker network) gets its own row everywhere carriers are listed —
-        # same repo link/version/icon, its own name and blurb. region/countries
+        # same repo link/version, its own name and blurb (and optionally its own
+        # icon, read from data/icons — the repo only ships the primary brand's). region/countries
         # default to the primary entry's but may be narrowed when the two
         # brands don't cover the same territory (e.g. one brand per country).
         for alias in meta.get("aliases") or []:
             alias_shared = shared | {
                 k: alias[k] for k in ("region", "countries") if k in alias
             }
+            if alias_icon := alias.get("icon"):
+                src = ALIAS_ICONS / alias_icon
+                if not src.is_file():
+                    raise GenerateError(f"{repo}: alias {alias['name']} icon {src} is missing")
+                (ICONS / alias_icon).write_bytes(src.read_bytes())
+                alias_shared["icon"] = alias_icon
             carriers.append(Carrier(name=alias["name"], blurb=alias["blurb"], **alias_shared))
 
     carriers.sort(key=_alpha_key)
@@ -612,9 +629,10 @@ Every integration below speaks the same [parcel contract](contract.md): the same
 ones that deliver to you — each works on its own, and none of them depends on
 another.
 
-Not every carrier's API exposes every optional field the contract allows —
-`null` for those is normal, not a bug. See the
-[capability comparison](capabilities.md) for which carrier gives you what.
+Pick a country to narrow the list, or a connection type to see which carriers
+work without an account. **Select a carrier** for its capabilities: which
+optional contract fields it actually populates, what it needs from you, and
+where it delivers.
 
 Install instructions live on [Getting started](install.md); each carrier's own
 README covers its options in full.
@@ -671,71 +689,195 @@ def _country_filter_options(carriers: list[Carrier]) -> str:
     )
 
 
-def _carrier_click_attributes(carrier: Carrier) -> str:
-    # One event per click, with no extra properties consuming Cloud quota.
-    # Use the repo so aliases and links from different pages share a counter.
-    return f'{{data-umami-event="carrier-click:{carrier.repo}"}}'
+def _slug(carrier: Carrier) -> str:
+    """Stable id for one row — what ``/carriers/#gls`` opens.
+
+    Built from the display name, not the repo, because aliases share a repo
+    and each one is its own card. Accents fold the same way they do in
+    _alpha_key, so the fragment stays typeable.
+    """
+    folded = unicodedata.normalize("NFKD", carrier.name)
+    ascii_only = folded.encode("ascii", "ignore").decode().lower()
+    return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", ascii_only)).strip("-")
+
+
+def _payload(carriers: list[Carrier]) -> str:
+    """Everything the detail dialog needs, as one JSON blob.
+
+    The card markup carries what the page shows at rest (name, version,
+    badges, flags); this carries the rest — capabilities, coverage prose,
+    per-backend connection detail — so a page with 50+ carriers is not 50+
+    hidden dialogs in the DOM.
+    """
+    rows = []
+    for c in carriers:
+        if isinstance(c.capabilities, dict):
+            # One row per backend, in the order the carrier declared them.
+            caps = [
+                {"variant": label, "fields": sorted(fields)}
+                for label, fields in c.capabilities.items()
+            ]
+        elif c.capabilities is None:
+            caps = None
+        else:
+            caps = [{"variant": "", "fields": sorted(c.capabilities)}]
+        rows.append(
+            {
+                "slug": _slug(c),
+                "name": c.name,
+                "repo": c.repo,
+                "url": c.url,
+                "icon": c.icon,
+                "version": c.version,
+                "early": c.early,
+                "blurb": c.blurb,
+                "region": c.region,
+                "countries": c.countries,
+                "directions": c.directions,
+                "connections": [
+                    {
+                        "kind": conn.auth,
+                        "label": AUTH_LABEL[conn.auth],
+                        "variant": conn.variant or "",
+                        "input": conn.input or "",
+                    }
+                    for conn in c.connections
+                ],
+                "capabilities": caps,
+            }
+        )
+    return json.dumps(
+        {
+            "carriers": rows,
+            "countries": COUNTRY_NAMES,
+            # The contract field travels with the label so the table header
+            # can name it — a reader comparing carriers is usually about to
+            # write a template against that exact key.
+            "capabilityLabels": [
+                [key, label, field.replace("`", "")]
+                for key, (label, field) in CAPABILITY_LABELS.items()
+            ],
+        }
+    )
+
+
+def _card(carrier: Carrier) -> str:
+    """One carrier card: logo first, then how you connect and where it runs.
+
+    A <button>, not a link — it opens the detail dialog rather than
+    navigating, and the element carries that for keyboard and screen-reader
+    users without any ARIA of our own. The link out to the repo lives in the
+    dialog, which is also where the carrier-click analytics event fires.
+    """
+    # Root-relative, not "assets/...": Material serves this page at
+    # /carriers/, and MkDocs does not rewrite src attributes inside raw
+    # HTML, so a relative path resolves to /carriers/assets/... and 404s.
+    logo = (
+        f'<img src="/assets/icons/{carrier.icon}" alt="" loading="lazy">'
+        if carrier.icon
+        else f'<span class="carrier-initial">{carrier.name[0]}</span>'
+    )
+    beta = '<span class="carrier-beta">Beta</span>' if carrier.early else ""
+
+    kinds = dict.fromkeys(conn.auth for conn in carrier.connections)
+    pills = "".join(
+        f'<span class="carrier-pill carrier-pill--{kind}">{AUTH_PILL[kind]}</span>'
+        for kind in kinds
+    )
+
+    if not carrier.countries:
+        where = '<span class="carrier-flags">🌍</span> Worldwide'
+    elif len(carrier.countries) == 1:
+        code = carrier.countries[0]
+        where = f'<span class="carrier-flags">{_flag(code)}</span> {COUNTRY_NAMES[code]}'
+    elif len(carrier.countries) <= FLAGS_SHOWN:
+        flags = " ".join(_flag(code) for code in carrier.countries)
+        where = f'<span class="carrier-flags">{flags}</span>'
+    else:
+        flags = " ".join(_flag(code) for code in carrier.countries[:FLAGS_SHOWN])
+        rest = len(carrier.countries) - FLAGS_SHOWN
+        where = (
+            f'<span class="carrier-flags">{flags}</span> '
+            f'<span class="carrier-more">+{rest} more</span>'
+        )
+
+    return (
+        f'<button type="button" class="carrier-card" data-slug="{_slug(carrier)}" '
+        f'data-kinds="{" ".join(kinds)}" '
+        f'data-countries="{" ".join(carrier.countries)}">'
+        f'<span class="carrier-plate">{logo}{beta}</span>'
+        f'<span class="carrier-name">{carrier.name}'
+        f'<span class="carrier-version">{carrier.version}</span></span>'
+        f'<span class="carrier-kinds">{pills}</span>'
+        f'<span class="carrier-where">{where}</span>'
+        # Not decoration and not dead weight: this is the sentence site search
+        # matches on ("bol.com" has to find Ampère), and the screen reader
+        # reads it as part of the button's own label.
+        f'<span class="carrier-blurb">{carrier.blurb}</span>'
+        "</button>"
+    )
+
+
+# How many flags a card shows before it switches to "+N more". Four fits the
+# narrowest card without wrapping onto a second line.
+FLAGS_SHOWN = 4
 
 
 def render_carriers(carriers: list[Carrier]) -> str:
     out = [CARRIERS_INTRO, ""]
-    out.append(f'<div id="carriers-block" markdown="1">\n')
+    out.append('<div id="carriers-block">')
     out.append(
-        '<div class="carriers-filter">\n'
-        '<label for="carrier-country-filter">Filter by country</label>\n'
-        '<select id="carrier-country-filter">\n'
-        '<option value="">All countries</option>\n'
-        f"{_country_filter_options(carriers)}\n"
-        "</select>\n"
-        '<span id="carrier-country-count" role="status"></span>\n'
-        "</div>\n"
+        '<div class="carriers-filter">'
+        '<label class="carriers-filter__country" for="carrier-country-filter">'
+        '<span>Delivering to</span>'
+        '<select id="carrier-country-filter">'
+        '<option value="">🌍 All countries</option>'
+        f"{_country_filter_options(carriers)}"
+        "</select>"
+        "</label>"
+        '<div class="carriers-filter__kinds" role="group" aria-label="Filter by connection type">'
+        + "".join(
+            f'<button type="button" class="carrier-chip carrier-chip--{kind}" '
+            f'data-kind="{kind}" aria-pressed="false">{label}</button>'
+            for kind, label in AUTH_PILL.items()
+        )
+        + "</div>"
+        "</div>"
     )
-    out.append(f"**{len(carriers)} carriers** and counting.\n")
-    out.append("| | Carrier | Coverage | Connect with | Tracks | Version |")
-    out.append("|---|---|---|---|---|---|")
-
-    for c in carriers:
-        # Root-relative, not "assets/...": Material serves this page at
-        # /carriers/, and MkDocs does not rewrite src attributes inside raw
-        # HTML, so a relative path resolves to /carriers/assets/... and 404s.
-        icon = (
-            f'<img src="/assets/icons/{c.icon}" width="32" alt="{c.name}">'
-            if c.icon
-            else ""
-        )
-        tracking = _carrier_click_attributes(c)
-        name = f"**[{c.name}]({c.url}){tracking}**<br><small>{c.blurb}</small>"
-        if c.early:
-            name += '<br>:material-flask: *Early release — status mapping unconfirmed*'
-        coverage = f"{c.flags} {c.region}".strip()
-        tracks = (
-            "Incoming & outgoing"
-            if c.directions == "incoming+outgoing"
-            else "Incoming"
-        )
-        badge = (
-            f"[![](https://img.shields.io/github/v/release/{ORG}/{c.repo}"
-            f"?style=flat-square&label=&color=41BDF5)]({c.url}/releases){tracking}"
-        )
-        if c.early:
-            badge += (
-                "<br>![](https://img.shields.io/badge/-BETA-orange?style=flat-square)"
-            )
-        out.append(f"| {icon} | {name} | {coverage} | {c.connect} | {tracks} | {badge} |")
-
-    # Row order here must match the <tr> order above exactly — carriers-filter.js
-    # zips this against the table's tbody rows by index, not by carrier name.
-    #
+    out.append(
+        f'<p class="carriers-count" id="carrier-count" role="status">'
+        f"<strong>{len(carriers)} carriers</strong> and counting.</p>"
+    )
+    out.append(
+        '<div class="carriers-grid" id="carriers-grid">'
+        + "".join(_card(c) for c in carriers)
+        + "</div>"
+    )
+    out.append(
+        '<p class="carriers-empty" id="carriers-empty" hidden>'
+        "No carrier matches that combination yet — "
+        "clear the connection filter, or "
+        f'<a href="https://github.com/{ORG}/.github/discussions/new'
+        '?category=carrier-requests">request the carrier</a>.</p>'
+    )
+    out.append(
+        '<dl class="carriers-legend">'
+        '<div><dt class="carrier-pill carrier-pill--account">Account</dt>'
+        "<dd>You sign in with your own carrier account.</dd></div>"
+        '<div><dt class="carrier-pill carrier-pill--trackingnr">Tracking</dt>'
+        "<dd>A tracking code is enough — no account.</dd></div>"
+        '<div><dt class="carrier-pill carrier-pill--apikey">API</dt>'
+        "<dd>You bring your own official API credentials.</dd></div>"
+        "</dl>"
+    )
     # A <div>, not <script>: navigation.instant strips <script> tags from the
     # content it swaps in on SPA navigation, which silently dropped this data
     # (and broke the filter) on every navigation into the page that wasn't a
     # full reload.
     out.append(
-        '\n<div id="carriers-country-data" hidden>'
-        + json.dumps([c.countries for c in carriers])
-        + "</div>\n"
-        "</div>\n"
+        '<div id="carriers-data" hidden>' + _payload(carriers) + "</div>"
     )
+    out.append("</div>")
 
     out.append(
         CARRIERS_FOOTER.format(
@@ -746,96 +888,6 @@ def render_carriers(carriers: list[Carrier]) -> str:
             ),
         )
     )
-    return "\n".join(out) + "\n"
-
-
-# --------------------------------------------------------------------------
-# Page: capabilities
-# --------------------------------------------------------------------------
-
-CAPABILITIES_INTRO = """\
----
-hide:
-  - navigation
-description: >-
-  Which optional parcel contract fields each carrier actually populates —
-  weight, dimensions, delivery window, pickup point, tracking link and status
-  history — so a null value reads as "this carrier doesn't have it" rather
-  than "something is broken".
----
-
-# Capability comparison
-
-Every carrier publishes the same [parcel shape](contract.md#the-parcel-shape),
-but the fields marked optional there are only as complete as the carrier's own
-API. A `null` on one of these is not a bug — it means the carrier itself never
-told us. This page is generated from each carrier's own source, so it changes
-the moment a carrier starts (or stops) exposing something new.
-
-A carrier that runs more than one backend — a country-specific API, not just a
-setup option — gets its own blank parent row plus one indented sub-row per
-backend, so a field only some of its countries populate is not silently
-averaged away, and one a single country lacks does not look like the whole
-carrier lacks it.
-"""
-
-CAPABILITIES_FOOTER = """
-**{count} of {total} carriers** have declared their capabilities so far — the
-rest show "?" until their own repo migrates. This is an ongoing rollout, not a
-claim that the undeclared ones support nothing.
-
-## Reading this table
-
-- 🟢 — the carrier's own tests prove this field comes back non-null for at
-  least some parcels.
-- 🔴 — the carrier's API does not expose this, so the field is always `null`.
-  Nothing to configure or work around.
-- ? — this carrier has not declared its capabilities yet.
-
-See the [parcel contract](contract.md#the-parcel-shape) for what each column
-actually means on the wire.
-"""
-
-
-SUPPORTED = "🟢"
-UNSUPPORTED = "🔴"
-UNDECLARED = "?"
-
-
-def render_capabilities(carriers: list[Carrier]) -> str:
-    keys = list(CAPABILITY_LABELS)
-    out = [CAPABILITIES_INTRO, ""]
-    out.append("| Carrier | " + " | ".join(CAPABILITY_LABELS[k][0] for k in keys) + " |")
-    out.append("|---|" + "---|" * len(keys))
-
-    declared = 0
-    for c in carriers:
-        link = f"[{c.name}]({c.url}){_carrier_click_attributes(c)}"
-        if c.capabilities is None:
-            cells = " | ".join(UNDECLARED for _ in keys)
-            out.append(f"| {link} | {cells} |")
-            continue
-
-        declared += 1
-        if isinstance(c.capabilities, dict):
-            # A blank parent row (name only, no per-field claim — the
-            # carrier as a whole doesn't have one answer) followed by one
-            # indented sub-row per backend, in the order the carrier
-            # declared them (its own country/backend dropdown order) — not
-            # re-sorted alphabetically, since that order is usually
-            # meaningful (e.g. "Germany, Other").
-            blanks = " | ".join("" for _ in keys)
-            out.append(f"| **{link}** | {blanks} |")
-            for variant, fields in c.capabilities.items():
-                cells = " | ".join(SUPPORTED if k in fields else UNSUPPORTED for k in keys)
-                out.append(f"| ↳ {variant} | {cells} |")
-        else:
-            cells = " | ".join(
-                SUPPORTED if k in c.capabilities else UNSUPPORTED for k in keys
-            )
-            out.append(f"| {link} | {cells} |")
-
-    out.append(CAPABILITIES_FOOTER.format(count=declared, total=len(carriers)))
     return "\n".join(out) + "\n"
 
 
@@ -1128,7 +1180,6 @@ def main() -> int:
     try:
         carriers = collect_carriers()
         (DOCS / "carriers.md").write_text(render_carriers(carriers), encoding="utf-8")
-        (DOCS / "capabilities.md").write_text(render_capabilities(carriers), encoding="utf-8")
         (DOCS / "automations.md").write_text(render_automations(), encoding="utf-8")
         (DOCS / "dashboards.md").write_text(render_dashboards(), encoding="utf-8")
         BUILD.mkdir(parents=True, exist_ok=True)
@@ -1145,7 +1196,6 @@ def main() -> int:
         return 1
 
     print(f"✓ docs/carriers.md          ({len(carriers)} carriers)")
-    print("✓ docs/capabilities.md")
     print("✓ docs/automations.md")
     print("✓ docs/dashboards.md")
     print("✓ build/profile-README.md   (pushed by scripts/sync_org.py)")

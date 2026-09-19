@@ -65,9 +65,12 @@ cover a full run.
 
 ## Carrier click analytics
 
-Umami records clicks on carrier names and release badges in the carrier table,
-and on carrier links in the capability comparison. Each click sends one custom
-event named `carrier-click:<repo>`, for example `carrier-click:ha-postnl`.
+Umami records clicks on the **View on GitHub** button in a carrier's detail
+dialog — the one place the carrier directory links out to a repo. Each click
+sends one custom event named `carrier-click:<repo>`, for example
+`carrier-click:ha-postnl`. Opening a carrier's card is not an event; the
+counter has always meant "clicked through to the integration", and it still
+does.
 Aliases pointing to the same integration share a counter. In Umami, select the
 website and date range, then view Events to compare the counts per integration.
 These are clicks, not completed installations, and collection starts after deploy.
