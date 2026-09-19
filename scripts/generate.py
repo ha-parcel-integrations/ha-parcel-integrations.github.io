@@ -335,10 +335,12 @@ class Carrier:
     # _capabilities_of), or None when undeclared.
     capabilities: frozenset[str] | dict[str, frozenset[str]] | None
     # The primary brand this row is an alias of, when it is one. Seven rows
-    # are a second brand on somebody else's repo, and they inherit that
-    # repo's logo — so the grid shows Chronopost and Colissimo as two
-    # identical La Poste tiles, with the explanation only in the blurb the
-    # tile keeps for screen readers. The tile says it out loud instead.
+    # are a second brand on somebody else's repo. Each carries its own logo
+    # from data/icons where the two brands look different; the two that share
+    # a visual identity with their parent (Zásilkovna with Packeta, Intelcom
+    # with Dragonfly) deliberately inherit the parent's, because a separate
+    # file would be the same artwork twice. The tile names the parent out loud
+    # either way.
     parent: str | None = None
 
     @property
@@ -568,9 +570,19 @@ def collect_carriers() -> list[Carrier]:
         meta = declared[repo]
         capabilities = _capabilities_of(repo, domain)
 
-        icon_bytes = gh_file(repo, f"custom_components/{domain}/brand/icon.png")
+        # The repo's own brand icon is the default. A repo that ships as one
+        # integration but lists here under two brand names (Posten Bring)
+        # overrides it, so the primary row carries one brand's mark and the
+        # alias row the other. HA and HACS keep reading the repo's icon —
+        # this override is the site listing only, exactly like `name`.
         icon_name = None
-        if icon_bytes:
+        if primary_icon := meta.get("icon"):
+            src = ALIAS_ICONS / primary_icon
+            if not src.is_file():
+                raise GenerateError(f"{repo}: icon {src} is missing")
+            (ICONS / primary_icon).write_bytes(src.read_bytes())
+            icon_name = primary_icon
+        elif icon_bytes := gh_file(repo, f"custom_components/{domain}/brand/icon.png"):
             icon_name = f"{domain}.png"
             (ICONS / icon_name).write_bytes(icon_bytes)
 

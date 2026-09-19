@@ -46,6 +46,13 @@
 #              the alias only when the two brands don't cover the same
 #              territory (e.g. one brand name per country within the repo's
 #              overall coverage).
+#   icon       optional override of the repo's own brand/icon.png, for this
+#              site's primary row only — a PNG in data/icons/, 256x256 like
+#              every other brand icon (tools/icon_audit.py checks it). Use it
+#              only when one repo lists here under two brand names and the
+#              primary row should carry one brand's mark while an alias row
+#              carries the other (ha-posten-bring). HA and HACS keep reading
+#              the repo's own icon; this is the listing only.
 #   name       optional override of the manifest's display name, for this
 #              site's primary row only. The manifest name stays the source of
 #              truth everywhere else (HA UI, HACS, README) — use this only
@@ -142,6 +149,7 @@ ha-ceska-posta:
   blurb: Czechia's national postal operator, whose pickup-point and locker network operates under the Balikovna brand
   aliases:
     - name: Balikovna
+      icon: balikovna.png
       blurb: Balikovna — Ceska Posta's own pickup-point and locker network, same backend and tracking codes
 
 ha-correos:
@@ -198,6 +206,7 @@ ha-dpd:
   blurb: DPD shipments, tracked through your myDPD account
   aliases:
     - name: BRT
+      icon: brt.png
       region: Italy
       countries: ["IT"]
       blurb: BRT — DPD's brand name in Italy
@@ -313,8 +322,10 @@ ha-laposte:
   blurb: La Poste tracking for Colissimo and Chronopost parcels, without an account
   aliases:
     - name: Chronopost
+      icon: chronopost.png
       blurb: Chronopost — La Poste's express brand, same tracking lookup
     - name: Colissimo
+      icon: colissimo.png
       blurb: Colissimo — La Poste's parcel brand, same tracking lookup
 
 ha-matkahuolto:
@@ -405,6 +416,7 @@ ha-poste-italiane:
 
 ha-posten-bring:
   name: Posten
+  icon: posten.png
   region: Norway, Sweden and Denmark
   countries: ["NO", "SE", "DK"]
   auth: account
@@ -412,6 +424,7 @@ ha-posten-bring:
   blurb: Posten parcels, tracked through your own consumer account
   aliases:
     - name: Bring
+      icon: bring.png
       blurb: Bring — Posten's sister brand, same backend and account model
 
 ha-postnl:
