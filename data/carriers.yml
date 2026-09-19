@@ -110,9 +110,13 @@ ha-boxnow:
 ha-bpost:
   region: Belgium
   countries: ["BE"]
-  auth: trackingnr
-  input: tracking code + postal code
-  directions: incoming
+  auth:
+    Tracking:
+      kind: trackingnr
+      input: tracking code + postal code
+    Account:
+      kind: account
+  directions: incoming; incoming+outgoing with a My bpost account
   blurb: bpost parcels, Belgium's national postal service
 
 ha-budbee:
