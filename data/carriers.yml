@@ -224,6 +224,14 @@ ha-elta-courier:
   directions: incoming
   blurb: ELTA Courier — the courier arm of Greece's national post, tracked without an account
 
+ha-evri:
+  region: United Kingdom
+  countries: ["GB"]
+  auth: trackingnr
+  input: tracking code + postal code
+  directions: incoming+outgoing
+  blurb: Evri parcels and packages in the UK, tracked without an account
+
 ha-fan-courier:
   region: Romania
   countries: ["RO"]
