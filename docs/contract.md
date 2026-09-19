@@ -1,6 +1,4 @@
 ---
-hide:
-  - navigation
 description: >-
   The shared contract behind every carrier: eight ParcelStatus values, one
   package shape, four events — so one automation covers every carrier.
@@ -102,7 +100,7 @@ Carriers that support outgoing parcels also fire
 Every payload is the full parcel dict from the section above, plus the extra keys
 in the table, plus the account's `device_id`.
 
-!!! danger "Delivery fires once, on one event"
+!!! warning "Delivery fires once, on one event"
     The transition **into** `delivered` fires only `_parcel_delivered` — it does
     *not* also fire `_parcel_status_changed`. Listening to both and expecting two
     notifications gets you one; listening to both and expecting one gets you two

@@ -7,12 +7,18 @@ site_url: https://ha-parcel-integrations.github.io/
 repo_url: https://github.com/ha-parcel-integrations
 repo_name: ha-parcel-integrations
 edit_uri: ""
+copyright: >-
+  Independent and MIT-licensed —
+  <a href="https://ha-parcel-integrations.github.io/sponsor/">support the project</a>
 
 theme:
   name: material
   custom_dir: docs/overrides
   language: en
-  logo: assets/logo.png
+  # Vector in the header, where it renders at ~18px and the raster original's
+  # antennae turned to grey mush. The favicon stays a PNG: an SVG favicon is
+  # fine in current browsers but a PNG is fine in all of them.
+  logo: assets/logo.svg
   favicon: assets/logo.png
   icon:
     repo: fontawesome/brands/github
@@ -35,9 +41,11 @@ theme:
     - navigation.instant
     - navigation.tracking
     - navigation.sections
-    # The landing page hides the sidebar, so the tabs are what makes the rest
-    # of the site visible from there.
+    # Tabs carry the four top-level sections, the sidebar the pages inside
+    # them. Sticky because the landing page hides the sidebar — without it
+    # there is no navigation at all once you scroll past the hero.
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.top
     - content.code.copy
     - content.code.annotate
@@ -95,10 +103,18 @@ extra:
 
 nav:
   - Home: index.md
-  - Carriers: carriers.md
-  - Getting started: install.md
-  - Parcel contract: contract.md
-  - Automations: automations.md
-  - Dashboards: dashboards.md
-  - Track from e-mail: email.md
-  - Sponsor this project: sponsor.md
+  - Start here:
+      - Getting started: install.md
+      - Carriers: carriers.md
+      - Troubleshooting: troubleshooting.md
+  - Build something:
+      - Automation cookbook: automations.md
+      - Dashboard cards: dashboards.md
+      - Track from e-mail: email.md
+  - Reference:
+      - Parcel contract: contract.md
+
+# Reachable from the landing page and the footer, but a donate link does not
+# belong in the nav between the reference docs.
+not_in_nav: |
+  sponsor.md

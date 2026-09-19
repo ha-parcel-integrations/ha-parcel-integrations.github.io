@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Home Assistant parcel integrations">
+  <!-- The rounded pentagon is drawn as a stroked polygon rather than an arc
+       path: stroke-linejoin:round gives the same corner radius on all five
+       joins, and the stroke's 10px outset is why the polygon's radius is 108
+       rather than the 118 the finished mark occupies. -->
+  <polygon points="128,20 230.7,94.6 191.5,215.4 64.5,215.4 25.3,94.6"
+           fill="#41bdf5" stroke="#41bdf5" stroke-width="20" stroke-linejoin="round"/>
+  <!-- Stems run under the box and are clipped by it, so they need no join.
+       Both they and the dots are a shade heavier than the raster original:
+       at the 18px the header renders this at, the old thin strokes were the
+       first thing to turn to grey mush. -->
+  <g fill="none" stroke="#fff" stroke-width="15" stroke-linecap="round">
+    <path d="M128 140V62"/>
+    <path d="M94 140v-34q0-18-16-18"/>
+    <path d="M162 140v-34q0-18 16-18"/>
+  </g>
+  <g fill="#fff">
+    <circle cx="128" cy="54" r="17"/>
+    <circle cx="70" cy="88" r="17"/>
+    <circle cx="186" cy="88" r="17"/>
+  </g>
+  <rect x="74" y="134" width="108" height="68" rx="9" fill="#fff"/>
+  <!-- Lid seam and ribbon, cut back out in the pentagon's own colour. -->
+  <rect x="74" y="152" width="108" height="6" fill="#41bdf5"/>
+  <path d="M117 134h22v42l-11-10-11 10z" fill="#41bdf5"/>
+</svg>

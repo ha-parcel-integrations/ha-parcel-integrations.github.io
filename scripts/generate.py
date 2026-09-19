@@ -25,6 +25,7 @@ Usage:
 from __future__ import annotations
 
 import base64
+import html
 import json
 import os
 import re
@@ -333,6 +334,12 @@ class Carrier:
     # CAPABILITIES_BY_VARIANT in that carrier's own const.py — see
     # _capabilities_of), or None when undeclared.
     capabilities: frozenset[str] | dict[str, frozenset[str]] | None
+    # The primary brand this row is an alias of, when it is one. Seven rows
+    # are a second brand on somebody else's repo, and they inherit that
+    # repo's logo — so the grid shows Chronopost and Colissimo as two
+    # identical La Poste tiles, with the explanation only in the blurb the
+    # tile keeps for screen readers. The tile says it out loud instead.
+    parent: str | None = None
 
     @property
     def early(self) -> bool:
@@ -594,7 +601,7 @@ def collect_carriers() -> list[Carrier]:
         # default to the primary entry's but may be narrowed when the two
         # brands don't cover the same territory (e.g. one brand per country).
         for alias in meta.get("aliases") or []:
-            alias_shared = shared | {
+            alias_shared = shared | {"parent": name} | {
                 k: alias[k] for k in ("region", "countries") if k in alias
             }
             if alias_icon := alias.get("icon"):
@@ -615,8 +622,6 @@ def collect_carriers() -> list[Carrier]:
 
 CARRIERS_INTRO = """\
 ---
-hide:
-  - navigation
 description: >-
   Every carrier you can track packages with in Home Assistant — PostNL, DHL,
   DPD, GLS, PostNord, Hermes, Packeta, Correos, Swiss Post and more.
@@ -739,7 +744,16 @@ def _payload(carriers: list[Carrier]) -> str:
                         "kind": conn.auth,
                         "label": AUTH_LABEL[conn.auth],
                         "variant": conn.variant or "",
-                        "input": conn.input or "",
+                        # Same rule as _connect_line: the sub-line only earns
+                        # its space when it says more than the pill above it,
+                        # and "Tracking code" under a "Tracking code" pill
+                        # says nothing twice.
+                        "input": (
+                            ""
+                            if (conn.input or "").casefold()
+                            == AUTH_LABEL[conn.auth].casefold()
+                            else conn.input or ""
+                        ),
                     }
                     for conn in c.connections
                 ],
@@ -761,6 +775,19 @@ def _payload(carriers: list[Carrier]) -> str:
     )
 
 
+def _searchable(carrier: Carrier) -> str:
+    """Lower-cased haystack for the name box on the carriers page.
+
+    Accents fold the same way _slug folds them, so typing "cesk" finds
+    Ceska posta on a keyboard that has no way to produce the diacritic.
+    """
+    text = f"{carrier.name} {carrier.blurb}".lower()
+    folded = unicodedata.normalize("NFKD", text)
+    stripped = "".join(ch for ch in folded if not unicodedata.combining(ch))
+    # Only the accented names need the second copy; most carriers have none.
+    return text if stripped == text else f"{text} {stripped}"
+
+
 def _card(carrier: Carrier) -> str:
     """One carrier card: logo first, then how you connect and where it runs.
 
@@ -778,6 +805,11 @@ def _card(carrier: Carrier) -> str:
         else f'<span class="carrier-initial">{carrier.name[0]}</span>'
     )
     beta = '<span class="carrier-beta">Beta</span>' if carrier.early else ""
+    parent = (
+        f'<span class="carrier-parent">via {carrier.parent}</span>'
+        if carrier.parent
+        else ""
+    )
 
     kinds = dict.fromkeys(conn.auth for conn in carrier.connections)
     pills = "".join(
@@ -804,10 +836,15 @@ def _card(carrier: Carrier) -> str:
     return (
         f'<button type="button" class="carrier-card" data-slug="{_slug(carrier)}" '
         f'data-kinds="{" ".join(kinds)}" '
+        # Name and blurb both, so "bol.com" still finds Ampere the way site
+        # search does. Folded here rather than in the browser so the filter
+        # never has to touch the DOM to read a card's text.
+        f'data-search="{html.escape(_searchable(carrier), quote=True)}" '
         f'data-countries="{" ".join(carrier.countries)}">'
         f'<span class="carrier-plate">{logo}{beta}</span>'
         f'<span class="carrier-name">{carrier.name}'
         f'<span class="carrier-version">{carrier.version}</span></span>'
+        f"{parent}"
         f'<span class="carrier-kinds">{pills}</span>'
         f'<span class="carrier-where">{where}</span>'
         # Not decoration and not dead weight: this is the sentence site search
@@ -828,20 +865,35 @@ def render_carriers(carriers: list[Carrier]) -> str:
     out.append('<div id="carriers-block">')
     out.append(
         '<div class="carriers-filter">'
+        # Country first: it is the question almost every visitor arrives with.
         '<label class="carriers-filter__country" for="carrier-country-filter">'
-        '<span>Delivering to</span>'
+        '<span class="carriers-filter__label">Delivering to</span>'
         '<select id="carrier-country-filter">'
         '<option value="">🌍 All countries</option>'
         f"{_country_filter_options(carriers)}"
         "</select>"
         "</label>"
-        '<div class="carriers-filter__kinds" role="group" aria-label="Filter by connection type">'
+        # Second, because it only helps a reader who already has a name in
+        # mind — but with 60+ tiles that reader should not have to scan.
+        '<label class="carriers-filter__search" for="carrier-search">'
+        '<span class="carriers-filter__label">Carrier</span>'
+        '<input type="search" id="carrier-search" autocomplete="off" '
+        'placeholder="Search by name">'
+        "</label>"
+        # The pills carried their purpose in an aria-label only, so a sighted
+        # reader met three unexplained words.
+        '<div class="carriers-filter__kinds" role="group" '
+        'aria-labelledby="carrier-kinds-label">'
+        '<span class="carriers-filter__label" id="carrier-kinds-label">'
+        "Connect with</span>"
+        '<div class="carriers-filter__pills">'
         + "".join(
             f'<button type="button" class="carrier-chip carrier-chip--{kind}" '
             f'data-kind="{kind}" aria-pressed="false">{label}</button>'
             for kind, label in AUTH_PILL.items()
         )
         + "</div>"
+        "</div>"
         "</div>"
     )
     out.append(
@@ -856,7 +908,7 @@ def render_carriers(carriers: list[Carrier]) -> str:
     out.append(
         '<p class="carriers-empty" id="carriers-empty" hidden>'
         "No carrier matches that combination yet — "
-        "clear the connection filter, or "
+        "clear the search or the connection filter, or "
         f'<a href="https://github.com/{ORG}/.github/discussions/new'
         '?category=carrier-requests">request the carrier</a>.</p>'
     )
@@ -868,6 +920,10 @@ def render_carriers(carriers: list[Carrier]) -> str:
         "<dd>A tracking code is enough — no account.</dd></div>"
         '<div><dt class="carrier-pill carrier-pill--apikey">API</dt>'
         "<dd>You bring your own official API credentials.</dd></div>"
+        # The badge on a third of the tiles was the one mark on this page
+        # with no key; CARRIERS_FOOTER explains it 60 tiles further down.
+        '<div><dt class="carrier-beta">Beta</dt>'
+        "<dd>Early release — its status mapping was inferred, not observed.</dd></div>"
         "</dl>"
     )
     # A <div>, not <script>: navigation.instant strips <script> tags from the
@@ -900,8 +956,6 @@ def render_carriers(carriers: list[Carrier]) -> str:
 
 AUTOMATIONS_INTRO = """\
 ---
-hide:
-  - navigation
 description: >-
   Copy-paste Home Assistant automations for package tracking — delivery
   notifications, daily summaries and calendar entries, for any carrier.
@@ -932,8 +986,6 @@ next year without a single edit.
 
 DASHBOARDS_INTRO = """\
 ---
-hide:
-  - navigation
 description: >-
   Copy-paste Home Assistant dashboard cards for package tracking — a parcel
   table, a per-carrier breakdown and a next-delivery card, for any carrier.
@@ -963,7 +1015,7 @@ cards](#ready-made-parcel-cards) below.
     `examples/dashboards/` folder.
 
 !!! tip "Where these go"
-    Open your dashboard, **✏️ → + Add card → Manual**, and paste over the
+    Open your dashboard, **:material-pencil: → + Add card → Manual**, and paste over the
     contents. On a card that already exists: **⋮ → Edit → Show code editor**.
 """
 
@@ -1002,26 +1054,49 @@ CUSTOM_RE = re.compile(r"custom:([a-z0-9_-]+)")
 TITLE_RE = re.compile(r"^(?:alias|title):\s*(.+?)\s*$", re.MULTILINE)
 
 
-def _describe(source: str) -> tuple[str, str]:
-    """Split a leading ``#`` comment block off as the human description."""
-    comment: list[str] = []
-    for line in source.splitlines():
+@dataclass(frozen=True)
+class Snippet:
+    title: str
+    # Every paragraph of the leading comment block, as prose.
+    description: tuple[str, ...]
+    # The YAML with that block removed — what the code block shows.
+    body: str
+    # The file exactly as it ships, which is what custom: cards are counted
+    # from: a snippet may name its fallback plugin in a comment.
+    source: str
+    filename: str
+
+
+def _describe(source: str) -> tuple[str, tuple[str, ...], str]:
+    """Split the leading ``#`` block off as prose, and hand back the rest.
+
+    That block and the description rendered above it said the same thing
+    twice, so the reader met nine grey comment lines before the first line of
+    YAML — ``alias:`` started below the fold of the code block. All of the
+    block becomes prose now, not just its first paragraph, so nothing is lost
+    by cutting it out of the snippet.
+    """
+    lines = source.strip().splitlines()
+    paragraphs: list[list[str]] = [[]]
+    cut = 0
+    for line in lines:
         if line.startswith("#"):
             text = line.lstrip("#").strip()
-            if not text:
-                # A bare "#" is a paragraph break. Take only the first
-                # paragraph as the summary — the rest stays in the listing
-                # below, where its line breaks survive.
-                break
-            comment.append(text)
-        elif comment or not line.strip():
+            if text:
+                paragraphs[-1].append(text)
+            elif paragraphs[-1]:
+                # A bare "#" is a paragraph break.
+                paragraphs.append([])
+        elif line.strip():
             break
+        cut += 1
     match = TITLE_RE.search(source)
     title = match.group(1).strip().strip("\"'") if match else ""
-    return title, " ".join(comment)
+    description = tuple(" ".join(p) for p in paragraphs if p)
+    return title, description, "\n".join(lines[cut:]).strip()
 
 
-def _snippets(folder: str) -> list[tuple[str, str, str, str]]:
+def _snippets(folder: str) -> list[Snippet]:
     items = []
     for entry in sorted(gh_dir(AGGREGATOR, f"examples/{folder}"), key=lambda e: e["name"]):
         if not entry["name"].endswith((".yaml", ".yml")):
@@ -1030,24 +1105,45 @@ def _snippets(folder: str) -> list[tuple[str, str, str, str]]:
         if raw is None:
             continue
         source = raw.decode("utf-8")
-        title, description = _describe(source)
+        title, description, body = _describe(source)
         fallback = entry["name"].rsplit(".", 1)[0].replace("_", " ").capitalize()
-        items.append((title or fallback, description, source.strip(), entry["name"]))
+        items.append(
+            Snippet(
+                title=title or fallback,
+                description=description,
+                body=body,
+                source=source.strip(),
+                filename=entry["name"],
+            )
+        )
     return items
 
 
 def _render_snippets(
-    snippets: list[tuple[str, str, str, str]], folder: str, examples_url: str
+    snippets: list[Snippet], folder: str, examples_url: str
 ) -> list[str]:
+    """A heading, the prose, then the YAML behind a disclosure.
+
+    The title used to live only in a ``???`` summary, which is not a heading —
+    so the two longest pages on the site carried a table of contents with two
+    entries between them, and no way to jump to a recipe. An ``h3`` per recipe
+    gives the reader the index the page was missing, and the snippet itself
+    stays folded because ten of them open at once is not a page anyone reads.
+    """
     out: list[str] = []
-    for title, description, source, filename in snippets:
-        out.append(f'??? example "{title}"')
-        if description:
-            out.append(f"    {description}\n")
+    for snippet in snippets:
+        out.append(f"### {snippet.title}\n")
+        for paragraph in snippet.description:
+            out.append(f"{paragraph}\n")
+        out.append('??? example "Show the YAML"')
         out.append("    ```yaml")
-        out.extend(f"    {line}" if line.strip() else "" for line in source.splitlines())
+        out.extend(
+            f"    {line}" if line.strip() else "" for line in snippet.body.splitlines()
+        )
         out.append("    ```\n")
-        out.append(f"    [View on GitHub]({examples_url}/{folder}/{filename})\n")
+        out.append(
+            f"    [View on GitHub]({examples_url}/{folder}/{snippet.filename})\n"
+        )
     return out
 
 
@@ -1099,7 +1195,7 @@ def render_dashboards() -> str:
     # Credit the plugins the snippets above actually reach for. Carrier repos
     # use the same two in their own examples, so both stay listed even when
     # only one turns up in the aggregator's — see CUSTOM_CARDS.
-    _custom_cards([source for _, _, source, _ in snippets])
+    _custom_cards([snippet.source for snippet in snippets])
     rows = [
         f"| [`custom:{name}`](https://github.com/{repo}) "
         f"| [{author}](https://github.com/{repo.split('/')[0]}) | {does} |"

@@ -11,6 +11,7 @@ document$.subscribe(() => {
   const select = document.getElementById("carrier-country-filter");
   if (!dataEl || !grid || !select) return;
 
+  const search = document.getElementById("carrier-search");
   const data = JSON.parse(dataEl.textContent);
   const bySlug = new Map(data.carriers.map((c) => [c.slug, c]));
   const countEl = document.getElementById("carrier-count");
@@ -25,6 +26,9 @@ document$.subscribe(() => {
 
   function apply() {
     const country = select.value;
+    // generate.py folds the haystack to lower case and appends an
+    // accent-stripped copy, so "cesk" matches Česká pošta.
+    const query = search ? search.value.trim().toLowerCase() : "";
     let shown = 0;
 
     cards.forEach((card) => {
@@ -34,12 +38,13 @@ document$.subscribe(() => {
       // regardless of which country is selected.
       const inCountry = !country || countries.length === 0 || countries.includes(country);
       const inKind = activeKinds.size === 0 || kinds.some((k) => activeKinds.has(k));
-      const visible = inCountry && inKind;
+      const inQuery = !query || (card.dataset.search || "").includes(query);
+      const visible = inCountry && inKind && inQuery;
       card.hidden = !visible;
       if (visible) shown += 1;
     });
 
-    const filtered = Boolean(country) || activeKinds.size > 0;
+    const filtered = Boolean(country) || activeKinds.size > 0 || Boolean(query);
     countEl.innerHTML = filtered
       ? `<strong>${shown} of ${total} carriers</strong>${
           country ? " — carriers without a country list deliver across borders and always match." : ""
@@ -49,6 +54,7 @@ document$.subscribe(() => {
   }
 
   select.addEventListener("change", apply);
+  if (search) search.addEventListener("input", apply);
 
   chips.forEach((chip) => {
     chip.addEventListener("click", () => {
@@ -118,11 +124,14 @@ document$.subscribe(() => {
       .join("");
     const rows = carrier.capabilities
       .map((entry) => {
+        // data-label carries the column header down to the narrow layout,
+        // where the table restacks into one labelled row per field and the
+        // thead is gone.
         const cells = data.capabilityLabels
-          .map(([key]) =>
+          .map(([key, label]) =>
             entry.fields.includes(key)
-              ? '<td class="is-yes"><span aria-hidden="true">●</span><span class="sr-only">Populated</span></td>'
-              : '<td class="is-no"><span aria-hidden="true">–</span><span class="sr-only">Always null</span></td>'
+              ? `<td class="is-yes" data-label="${esc(label)}"><span aria-hidden="true">●</span><span class="sr-only">Populated</span></td>`
+              : `<td class="is-no" data-label="${esc(label)}"><span aria-hidden="true">–</span><span class="sr-only">Always null</span></td>`
           )
           .join("");
         const label = perBackend ? `<th scope="row">${esc(entry.variant)}</th>` : "";
@@ -134,7 +143,14 @@ document$.subscribe(() => {
       ? '<p class="carrier-note">This carrier runs a separate backend per country, so each one ' +
         "answers for itself — a field one country lacks is not missing everywhere.</p>"
       : "";
-    return `<div class="carrier-table"><table class="carrier-caps"><thead><tr>${corner}${head}</tr></thead><tbody>${rows}</tbody></table></div>${note}`;
+    // The dash was spelled out in the prose above and the dot was not, which
+    // left the marker that means "yes" as the unexplained one.
+    const legend =
+      '<p class="carrier-caps-legend">' +
+      '<span><span class="is-yes" aria-hidden="true">●</span> Populated</span>' +
+      '<span><span class="is-no" aria-hidden="true">–</span> Always null — its API never exposes the field</span>' +
+      "</p>";
+    return `<div class="carrier-table"><table class="carrier-caps"><thead><tr>${corner}${head}</tr></thead><tbody>${rows}</tbody></table></div>${legend}${note}`;
   }
 
   function render(carrier) {
@@ -180,7 +196,7 @@ document$.subscribe(() => {
         <h3>Capabilities</h3>
         <p class="carrier-note">Which optional
           <a href="../contract/#the-parcel-shape">parcel fields</a> this carrier actually
-          populates. A dash means its API never exposes that field — nothing to configure.</p>
+          populates — nothing here is something you configure.</p>
         ${capabilities(carrier)}
       </section>
       <p class="carrier-dialog__foot">${esc(release)}</p>
