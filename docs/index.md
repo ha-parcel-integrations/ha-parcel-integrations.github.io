@@ -14,50 +14,10 @@ that track your packages across carriers and countries — every one of them
 speaking the **same canonical parcel contract**, so your automations and
 dashboards work the same no matter who delivers.
 
-*Parcel* and *package* mean the same thing here; the integrations use "parcel"
-throughout because that is what most European carriers call it.
-
 [Browse the carriers :material-arrow-right:](carriers.md){ .md-button .md-button--primary }
 [Get started](install.md){ .md-button }
 
 ---
-
-## Pick one carrier, or all of them
-
-Every integration stands on its own. Install the one carrier that delivers to
-you, and you get its sensors, its events and its parcel data — nothing else
-required.
-
-```yaml
-triggers:
-  - trigger: event
-    event_type: postnl_parcel_status_changed
-    event_data:
-      new_status: out_for_delivery
-```
-
-Use several carriers, and the shared contract starts paying off: the optional
-**Parcel Aggregator** merges them into one event stream, so the same automation
-covers every carrier at once — including the one you install next year.
-
-```yaml
-triggers:
-  - trigger: event
-    event_type: parcel_aggregator_parcel_status_changed  # (1)!
-    event_data:
-      new_status: out_for_delivery
-
-actions:
-  - action: notify.mobile_app
-    data:
-      title: "📦 On its way"
-      message: >-
-        {{ trigger.event.data.carrier }} is delivering
-        {{ trigger.event.data.sender or 'your parcel' }} today.
-```
-
-1.  The only line that differs from the single-carrier version above. The event
-    payload is identical either way.
 
 ## How the pieces fit
 
@@ -101,14 +61,6 @@ actions:
     · [:octicons-arrow-right-24: Dashboard cards](dashboards.md)
 
 </div>
-
-## No account, in most cases
-
-Most carriers here need nothing but a tracking code — no login, no API key, no
-developer portal. You add the code the way you would on the carrier's own
-tracking page, and Home Assistant takes it from there. Where a carrier does offer
-an account (PostNL, DHL, DPD, Vinted Go), logging in gets you every parcel
-automatically, including the ones you send.
 
 ## Missing your carrier?
 
