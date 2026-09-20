@@ -533,6 +533,18 @@ ha-ups:
   directions: incoming
   blurb: UPS parcels worldwide, tracked without a UPS account — updates arrive slowly, because UPS answers a home connection only a few times an hour
 
+ha-usps:
+  region: United States
+  countries: ["US"]
+  auth:
+    Informed Delivery:
+      kind: account
+    API Tracking:
+      kind: apikey
+      input: tracking code
+  directions: incoming
+  blurb: USPS packages, either discovered automatically from your Informed Delivery addresses or tracked by code through USPS's own developer API
+
 ha-vinted-go:
   region: Netherlands, Belgium, France, Spain & Portugal
   countries: ["NL", "BE", "FR", "ES", "PT"]
