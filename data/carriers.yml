@@ -83,6 +83,14 @@ ha-an-post:
   directions: incoming
   blurb: An Post — Ireland's national postal operator, with a watchlist for parcels not yet linked to your account
 
+ha-apple-express:
+  region: Canada and the United States
+  countries: ["CA", "US"]
+  auth: trackingnr
+  input: order or reference number
+  directions: incoming
+  blurb: Apple Express — Canadian last-mile and e-commerce delivery, tracked without an account
+
 ha-aramex:
   region: Australia and New Zealand
   countries: ["AU", "NZ"]
