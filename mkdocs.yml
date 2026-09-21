@@ -9,6 +9,7 @@ repo_name: ha-parcel-integrations
 edit_uri: ""
 copyright: >-
   Independent and MIT-licensed —
+  <a href="https://ha-parcel-integrations.github.io/disclaimer/">disclaimer</a> ·
   <a href="https://ha-parcel-integrations.github.io/sponsor/">support the project</a>
 
 theme:
@@ -114,7 +115,8 @@ nav:
   - Reference:
       - Parcel contract: contract.md
 
-# Reachable from the landing page and the footer, but a donate link does not
-# belong in the nav between the reference docs.
+# Reachable from the landing page and the footer, but a donate link or a
+# disclaimer does not belong in the nav between the reference docs.
 not_in_nav: |
   sponsor.md
+  disclaimer.md

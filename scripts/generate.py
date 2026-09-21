@@ -1267,6 +1267,10 @@ For bugs, find the integration through the **[carrier directory]({site_url}carri
 ## Support this project
 
 These integrations are free and MIT-licensed. If you would like to help keep the project going, **[visit the support page]({site_url}sponsor/)** for sponsorship and other ways to contribute.
+
+## Disclaimer
+
+Independent, community-built projects, not affiliated with or endorsed by any carrier, brand owner, or Home Assistant. Trademarks belong to their respective owners. Read the **[full disclaimer]({site_url}disclaimer/)**.
 """
 
 SITE_URL = f"https://{ORG}.github.io/"

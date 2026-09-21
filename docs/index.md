@@ -81,4 +81,4 @@ you, [the ways to help that cost nothing](sponsor.md) are worth as much.
 
 !!! info "Independent project"
     Community-built, MIT-licensed, with no affiliation with or endorsement by
-    any parcel carrier.
+    any parcel carrier. See the [disclaimer](disclaimer.md).
