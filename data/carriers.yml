@@ -477,6 +477,13 @@ ha-sameday:
   directions: incoming
   blurb: Sameday — the easybox locker network
 
+ha-seur:
+  region: Spain
+  countries: ["ES"]
+  auth: account
+  directions: incoming+outgoing
+  blurb: SEUR package and parcel deliveries, imported from your miSEUR account
+
 ha-shopee-xpress:
   region: Brazil, Indonesia, Malaysia, the Philippines, Thailand & Vietnam
   countries: ["BR", "ID", "MY", "PH", "TH", "VN"]
