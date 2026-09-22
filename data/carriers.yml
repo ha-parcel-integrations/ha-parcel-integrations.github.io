@@ -388,6 +388,14 @@ ha-orlen-paczka:
   directions: incoming
   blurb: ORLEN Paczka — Poland's parcel locker network, tracked without an account
 
+ha-paack:
+  region: Spain, Portugal, France and Italy
+  countries: ["ES", "PT", "FR", "IT"]
+  auth: trackingnr
+  input: tracking code + delivery postcode
+  directions: incoming
+  blurb: Paack — scheduled last-mile delivery, tracked with the delivery postcode
+
 ha-speedx:
   region: United States
   countries: ["US"]
