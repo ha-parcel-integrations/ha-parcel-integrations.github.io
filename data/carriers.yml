@@ -465,9 +465,14 @@ ha-postnord:
 ha-ppl-cz:
   region: Czechia
   countries: ["CZ"]
-  auth: account
+  auth:
+    Account:
+      kind: account
+    Tracking:
+      kind: trackingnr
+      input: tracking code
   directions: incoming+outgoing
-  blurb: PPL — one of Czechia's two dominant private carriers, passwordless e-mail + PIN login
+  blurb: PPL — one of Czechia's two dominant private carriers, by passwordless e-mail + PIN login or by tracking code
 
 ha-quickpac:
   region: Switzerland
