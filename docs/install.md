@@ -61,7 +61,8 @@ You get:
 | `sensor.parcel_aggregator_outgoing_parcels` | Active outgoing parcels |
 | `sensor.parcel_aggregator_delivered_parcels` | Recently delivered incoming parcels |
 | `sensor.parcel_aggregator_outgoing_delivered_parcels` | Recently delivered outgoing parcels |
-| `sensor.parcel_aggregator_awaiting_pickup` | Parcels headed for a pickup point |
+| `sensor.parcel_aggregator_en_route_to_pickup_point` | Parcels on their way to a pickup point |
+| `sensor.parcel_aggregator_awaiting_pickup` | Parcels ready to collect at a pickup point |
 | `sensor.parcel_aggregator_next_delivery` | Earliest expected delivery, with the parcel on `parcel` |
 
 Each one carries the merged parcel list on its `parcels` attribute and a
