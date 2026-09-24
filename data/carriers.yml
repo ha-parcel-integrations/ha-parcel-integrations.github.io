@@ -318,8 +318,8 @@ ha-hermes:
   blurb: Hermes Paket
 
 ha-inpost:
-  region: Poland, plus keyless tracking in Italy, Portugal and the United Kingdom
-  countries: ["PL", "IT", "PT", "GB"]
+  region: Poland, plus keyless tracking in Italy, Portugal, the United Kingdom and Spain
+  countries: ["PL", "IT", "PT", "GB", "ES"]
   auth: account
   directions: incoming
   blurb: InPost Paczkomat lockers, tracked through your InPost account in Poland or by tracking code elsewhere — a parcel ready for pickup shows the locker's name
