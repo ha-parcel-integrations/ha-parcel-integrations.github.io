@@ -173,12 +173,18 @@ ha-correos:
   blurb: Spain's national postal operator
 
 ha-ctt:
-  region: Portugal
-  countries: ["PT"]
+  name: CTT
+  region: Portugal and Spain
+  countries: ["PT", "ES"]
   auth: trackingnr
   input: tracking code
   directions: incoming
   blurb: Portugal's national postal operator, tracked through its public keyless tracker
+  aliases:
+    - name: CTT Express
+      region: Spain
+      countries: ["ES"]
+      blurb: CTT's Spanish parcel arm — its codes go into the same integration as CTT and are tracked through CTT Express's own tracker
 
 ha-dao:
   region: Denmark
