@@ -463,10 +463,14 @@ ha-postnl:
 ha-postnord:
   region: Nordics
   countries: ["SE", "DK", "NO", "FI"]
-  auth: trackingnr
-  input: tracking code
-  directions: incoming
-  blurb: PostNord — the Nordic postal operator
+  auth:
+    Tracking:
+      kind: trackingnr
+      input: tracking code
+    Account:
+      kind: account
+  directions: incoming; incoming+outgoing with a PostNord account
+  blurb: PostNord — the Nordic postal operator, by tracking code or by PostNord account login
 
 ha-ppl-cz:
   region: Czechia
