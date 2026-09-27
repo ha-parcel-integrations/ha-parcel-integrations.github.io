@@ -453,6 +453,18 @@ ha-posten-bring:
       icon: bring.png
       blurb: Bring — Posten's sister brand, same backend and account model
 
+ha-posti:
+  region: Finland
+  countries: ["FI"]
+  auth:
+    Tracking:
+      kind: trackingnr
+      input: tracking code
+    Account:
+      kind: account
+  directions: incoming
+  blurb: Posti — Finland's national postal service, by tracking code or by OmaPosti account login
+
 ha-postnl:
   region: Netherlands & Belgium
   countries: ["NL", "BE"]
