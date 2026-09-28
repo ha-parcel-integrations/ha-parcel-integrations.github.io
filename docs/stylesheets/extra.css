@@ -457,6 +457,80 @@
   clip: rect(0, 0, 0, 0);
 }
 
+/* The repo link is what most visitors came for, so it no longer hides behind
+   the dialog. It carries the link colour; Details stays neutral. Neither is
+   filled at rest: a solid blue button on every one of 63 tiles outweighed
+   the logos, the same wall the beta badge was pulled back from. */
+.md-typeset .carrier-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--carrier-line);
+}
+
+.md-typeset .carrier-details,
+.md-typeset .carrier-github {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-height: 1.7rem;
+  padding: 0 0.3rem;
+  border-radius: 0.3rem;
+  font: inherit;
+  font-size: 0.6rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 125ms, border-color 125ms, color 125ms;
+}
+
+.md-typeset .carrier-details {
+  border: 1px solid var(--carrier-line);
+  background: transparent;
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .carrier-details:hover {
+  border-color: var(--md-primary-fg-color);
+}
+
+.md-typeset .carrier-github,
+.md-typeset .carrier-github:visited {
+  border: 1px solid var(--md-typeset-a-color);
+  background: transparent;
+  color: var(--md-typeset-a-color);
+}
+
+.md-typeset .carrier-github:hover,
+.md-typeset .carrier-github:focus {
+  border-color: var(--md-primary-fg-color);
+  background: var(--md-primary-fg-color);
+  color: var(--parcel-header-bg);
+}
+
+/* Same 44px floor as the chips, but only where a finger does the tapping:
+   on a mouse it would make the footer the tallest thing on the tile. */
+@media (pointer: coarse) {
+  .md-typeset .carrier-details,
+  .md-typeset .carrier-github {
+    min-height: 2.2rem;
+  }
+}
+
+.md-typeset .carrier-github svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  flex: none;
+}
+
+.md-typeset .carrier-details:focus-visible,
+.md-typeset .carrier-github:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+
 /* --- legend -------------------------------------------------------- */
 
 .md-typeset .carriers-legend {

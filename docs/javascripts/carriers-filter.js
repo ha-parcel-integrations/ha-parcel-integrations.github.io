@@ -217,6 +217,7 @@ document$.subscribe(() => {
   }
 
   grid.addEventListener("click", (event) => {
+    if (event.target.closest(".carrier-github")) return;
     const card = event.target.closest(".carrier-card");
     if (card) open(card.dataset.slug);
   });

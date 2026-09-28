@@ -800,13 +800,24 @@ def _searchable(carrier: Carrier) -> str:
     return text if stripped == text else f"{text} {stripped}"
 
 
+GITHUB_MARK = (
+    '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" '
+    'd="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49'
+    '-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82'
+    '.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15'
+    '-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82'
+    ' 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48'
+    ' 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>'
+)
+
+
 def _card(carrier: Carrier) -> str:
     """One carrier card: logo first, then how you connect and where it runs.
 
-    A <button>, not a link — it opens the detail dialog rather than
-    navigating, and the element carries that for keyboard and screen-reader
-    users without any ARIA of our own. The link out to the repo lives in the
-    dialog, which is also where the carrier-click analytics event fires.
+    A <div>, not a <button>: the tile now carries its own link out to the
+    repo, and a link cannot nest inside a button. The whole tile still opens
+    the dialog on click; the Details button is the keyboard and
+    screen-reader route to it.
     """
     # Root-relative, not "assets/...": Material serves this page at
     # /carriers/, and MkDocs does not rewrite src attributes inside raw
@@ -816,6 +827,7 @@ def _card(carrier: Carrier) -> str:
         if carrier.icon
         else f'<span class="carrier-initial">{carrier.name[0]}</span>'
     )
+    name = html.escape(carrier.name, quote=True)
     beta = '<span class="carrier-beta">Beta</span>' if carrier.early else ""
     parent = (
         f'<span class="carrier-parent">via {carrier.parent}</span>'
@@ -846,7 +858,7 @@ def _card(carrier: Carrier) -> str:
         )
 
     return (
-        f'<button type="button" class="carrier-card" data-slug="{_slug(carrier)}" '
+        f'<div class="carrier-card" data-slug="{_slug(carrier)}" '
         f'data-kinds="{" ".join(kinds)}" '
         # Name and blurb both, so "bol.com" still finds Ampere the way site
         # search does. Folded here rather than in the browser so the filter
@@ -860,10 +872,15 @@ def _card(carrier: Carrier) -> str:
         f'<span class="carrier-kinds">{pills}</span>'
         f'<span class="carrier-where">{where}</span>'
         # Not decoration and not dead weight: this is the sentence site search
-        # matches on ("bol.com" has to find Ampère), and the screen reader
-        # reads it as part of the button's own label.
+        # matches on ("bol.com" has to find Ampère).
         f'<span class="carrier-blurb">{carrier.blurb}</span>'
-        "</button>"
+        '<span class="carrier-actions">'
+        f'<button type="button" class="carrier-details" aria-label="{name} details">'
+        "Details</button>"
+        f'<a class="carrier-github" href="{carrier.url}" aria-label="{name} on GitHub" '
+        f'data-umami-event="carrier-click:{carrier.repo}">{GITHUB_MARK}GitHub</a>'
+        "</span>"
+        "</div>"
     )
 
 
