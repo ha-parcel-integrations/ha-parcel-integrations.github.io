@@ -12,7 +12,7 @@ subscription writes a good part of the code these days, and that's the real
 recurring cost sponsoring covers. Beyond that it buys nothing — no priority
 support, no early access — it just tells me the work is worth keeping up.
 
-[:simple-githubsponsors: Sponsor on GitHub](https://github.com/sponsors/peternijssen){ .md-button .md-button--primary }
+[:simple-githubsponsors: Sponsor on GitHub](https://github.com/sponsors/peter-mdf){ .md-button .md-button--primary }
 [:simple-buymeacoffee: Buy me a coffee](https://www.buymeacoffee.com/peternijssen){ .md-button }
 
 GitHub Sponsors is the one to pick for recurring support and shows up on the

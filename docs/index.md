@@ -76,7 +76,7 @@ Every integration here is free and MIT-licensed, and stays that way. Sponsoring
 covers what keeping the suite running actually costs — and if that is not for
 you, [the ways to help that cost nothing](sponsor.md) are worth as much.
 
-[:simple-githubsponsors: Sponsor on GitHub](https://github.com/sponsors/peternijssen){ .md-button .md-button--primary }
+[:simple-githubsponsors: Sponsor on GitHub](https://github.com/sponsors/peter-mdf){ .md-button .md-button--primary }
 [:simple-buymeacoffee: Buy me a coffee](https://www.buymeacoffee.com/peternijssen){ .md-button }
 
 !!! info "Independent project"
