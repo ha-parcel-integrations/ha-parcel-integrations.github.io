@@ -77,7 +77,7 @@ covers what keeping the suite running actually costs — and if that is not for
 you, [the ways to help that cost nothing](sponsor.md) are worth as much.
 
 [:simple-githubsponsors: Sponsor on GitHub](https://github.com/sponsors/peter-mdf){ .md-button .md-button--primary }
-[:simple-buymeacoffee: Buy me a coffee](https://www.buymeacoffee.com/peternijssen){ .md-button }
+[:simple-buymeacoffee: Buy me a coffee](https://www.buymeacoffee.com/peter.mdf){ .md-button }
 
 !!! info "Independent project"
     Community-built, MIT-licensed, with no affiliation with or endorsement by

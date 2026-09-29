@@ -13,7 +13,7 @@ recurring cost sponsoring covers. Beyond that it buys nothing — no priority
 support, no early access — it just tells me the work is worth keeping up.
 
 [:simple-githubsponsors: Sponsor on GitHub](https://github.com/sponsors/peter-mdf){ .md-button .md-button--primary }
-[:simple-buymeacoffee: Buy me a coffee](https://www.buymeacoffee.com/peternijssen){ .md-button }
+[:simple-buymeacoffee: Buy me a coffee](https://www.buymeacoffee.com/peter.mdf){ .md-button }
 
 GitHub Sponsors is the one to pick for recurring support and shows up on the
 repositories themselves; Buy me a coffee is there for a one-off. Neither is
