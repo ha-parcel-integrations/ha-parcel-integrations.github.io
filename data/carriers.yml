@@ -364,6 +364,13 @@ ha-matkahuolto:
   directions: incoming
   blurb: Matkahuolto — Finnish parcel and logistics tracking, without an account
 
+ha-mondial-relay:
+  region: France, Belgium, the Netherlands, Spain & Portugal
+  countries: ["FR", "BE", "NL", "ES", "PT"]
+  auth: account
+  directions: incoming+outgoing
+  blurb: Mondial Relay Point Relais and locker parcels, imported from your Mondial Relay account
+
 ha-nova-post:
   region: Ukraine, Europe and the US
   countries: ["UA", "MD", "PL", "LT", "CZ", "RO", "DE", "SK", "EE", "LV", "HU", "IT", "FI", "GB", "FR", "ES", "AT", "NL", "US"]
