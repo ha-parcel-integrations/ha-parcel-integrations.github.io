@@ -202,11 +202,16 @@ ha-delhivery:
   blurb: Delhivery — India's e-commerce delivery network, tracked by tracking code, no account needed
 
 ha-dhl:
-  region: Germany and Poland
-  countries: ["DE", "PL"]
-  auth: account
-  directions: incoming+outgoing (DE); incoming+observed (PL)
-  blurb: DHL Paket (DE) and DHL Parcel Polska (PL), tracked through your own DHL account
+  region: Worldwide by tracking code — DHL Parcel, DHL Express and DHL Freight Sweden; account login in Germany and Poland
+  countries: []
+  auth:
+    Tracking:
+      kind: trackingnr
+      input: tracking code
+    Account:
+      kind: account
+  directions: incoming+outgoing; incoming+observed with a Polish Mój DHL account
+  blurb: DHL parcels, by tracking code worldwide or by DHL account login in Germany (DHL Paket) and Poland (DHL Parcel Polska)
 
 ha-dhl-nl:
   region: Netherlands
