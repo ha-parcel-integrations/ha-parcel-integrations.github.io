@@ -335,10 +335,14 @@ ha-helthjem:
 ha-hermes:
   region: Germany
   countries: ["DE"]
-  auth: trackingnr
-  input: tracking code
+  auth:
+    Tracking:
+      kind: trackingnr
+      input: tracking code
+    Account:
+      kind: account
   directions: incoming
-  blurb: Hermes Paket
+  blurb: Hermes Paket, by tracking code or by Hermes account login — an account finds your parcels by itself and names who sent them, and a parcel routed to a PaketShop shows that shop as the pickup point
 
 ha-inpost:
   region: Poland, plus keyless tracking in Italy, Portugal, the United Kingdom and Spain
