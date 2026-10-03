@@ -164,6 +164,17 @@ CAPABILITIES_VARIANT_ENTRY_RE = re.compile(
     r'"([^"]+)"\s*:\s*frozenset\(\s*\{(.*?)\}\s*\)', re.DOTALL
 )
 
+# Fields a carrier has not been able to confirm yet (no real parcel to check
+# against). Declared next to CAPABILITIES in the carrier's own const.py; the
+# page shows them as "awaiting data" instead of folding them into "never".
+PENDING_RE = re.compile(
+    r"^PENDING_CAPABILITIES(?:\s*:\s*[^=]+)?=\s*frozenset\(\s*(?:\{(.*?)\})?\s*\)",
+    re.DOTALL | re.MULTILINE,
+)
+PENDING_BY_VARIANT_RE = re.compile(
+    r"^PENDING_CAPABILITIES_BY_VARIANT\s*=\s*\{(.*?)\n\}", re.DOTALL | re.MULTILINE
+)
+
 # Finished Lovelace cards, built by other people, that read this suite's
 # sensors on their own. Every carrier README links these two under "Community
 # Lovelace cards"; the site says the same thing in one place so the credit is
@@ -334,6 +345,9 @@ class Carrier:
     # CAPABILITIES_BY_VARIANT in that carrier's own const.py — see
     # _capabilities_of), or None when undeclared.
     capabilities: frozenset[str] | dict[str, frozenset[str]] | None
+    # Same shape as ``capabilities``: fields not confirmed yet. Empty when the
+    # carrier declares none.
+    pending: frozenset[str] | dict[str, frozenset[str]]
     # The primary brand this row is an alias of, when it is one. Seven rows
     # are a second brand on somebody else's repo. Each carries its own logo
     # from data/icons where the two brands look different; the two that share
@@ -439,6 +453,36 @@ def _capabilities_of(
     match = CAPABILITIES_RE.search(text)
     if not match:
         return None
+    return frozenset(re.findall(r'"([^"]+)"', match.group(1)))
+
+
+def _pending_of(
+    repo: str, domain: str
+) -> frozenset[str] | dict[str, frozenset[str]]:
+    """Parse ``PENDING_CAPABILITIES`` (or the ``_BY_VARIANT`` form) out of const.py.
+
+    Absent means nothing is pending, so an empty frozenset comes back — the
+    unlike-``CAPABILITIES`` case where silence is the normal answer.
+    """
+    raw = gh_file(repo, f"custom_components/{domain}/const.py")
+    if raw is None:
+        return frozenset()
+    text = raw.decode("utf-8")
+
+    variant_match = PENDING_BY_VARIANT_RE.search(text)
+    if variant_match:
+        variants = {
+            label: frozenset(re.findall(r'"([^"]+)"', fields))
+            for label, fields in CAPABILITIES_VARIANT_ENTRY_RE.findall(
+                variant_match.group(1)
+            )
+        }
+        if variants:
+            return variants
+
+    match = PENDING_RE.search(text)
+    if not match or not match.group(1):
+        return frozenset()
     return frozenset(re.findall(r'"([^"]+)"', match.group(1)))
 
 
@@ -572,6 +616,7 @@ def collect_carriers() -> list[Carrier]:
         manifest = json.loads(raw)
         meta = declared[repo]
         capabilities = _capabilities_of(repo, domain)
+        pending = _pending_of(repo, domain)
 
         # The repo's own brand icon is the default. A repo that ships as one
         # integration but lists here under two brand names (Posten Bring)
@@ -603,6 +648,7 @@ def collect_carriers() -> list[Carrier]:
             directions=meta.get("directions", "incoming"),
             icon=icon_name,
             capabilities=capabilities,
+            pending=pending,
             connections=_connections_of(repo, meta, capabilities),
         )
 
@@ -731,13 +777,22 @@ def _payload(carriers: list[Carrier]) -> str:
     """
     rows = []
     for c in carriers:
+        def pending_for(label: str) -> list[str]:
+            if isinstance(c.pending, dict):
+                return sorted(c.pending.get(label, ()))
+            return sorted(c.pending)
+
         if isinstance(c.capabilities, dict):
             # One row per backend, in the same account → tracking → API
             # order as the connections; a backend with no connection entry
             # keeps the carrier's own order after them.
             order = {conn.variant: i for i, conn in enumerate(c.connections)}
             caps = [
-                {"variant": label, "fields": sorted(fields)}
+                {
+                    "variant": label,
+                    "fields": sorted(fields),
+                    "pending": pending_for(label),
+                }
                 for label, fields in sorted(
                     c.capabilities.items(),
                     key=lambda item: order.get(item[0], len(order)),
@@ -746,7 +801,13 @@ def _payload(carriers: list[Carrier]) -> str:
         elif c.capabilities is None:
             caps = None
         else:
-            caps = [{"variant": "", "fields": sorted(c.capabilities)}]
+            caps = [
+                {
+                    "variant": "",
+                    "fields": sorted(c.capabilities),
+                    "pending": pending_for(""),
+                }
+            ]
         rows.append(
             {
                 "slug": _slug(c),

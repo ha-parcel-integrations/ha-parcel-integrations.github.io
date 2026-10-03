@@ -799,6 +799,14 @@
   color: var(--md-default-fg-color--lighter);
 }
 
+/* Not confirmed yet: reuses the amber of the other "check this" signals, so it
+   reads as neither yes nor never. */
+.md-typeset .carrier-caps .is-pending,
+.md-typeset .carrier-caps-legend .is-pending {
+  color: var(--carrier-apikey);
+  font-weight: 700;
+}
+
 .md-typeset .carrier-dialog__foot {
   margin: 0;
   padding: 0.7rem 1rem;

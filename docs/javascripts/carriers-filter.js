@@ -128,11 +128,15 @@ document$.subscribe(() => {
         // where the table restacks into one labelled row per field and the
         // thead is gone.
         const cells = data.capabilityLabels
-          .map(([key, label]) =>
-            entry.fields.includes(key)
-              ? `<td class="is-yes" data-label="${esc(label)}"><span aria-hidden="true">●</span><span class="sr-only">Populated</span></td>`
-              : `<td class="is-no" data-label="${esc(label)}"><span aria-hidden="true">–</span><span class="sr-only">Always null</span></td>`
-          )
+          .map(([key, label]) => {
+            if (entry.fields.includes(key)) {
+              return `<td class="is-yes" data-label="${esc(label)}"><span aria-hidden="true">●</span><span class="sr-only">Populated</span></td>`;
+            }
+            if ((entry.pending || []).includes(key)) {
+              return `<td class="is-pending" data-label="${esc(label)}"><span aria-hidden="true">?</span><span class="sr-only">Awaiting data</span></td>`;
+            }
+            return `<td class="is-no" data-label="${esc(label)}"><span aria-hidden="true">–</span><span class="sr-only">Always null</span></td>`;
+          })
           .join("");
         const label = perBackend ? `<th scope="row">${esc(entry.variant)}</th>` : "";
         return `<tr>${label}${cells}</tr>`;
@@ -145,9 +149,13 @@ document$.subscribe(() => {
       : "";
     // The dash was spelled out in the prose above and the dot was not, which
     // left the marker that means "yes" as the unexplained one.
+    const hasPending = carrier.capabilities.some((entry) => (entry.pending || []).length);
     const legend =
       '<p class="carrier-caps-legend">' +
       '<span><span class="is-yes" aria-hidden="true">●</span> Populated</span>' +
+      (hasPending
+        ? '<span><span class="is-pending" aria-hidden="true">?</span> Awaiting data — not confirmed on a real parcel yet</span>'
+        : "") +
       '<span><span class="is-no" aria-hidden="true">–</span> Always null — its API never exposes the field</span>' +
       "</p>";
     return `<div class="carrier-table"><table class="carrier-caps"><thead><tr>${corner}${head}</tr></thead><tbody>${rows}</tbody></table></div>${legend}${note}`;
