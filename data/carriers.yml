@@ -465,6 +465,14 @@ ha-planzer:
   directions: incoming
   blurb: Planzer — the carrier behind IKEA Switzerland home deliveries
 
+ha-poczta-polska:
+  region: Poland
+  countries: ["PL"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Poczta Polska — Poland's national post, including Pocztex, tracked without an account
+
 ha-poste-italiane:
   region: Italy
   countries: ["IT"]
