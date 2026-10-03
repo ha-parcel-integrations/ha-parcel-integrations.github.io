@@ -168,7 +168,7 @@ CAPABILITIES_VARIANT_ENTRY_RE = re.compile(
 # against). Declared next to CAPABILITIES in the carrier's own const.py; the
 # page shows them as "awaiting data" instead of folding them into "never".
 PENDING_RE = re.compile(
-    r"^PENDING_CAPABILITIES(?:\s*:\s*[^=]+)?=\s*frozenset\(\s*(?:\{(.*?)\})?\s*\)",
+    r"^PENDING_CAPABILITIES(?:\s*:\s*[^=]+)?\s*=\s*frozenset\(\s*(?:\{(.*?)\})?\s*\)",
     re.DOTALL | re.MULTILINE,
 )
 PENDING_BY_VARIANT_RE = re.compile(
