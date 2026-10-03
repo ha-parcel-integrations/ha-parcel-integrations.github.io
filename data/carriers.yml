@@ -68,6 +68,18 @@ ha-4px:
   directions: incoming
   blurb: 4PX's tracking layer for cross-border parcels shipped from China
 
+ha-airmee:
+  region: Sweden
+  countries: ["SE"]
+  auth:
+    Tracking:
+      kind: trackingnr
+      input: tracking link + phone number hash
+    Account:
+      kind: account
+  directions: incoming
+  blurb: Airmee — Swedish last-mile delivery, by tracking link or by logging in with an SMS code
+
 ha-ampere:
   region: Netherlands
   countries: ["NL"]
