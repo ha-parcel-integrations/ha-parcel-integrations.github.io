@@ -344,6 +344,14 @@ ha-hermes:
   directions: incoming
   blurb: Hermes Paket, by tracking code or by Hermes account login — an account finds your parcels by itself and names who sent them, and a parcel routed to a PaketShop shows that shop as the pickup point
 
+ha-ics-courier:
+  region: Canada
+  countries: ["CA"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: ICS Courier — Canadian courier and parcel delivery, tracked without an account
+
 ha-inpost:
   region: Poland, plus keyless tracking in Italy, Portugal, the United Kingdom and Spain
   countries: ["PL", "IT", "PT", "GB", "ES"]
