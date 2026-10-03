@@ -182,7 +182,7 @@ ha-correos:
   auth: trackingnr
   input: tracking code
   directions: incoming
-  blurb: Spain's national postal operator
+  blurb: Spain's national postal operator, including its Correos Express parcels
 
 ha-ctt:
   name: CTT
