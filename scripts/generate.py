@@ -145,7 +145,8 @@ CAPABILITY_LABELS = {
 # match inside ``KNOWN_CAPABILITIES = frozenset({...})``, which contains
 # "CAPABILITIES = frozenset(" as a literal substring.
 CAPABILITIES_RE = re.compile(
-    r"^CAPABILITIES\s*=\s*frozenset\(\s*\{(.*?)\}\s*\)", re.DOTALL | re.MULTILINE
+    r"^CAPABILITIES(?:\s*:\s*[^=]+)?\s*=\s*frozenset\(\s*(?:\{(.*?)\})?\s*\)",
+    re.DOTALL | re.MULTILINE,
 )
 
 # A carrier with more than one backend (a country-specific transport, not
@@ -453,7 +454,7 @@ def _capabilities_of(
     match = CAPABILITIES_RE.search(text)
     if not match:
         return None
-    return frozenset(re.findall(r'"([^"]+)"', match.group(1)))
+    return frozenset(re.findall(r'"([^"]+)"', match.group(1) or ""))
 
 
 def _pending_of(
@@ -484,6 +485,34 @@ def _pending_of(
     if not match or not match.group(1):
         return frozenset()
     return frozenset(re.findall(r'"([^"]+)"', match.group(1)))
+
+
+def _check_pending(
+    repo: str,
+    capabilities: frozenset[str] | dict[str, frozenset[str]] | None,
+    pending: frozenset[str] | dict[str, frozenset[str]],
+) -> None:
+    """Fail the build on a pending declaration the page could not render truthfully."""
+    if isinstance(pending, dict):
+        entries = list(pending.items())
+    else:
+        entries = [("", pending)]
+    for label, fields in entries:
+        unknown = sorted(fields - CAPABILITY_LABELS.keys())
+        if unknown:
+            raise GenerateError(f"{repo}: PENDING_CAPABILITIES names unknown field(s) {', '.join(unknown)}")
+        if isinstance(capabilities, dict):
+            if label not in capabilities:
+                raise GenerateError(
+                    f"{repo}: PENDING_CAPABILITIES_BY_VARIANT names backend {label!r} that "
+                    "CAPABILITIES_BY_VARIANT does not declare"
+                )
+            populated = capabilities[label]
+        else:
+            populated = capabilities or frozenset()
+        both = sorted(fields & populated)
+        if both:
+            raise GenerateError(f"{repo}: {', '.join(both)} is both populated and pending")
 
 
 def _connections_of(
@@ -617,6 +646,7 @@ def collect_carriers() -> list[Carrier]:
         meta = declared[repo]
         capabilities = _capabilities_of(repo, domain)
         pending = _pending_of(repo, domain)
+        _check_pending(repo, capabilities, pending)
 
         # The repo's own brand icon is the default. A repo that ships as one
         # integration but lists here under two brand names (Posten Bring)
