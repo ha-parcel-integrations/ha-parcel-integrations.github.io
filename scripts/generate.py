@@ -493,7 +493,10 @@ def _connections_of(
                 variant=label,
             )
         )
-    return tuple(connections)
+    # Account first, then tracking code, then API key — whatever order the
+    # yaml happens to list them in. AUTH_LABEL's key order is the ranking.
+    rank = {kind: i for i, kind in enumerate(AUTH_LABEL)}
+    return tuple(sorted(connections, key=lambda conn: rank[conn.auth]))
 
 
 def _checked_auth(repo: str, auth: str) -> str:
@@ -729,10 +732,16 @@ def _payload(carriers: list[Carrier]) -> str:
     rows = []
     for c in carriers:
         if isinstance(c.capabilities, dict):
-            # One row per backend, in the order the carrier declared them.
+            # One row per backend, in the same account → tracking → API
+            # order as the connections; a backend with no connection entry
+            # keeps the carrier's own order after them.
+            order = {conn.variant: i for i, conn in enumerate(c.connections)}
             caps = [
                 {"variant": label, "fields": sorted(fields)}
-                for label, fields in c.capabilities.items()
+                for label, fields in sorted(
+                    c.capabilities.items(),
+                    key=lambda item: order.get(item[0], len(order)),
+                )
             ]
         elif c.capabilities is None:
             caps = None

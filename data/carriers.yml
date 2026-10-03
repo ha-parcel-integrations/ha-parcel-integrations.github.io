@@ -587,10 +587,14 @@ ha-sunyou:
 ha-swiss-post:
   region: Switzerland
   countries: ["CH"]
-  auth: trackingnr
-  input: tracking code
-  directions: incoming
-  blurb: Swiss Post — Switzerland's national postal operator
+  auth:
+    Account:
+      kind: account
+    Tracking:
+      kind: trackingnr
+      input: tracking code
+  directions: incoming; incoming+outgoing with a SwissID account
+  blurb: Swiss Post — Switzerland's national postal operator, by tracking code or by SwissID account login
 
 ha-trunkrs:
   region: Netherlands
