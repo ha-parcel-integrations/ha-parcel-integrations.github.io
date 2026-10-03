@@ -529,6 +529,14 @@ ha-ppl-cz:
   directions: incoming+outgoing
   blurb: PPL — one of Czechia's two dominant private carriers, by passwordless e-mail + PIN login or by tracking code
 
+ha-purolator:
+  region: Canada
+  countries: ["CA"]
+  auth: trackingnr
+  input: tracking number (PIN)
+  directions: incoming+outgoing
+  blurb: Purolator — Canadian courier and parcel delivery, tracked by PIN
+
 ha-quickpac:
   region: Switzerland
   countries: ["CH"]
