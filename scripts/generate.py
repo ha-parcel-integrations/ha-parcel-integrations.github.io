@@ -493,6 +493,8 @@ def _check_pending(
     pending: frozenset[str] | dict[str, frozenset[str]],
 ) -> None:
     """Fail the build on a pending declaration the page could not render truthfully."""
+    if not pending:
+        return
     if isinstance(pending, dict):
         entries = list(pending.items())
     else:
