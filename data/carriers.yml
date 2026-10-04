@@ -155,6 +155,18 @@ ha-cainiao:
   directions: incoming
   blurb: Alibaba's tracking layer for AliExpress, Temu, Shein and similar shops
 
+ha-canada-post:
+  region: Canada
+  countries: ["CA"]
+  auth:
+    Tracking:
+      kind: trackingnr
+      input: tracking code or delivery notice card number
+    Account:
+      kind: account
+  directions: incoming
+  blurb: Canada Post parcels, by tracking code or imported from your Canada Post account, with the post office shown while a parcel waits for pickup
+
 ha-canpar:
   region: Canada
   countries: ["CA"]
