@@ -162,10 +162,16 @@ document$.subscribe(() => {
   }
 
   function render(carrier) {
-    const beta = carrier.early ? '<span class="carrier-beta">Beta</span>' : "";
-    const release = carrier.early
-      ? "Early release — it works, but its status mapping was inferred rather than seen on a real parcel."
-      : "Stable release.";
+    const beta = carrier.experimental
+      ? '<span class="carrier-beta carrier-beta--experimental">Experimental</span>'
+      : carrier.early
+        ? '<span class="carrier-beta">Beta</span>'
+        : "";
+    const release = carrier.experimental
+      ? "Experimental — a trial for testing only; it may still be renamed, restructured or withdrawn, and updates may change its entities."
+      : carrier.early
+        ? "Early release — it works, but its status mapping was inferred rather than seen on a real parcel."
+        : "Stable release.";
     // data/carriers.yml's `region` is the authored sentence — it names the
     // single country a flag alone leaves unlabelled, and explains the split
     // when a carrier runs a different backend per country.

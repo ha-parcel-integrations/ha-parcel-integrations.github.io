@@ -104,11 +104,13 @@ COUNTRY_NAMES = {
     "IE": "Ireland",
     "IN": "India",
     "IT": "Italy",
+    "JP": "Japan",
     "LI": "Liechtenstein",
     "LT": "Lithuania",
     "LU": "Luxembourg",
     "LV": "Latvia",
     "MD": "Moldova",
+    "MX": "Mexico",
     "MY": "Malaysia",
     "NL": "Netherlands",
     "NO": "Norway",
@@ -357,6 +359,9 @@ class Carrier:
     # file would be the same artwork twice. The tile names the parent out loud
     # either way.
     parent: str | None = None
+    # A trial that may still be renamed or withdrawn — set by hand in
+    # data/carriers.yml, because no version number can say that.
+    experimental: bool = False
 
     @property
     def early(self) -> bool:
@@ -682,6 +687,7 @@ def collect_carriers() -> list[Carrier]:
             capabilities=capabilities,
             pending=pending,
             connections=_connections_of(repo, meta, capabilities),
+            experimental=bool(meta.get("experimental")),
         )
 
         name = meta.get("name") or manifest.get("name", repo)
@@ -849,6 +855,7 @@ def _payload(carriers: list[Carrier]) -> str:
                 "icon": c.icon,
                 "version": c.version,
                 "early": c.early,
+                "experimental": c.experimental,
                 "blurb": c.blurb,
                 "region": c.region,
                 "countries": c.countries,
@@ -930,7 +937,12 @@ def _card(carrier: Carrier) -> str:
         else f'<span class="carrier-initial">{carrier.name[0]}</span>'
     )
     name = html.escape(carrier.name, quote=True)
-    beta = '<span class="carrier-beta">Beta</span>' if carrier.early else ""
+    if carrier.experimental:
+        beta = '<span class="carrier-beta carrier-beta--experimental">Experimental</span>'
+    elif carrier.early:
+        beta = '<span class="carrier-beta">Beta</span>'
+    else:
+        beta = ""
     parent = (
         f'<span class="carrier-parent">via {carrier.parent}</span>'
         if carrier.parent
@@ -1055,7 +1067,13 @@ def render_carriers(carriers: list[Carrier]) -> str:
         # with no key; CARRIERS_FOOTER explains it 60 tiles further down.
         '<div><dt class="carrier-beta">Beta</dt>'
         "<dd>Early release — its status mapping was inferred, not observed.</dd></div>"
-        "</dl>"
+        + (
+            '<div><dt class="carrier-beta carrier-beta--experimental">Experimental</dt>'
+            "<dd>A trial — it may still be renamed, restructured or withdrawn.</dd></div>"
+            if any(c.experimental for c in carriers)
+            else ""
+        )
+        + "</dl>"
     )
     # A <div>, not <script>: navigation.instant strips <script> tags from the
     # content it swaps in on SPA navigation, which silently dropped this data

@@ -59,6 +59,10 @@
 #              when the manifest name carries scope an alias entry already
 #              covers (e.g. "X, including Y" once Y has its own alias row)
 #              and the shorter form reads better as a site listing.
+#   experimental  optional `true` for a trial integration that may still be
+#              renamed, restructured or withdrawn — not just unconfirmed
+#              statuses, which any pre-1.0 release already flags as Beta. It
+#              swaps the Beta badge for an Experimental one.
 
 ha-4px:
   region: Cross-border
@@ -79,6 +83,14 @@ ha-airmee:
       kind: account
   directions: incoming
   blurb: Airmee — Swedish last-mile delivery, by tracking link or by logging in with an SMS code
+
+ha-amazon:
+  region: Amazon's own storefronts — one sign-in per country you shop on
+  countries: ["NL", "BE", "DE", "FR", "GB", "IE", "ES", "IT", "SE", "PL", "US", "CA", "MX", "BR", "AU", "JP", "IN"]
+  auth: account
+  directions: incoming
+  blurb: Amazon — every shipment of your recent orders, whichever courier delivers it
+  experimental: true
 
 ha-ampere:
   region: Netherlands

@@ -375,6 +375,12 @@
   color: var(--carrier-beta);
 }
 
+/* Same neutral badge, dashed: it qualifies the whole integration, not just
+   its status mapping, so it has to read as a different mark from Beta. */
+.md-typeset .carrier-beta--experimental {
+  border-style: dashed;
+}
+
 .md-typeset .carrier-name {
   display: flex;
   justify-content: space-between;
