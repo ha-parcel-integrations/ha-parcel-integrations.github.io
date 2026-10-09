@@ -89,8 +89,7 @@ ha-amazon:
   countries: ["NL", "BE", "DE", "FR", "GB", "IE", "ES", "IT", "SE", "PL", "US", "CA", "MX", "BR", "AU", "JP", "IN"]
   auth: account
   directions: incoming
-  blurb: Amazon — every shipment of your recent orders, whichever courier delivers it
-  experimental: true
+  blurb: Amazon — every shipment of your recent orders, whichever courier delivers it, handed over to that courier's own integration when you have it set up for the full delivery details
 
 ha-ampere:
   region: Netherlands
