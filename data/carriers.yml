@@ -200,6 +200,14 @@ ha-ceska-posta:
       icon: balikovna.png
       blurb: Balikovna — Ceska Posta's own pickup-point and locker network, same backend and tracking codes
 
+ha-colis-prive:
+  region: France, Belgium and Luxembourg
+  countries: ["FR", "BE", "LU"]
+  auth: trackingnr
+  input: tracking code + delivery postcode
+  directions: incoming
+  blurb: Colis Privé — the last-mile courier behind many Amazon deliveries, tracked with the delivery postcode
+
 ha-correos:
   region: Spain
   countries: ["ES"]
