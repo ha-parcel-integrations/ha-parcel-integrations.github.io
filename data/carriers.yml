@@ -645,8 +645,8 @@ ha-swiss-post:
   blurb: Swiss Post — Switzerland's national postal operator, by tracking code or by SwissID account login
 
 ha-trunkrs:
-  region: Netherlands
-  countries: ["NL"]
+  region: Netherlands & Belgium
+  countries: ["NL", "BE"]
   auth: trackingnr
   input: tracking code + postal code
   directions: incoming
