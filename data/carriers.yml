@@ -273,8 +273,8 @@ ha-dhl-nl:
 
 ha-dpd:
   name: DPD
-  region: Netherlands and 17 more countries — Germany on its own separate backend, the rest sharing DPD's myDPD network
-  countries: ["NL", "AR", "BE", "HR", "CZ", "CH", "DE", "EE", "FR", "GB", "HU", "IT", "LV", "LT", "LU", "PT", "SK", "SI"]
+  region: Netherlands and 19 more countries — Germany, Poland and Austria each on their own separate backend, the rest sharing DPD's myDPD network
+  countries: ["NL", "AR", "AT", "BE", "HR", "CZ", "CH", "DE", "EE", "FR", "GB", "HU", "IT", "LV", "LT", "LU", "PL", "PT", "SK", "SI"]
   auth: account
   directions: incoming+outgoing
   blurb: DPD shipments, tracked through your myDPD account
