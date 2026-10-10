@@ -355,6 +355,14 @@ ha-gls:
   directions: incoming
   blurb: GLS parcels, just like the gls-info.nl website
 
+ha-gobolt:
+  region: Canada and the United States
+  countries: ["CA", "US"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: GoBolt — North American last-mile carrier retailers ship with, tracked with the code from your shipping confirmation
+
 ha-gofo:
   region: United States, Canada, Italy, France, Spain and the Netherlands
   countries: ["US", "CA", "IT", "FR", "ES", "NL"]
