@@ -639,6 +639,14 @@ ha-slovenska-posta:
   directions: incoming
   blurb: Slovenská Pošta parcels, tracked the same way as on posta.sk
 
+ha-spee-dee-delivery:
+  region: United States
+  countries: ["US"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Spee-Dee Delivery — regional ground parcel carrier across the upper Midwest
+
 ha-straightship:
   region: Canada
   countries: ["CA"]
