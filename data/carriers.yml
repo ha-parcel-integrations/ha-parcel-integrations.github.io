@@ -72,6 +72,14 @@ ha-4px:
   directions: incoming
   blurb: 4PX's tracking layer for cross-border parcels shipped from China
 
+ha-acs-courier:
+  region: Greece
+  countries: ["GR"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: ACS Courier — one of Greece's largest couriers, tracked without an account
+
 ha-airmee:
   region: Sweden
   countries: ["SE"]
