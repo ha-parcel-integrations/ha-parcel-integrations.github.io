@@ -639,6 +639,14 @@ ha-slovenska-posta:
   directions: incoming
   blurb: Slovenská Pošta parcels, tracked the same way as on posta.sk
 
+ha-straightship:
+  region: Canada
+  countries: ["CA"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Straightship — Canadian last-mile courier for domestic B2C parcels, tracked with the code from your shipping confirmation
+
 ha-sunyou:
   region: Cross-border
   countries: []
