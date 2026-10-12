@@ -691,6 +691,14 @@ ha-trunkrs:
   directions: incoming
   blurb: Trunkrs — same-day and next-day delivery
 
+ha-ukrposhta:
+  region: Ukraine
+  countries: ["UA"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Ukrposhta — Ukraine's national postal operator, tracking domestic and inbound parcels with the code from your shipping confirmation
+
 ha-uniuni:
   region: Canada & United States
   countries: ["CA", "US"]
