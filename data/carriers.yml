@@ -99,6 +99,14 @@ ha-amazon:
   directions: incoming
   blurb: Amazon — every shipment of your recent orders, whichever courier delivers it, handed over to that courier's own integration when you have it set up for the full delivery details
 
+ha-amazon-shipping:
+  region: United States, United Kingdom, France, Italy and Spain
+  countries: ["US", "GB", "FR", "IT", "ES"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Amazon Shipping — parcels a seller ships through Amazon's own network, including Multi-Channel Fulfillment orders placed outside Amazon, tracked by number without an account
+
 ha-ampere:
   region: Netherlands
   countries: ["NL"]
