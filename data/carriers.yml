@@ -194,6 +194,14 @@ ha-canpar:
   directions: incoming
   blurb: Canpar Express — Canadian parcel delivery and pickup-point tracking
 
+ha-cdl-last-mile:
+  region: United States
+  countries: ["US"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: CDL Last Mile Solutions — US last-mile carrier delivering for retailers and marketplaces, tracked with the label or order number from your shipping confirmation
+
 ha-ceska-posta:
   name: Ceska Posta
   region: Czechia
