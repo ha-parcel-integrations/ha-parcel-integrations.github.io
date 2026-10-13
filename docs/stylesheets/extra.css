@@ -914,7 +914,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.2rem 1.2rem;
-  margin: 0.45rem 0 0;
+  margin: 0 0 0.5rem;
   font-size: 0.66rem;
   color: var(--md-default-fg-color--light);
 }
