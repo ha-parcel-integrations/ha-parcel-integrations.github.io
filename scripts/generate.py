@@ -80,6 +80,7 @@ AUTH_PILL = {
 # fails the build if a carrier uses a code this map does not, so the filter
 # never silently mislabels or drops a country.
 COUNTRY_NAMES = {
+    "AD": "Andorra",
     "AR": "Argentina",
     "AT": "Austria",
     "AU": "Australia",

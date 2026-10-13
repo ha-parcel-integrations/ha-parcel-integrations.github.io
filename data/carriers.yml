@@ -683,6 +683,14 @@ ha-swiss-post:
   directions: incoming; incoming+outgoing with a SwissID account
   blurb: Swiss Post — Switzerland's national postal operator, by tracking code or by SwissID account login
 
+ha-tipsa:
+  region: Spain, Portugal & Andorra
+  countries: ["ES", "PT", "AD"]
+  auth: trackingnr
+  input: tracking code + postal code
+  directions: incoming
+  blurb: TIPSA — Spanish courier for domestic and Iberian parcels, tracked with the 22-digit code and the delivery postcode
+
 ha-trunkrs:
   region: Netherlands & Belgium
   countries: ["NL", "BE"]
