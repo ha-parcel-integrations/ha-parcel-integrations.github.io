@@ -788,8 +788,11 @@ def _country_filter_options(carriers: list[Carrier]) -> str:
             f"COUNTRY_NAMES: {', '.join(unknown)}. Add them there."
         )
     ordered = sorted(codes, key=lambda code: COUNTRY_NAMES[code])
+    # Name before flag: a native select's type-ahead matches the start of the
+    # option text, and a leading flag made every option start with the same
+    # kind of character — typing "n" for Netherlands jumped nowhere.
     return "\n".join(
-        f'<option value="{code}">{_flag(code)} {COUNTRY_NAMES[code]}</option>'
+        f'<option value="{code}">{COUNTRY_NAMES[code]} {_flag(code)}</option>'
         for code in ordered
     )
 
@@ -1013,7 +1016,7 @@ def render_carriers(carriers: list[Carrier]) -> str:
         '<label class="carriers-filter__country" for="carrier-country-filter">'
         '<span class="carriers-filter__label">Delivering to</span>'
         '<select id="carrier-country-filter">'
-        '<option value="">🌍 All countries</option>'
+        '<option value="">All countries 🌍</option>'
         f"{_country_filter_options(carriers)}"
         "</select>"
         "</label>"

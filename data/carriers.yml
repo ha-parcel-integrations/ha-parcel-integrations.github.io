@@ -364,8 +364,8 @@ ha-fedex:
   blurb: FedEx parcels worldwide, through FedEx's official tracking API with a developer key you provide yourself
 
 ha-gls:
-  region: 23 countries — Austria, Belgium, Croatia, Czechia, Denmark, Finland, France, Hungary, Ireland, Italy, Liechtenstein, Luxembourg, Serbia, Slovakia, Slovenia and Switzerland share GLS's pan-EU tracker; Canada, Germany, the Netherlands, Poland, Portugal, Spain and the United States use national backends
-  countries: ["NL", "DE", "AT", "BE", "CH", "HR", "CZ", "DK", "FI", "FR", "HU", "IE", "IT", "LI", "LU", "RS", "SK", "SI", "CA", "US", "PL", "ES", "PT"]
+  region: 24 countries — Austria, Belgium, Croatia, Czechia, Denmark, Finland, France, Hungary, Ireland, Italy, Liechtenstein, Luxembourg, Romania, Serbia, Slovakia, Slovenia and Switzerland share GLS's pan-EU tracker; Canada, Germany, the Netherlands, Poland, Portugal, Spain and the United States use national backends
+  countries: ["NL", "DE", "AT", "BE", "CH", "HR", "CZ", "DK", "FI", "FR", "HU", "IE", "IT", "LI", "LU", "RO", "RS", "SK", "SI", "CA", "US", "PL", "ES", "PT"]
   auth: trackingnr
   input: tracking code + postal code (US and PL need only the tracking code; Spain and Portugal need both to match)
   directions: incoming
