@@ -158,10 +158,7 @@ document$.subscribe(() => {
         : "") +
       '<span><span class="is-no" aria-hidden="true">–</span> Always null — its API never exposes the field</span>' +
       "</p>";
-    // Legend above the table: it is the key to every cell below it, so a
-    // reader meets the markers already explained instead of guessing and
-    // then finding out.
-    return `${legend}<div class="carrier-table"><table class="carrier-caps"><thead><tr>${corner}${head}</tr></thead><tbody>${rows}</tbody></table></div>${note}`;
+    return `<div class="carrier-table"><table class="carrier-caps"><thead><tr>${corner}${head}</tr></thead><tbody>${rows}</tbody></table></div>${legend}${note}`;
   }
 
   function render(carrier) {
