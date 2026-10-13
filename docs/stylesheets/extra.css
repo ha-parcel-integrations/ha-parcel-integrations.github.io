@@ -271,7 +271,7 @@
 .md-typeset .carriers-count {
   color: var(--md-default-fg-color--light);
   font-size: 0.72rem;
-  margin: 0 0 1rem;
+  margin: 0.9rem 0 1rem;
 }
 
 .md-typeset .carriers-count strong {
@@ -543,7 +543,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem 1.4rem;
-  margin: 1.4rem 0 0;
+  margin: 0.9rem 0 0;
   font-size: 0.68rem;
   color: var(--md-default-fg-color--light);
 }

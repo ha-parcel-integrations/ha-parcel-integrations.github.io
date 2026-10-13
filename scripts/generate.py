@@ -1044,22 +1044,9 @@ def render_carriers(carriers: list[Carrier]) -> str:
         "</div>"
         "</div>"
     )
-    out.append(
-        f'<p class="carriers-count" id="carrier-count" role="status">'
-        f"<strong>{len(carriers)} carriers</strong> and counting.</p>"
-    )
-    out.append(
-        '<div class="carriers-grid" id="carriers-grid">'
-        + "".join(_card(c) for c in carriers)
-        + "</div>"
-    )
-    out.append(
-        '<p class="carriers-empty" id="carriers-empty" hidden>'
-        "No carrier matches that combination yet — "
-        "clear the search or the connection filter, or "
-        f'<a href="https://github.com/{ORG}/.github/discussions/new'
-        '?category=carrier-requests">request the carrier</a>.</p>'
-    )
+    # Directly under the filter: the three words are the pills a reader is
+    # about to click and the ones on every card, and after 80+ tiles the key
+    # arrives long past the point of being any use.
     out.append(
         '<dl class="carriers-legend">'
         '<div><dt class="carrier-pill carrier-pill--account">Account</dt>'
@@ -1079,6 +1066,22 @@ def render_carriers(carriers: list[Carrier]) -> str:
             else ""
         )
         + "</dl>"
+    )
+    out.append(
+        f'<p class="carriers-count" id="carrier-count" role="status">'
+        f"<strong>{len(carriers)} carriers</strong> and counting.</p>"
+    )
+    out.append(
+        '<div class="carriers-grid" id="carriers-grid">'
+        + "".join(_card(c) for c in carriers)
+        + "</div>"
+    )
+    out.append(
+        '<p class="carriers-empty" id="carriers-empty" hidden>'
+        "No carrier matches that combination yet — "
+        "clear the search or the connection filter, or "
+        f'<a href="https://github.com/{ORG}/.github/discussions/new'
+        '?category=carrier-requests">request the carrier</a>.</p>'
     )
     # A <div>, not <script>: navigation.instant strips <script> tags from the
     # content it swaps in on SPA navigation, which silently dropped this data
