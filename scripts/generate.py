@@ -1046,9 +1046,13 @@ def render_carriers(carriers: list[Carrier]) -> str:
     )
     # Directly under the filter: the three words are the pills a reader is
     # about to click and the ones on every card, and after 80+ tiles the key
-    # arrives long past the point of being any use.
+    # arrives long past the point of being any use. Folded, because open it
+    # cost two to five lines above a grid people came to scan; <details> keeps
+    # it keyboard- and touch-reachable without any script.
     out.append(
-        '<dl class="carriers-legend">'
+        '<details class="carriers-legend">'
+        "<summary>What do these labels mean?</summary>"
+        "<dl>"
         '<div><dt class="carrier-pill carrier-pill--account">Account</dt>'
         "<dd>You sign in with your own carrier account.</dd></div>"
         '<div><dt class="carrier-pill carrier-pill--trackingnr">Tracking</dt>'
@@ -1066,6 +1070,7 @@ def render_carriers(carriers: list[Carrier]) -> str:
             else ""
         )
         + "</dl>"
+        "</details>"
     )
     out.append(
         f'<p class="carriers-count" id="carrier-count" role="status">'

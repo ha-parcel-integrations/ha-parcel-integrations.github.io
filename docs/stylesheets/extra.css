@@ -539,16 +539,79 @@
 
 /* --- legend -------------------------------------------------------- */
 
-.md-typeset .carriers-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 1.4rem;
-  margin: 0.9rem 0 0;
+/* Material dresses every <details> as an admonition (frame, tinted summary,
+   its own chevrons); this is a plain line of text, so strip all of that. */
+.md-typeset details.carriers-legend {
+  /* The summary's own 40px box supplies the air on both sides. */
+  margin: -0.5rem 0 -0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
   font-size: 0.68rem;
   color: var(--md-default-fg-color--light);
 }
 
-.md-typeset .carriers-legend > div {
+.md-typeset .carriers-legend > summary {
+  display: inline-flex;
+  position: static;
+  margin: 0;
+  background: none;
+  font-weight: 400;
+  align-items: center;
+  gap: 0.3rem;
+  /* 40px target without pushing the grid further down than the line itself. */
+  min-height: 2rem;
+  padding: 0 0.5rem 0 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.md-typeset .carriers-legend > summary::-webkit-details-marker {
+  display: none;
+}
+
+.md-typeset .carriers-legend > summary::after {
+  content: none;
+}
+
+.md-typeset .carriers-legend > summary::before {
+  content: "";
+  position: static;
+  mask: none;
+  -webkit-mask: none;
+  background: none;
+  width: 0.4em;
+  height: 0.4em;
+  margin-right: 0.2rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 125ms;
+}
+
+.md-typeset .carriers-legend[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.md-typeset .carriers-legend > summary:hover {
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset .carriers-legend > summary:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+
+.md-typeset .carriers-legend dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.4rem;
+  margin: 0.2rem 0 0.4rem;
+}
+
+.md-typeset .carriers-legend dl > div {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -556,6 +619,12 @@
 
 .md-typeset .carriers-legend dd {
   margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset .carriers-legend > summary::before {
+    transition: none;
+  }
 }
 
 /* --- detail dialog ------------------------------------------------- */
