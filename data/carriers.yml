@@ -331,6 +331,14 @@ ha-econt:
   directions: incoming
   blurb: Econt — Bulgaria's largest private courier, tracked without an account
 
+ha-ecoscooting:
+  region: Spain and Portugal
+  countries: ["ES", "PT"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Ecoscooting — the last-mile courier that brings e-commerce parcels to doors and pickup points in Spain and Portugal, tracked without an account
+
 ha-elta-courier:
   region: Greece
   countries: ["GR"]
@@ -442,6 +450,14 @@ ha-laposte:
     - name: Colissimo
       icon: colissimo.png
       blurb: Colissimo — La Poste's parcel brand, same tracking lookup
+
+ha-magyar-posta:
+  region: Hungary
+  countries: ["HU"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Magyar Posta and MPL — Hungary's national post and its parcel arm, tracked without an account
 
 ha-matkahuolto:
   region: Finland
