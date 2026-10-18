@@ -8,27 +8,33 @@ description: >-
 
 ## What you need
 
-- Home Assistant **2024.7** or newer
+- Home Assistant **2025.12** or newer
 - [HACS](https://hacs.xyz/) installed
 
-Every integration in this suite is distributed through HACS as a custom
-repository.
+Every integration in this suite installs through HACS. Many are already in the
+HACS default list; the rest are added once as a custom repository.
 
 ## 1. Add the carriers you use
 
-Repeat this for each carrier that delivers to you — [the full list is
-here](carriers.md).
+Start by finding the carriers that deliver to you:
 
-1. Open **HACS → Integrations → ⋮ → Custom repositories**
-2. Paste the repository URL (for example
-   `https://github.com/ha-parcel-integrations/ha-postnl`) and pick category
-   **Integration**
-3. Search for the carrier and install it
-4. Restart Home Assistant
-5. Go to **Settings → Devices & Services → Add Integration** and search for the
+[Find your carriers :material-arrow-right:](carriers.md){ .md-button .md-button--primary }
+
+Then repeat this for each one:
+
+1. **Get it into HACS.** Select the carrier on the [carriers page](carriers.md):
+    - With an **Open in HACS** button, it is in the HACS default list — click
+      it, or just search for the carrier's name in HACS.
+    - Without one, open **HACS → ⋮ → Custom repositories**, paste the
+      repository URL from its **View on GitHub** button (for example
+      `https://github.com/ha-parcel-integrations/ha-postnl`) and pick type
+      **Integration**. After that it shows up in the HACS search too.
+2. **Download** it from HACS
+3. **Restart** Home Assistant
+4. Go to **Settings → Devices & Services → Add Integration** and search for the
    carrier
 
-What step 5 asks you for depends on the carrier: a tracking code, a tracking
+What step 4 asks you for depends on the carrier: a tracking code, a tracking
 code plus postal code, or an account login. Every tile on the [carriers
 page](carriers.md) carries that as a badge — **Account**, **Tracking** or
 **API** — and selecting a carrier spells out exactly what it asks for.
@@ -45,9 +51,10 @@ and every carrier keeps working exactly as it does now.
 
 Do this once, after at least one carrier is set up.
 
-1. Add `https://github.com/ha-parcel-integrations/ha-parcel-aggregator` as a
-   custom repository, category **Integration**
-2. Install it, restart, then add it under **Settings → Devices & Services**
+1. It is in the HACS default list: search HACS for **Parcel Aggregator**, or
+   [open it in HACS](https://my.home-assistant.io/redirect/hacs_repository/?owner=ha-parcel-integrations&repository=ha-parcel-aggregator&category=integration)
+   directly
+2. Download it, restart, then add it under **Settings → Devices & Services**
 3. There is nothing to configure — no credentials, no options
 
 It discovers your carrier sensors on its own, and keeps watching the entity

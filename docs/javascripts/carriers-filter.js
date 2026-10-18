@@ -197,6 +197,12 @@ document$.subscribe(() => {
                 : ""
             }
           </div>
+          ${
+            carrier.hacs_url
+              ? ""
+              : `<p class="carrier-dialog__hint">Not in the HACS default list yet —
+               <a href="/install/#1-add-the-carriers-you-use">add it as a custom repository</a>.</p>`
+          }
         </div>
         <button type="button" class="carrier-dialog__close" aria-label="Close">&times;</button>
       </div>

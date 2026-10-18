@@ -1172,7 +1172,8 @@ next year without a single edit.
 !!! note "Not running the aggregator?"
     These work per carrier too. Swap `parcel_aggregator_` for the carrier's own
     domain (`postnl_parcel_status_changed`) and the aggregator's sensors for that
-    carrier's own. The parcel data inside is identical — see the
+    carrier's own, found via the [carriers page](carriers.md). The parcel data
+    inside is identical — see the
     [contract](contract.md).
 
 !!! tip "Where these go"

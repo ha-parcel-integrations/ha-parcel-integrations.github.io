@@ -715,6 +715,11 @@
   margin-top: 0.6rem;
 }
 
+.md-typeset .carrier-dialog__title .carrier-dialog__hint {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+}
+
 .md-typeset .carrier-dialog .carrier-repo {
   display: inline-block;
   margin: 0;

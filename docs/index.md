@@ -39,7 +39,8 @@ dashboards work the same no matter who delivers.
     Only if you run several carriers. Reads what they already publish and
     re-emits it merged: summed sensors, one `next_delivery`, one event stream.
 
-    [:octicons-arrow-right-24: On GitHub](https://github.com/ha-parcel-integrations/ha-parcel-aggregator)
+    [:octicons-arrow-right-24: Set it up](install.md#2-optional-add-the-aggregator)
+    · [:octicons-arrow-right-24: On GitHub](https://github.com/ha-parcel-integrations/ha-parcel-aggregator)
 
 -   :material-file-document-outline: **The contract**
 

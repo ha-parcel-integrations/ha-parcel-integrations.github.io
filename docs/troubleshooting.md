@@ -15,8 +15,8 @@ description: >-
   vocabulary was inferred rather than confirmed against real shipments. Your
   reports are what move it to 1.0.
 - **Nothing appears at all** — check **Settings → System → Logs**, then open an
-  issue on that carrier's own repository with the diagnostics download from its
-  device page.
+  issue on that carrier's own repository — the [carriers page](carriers.md)
+  links to each one — with the diagnostics download from its device page.
 
 ## Polling and rate limits
 
