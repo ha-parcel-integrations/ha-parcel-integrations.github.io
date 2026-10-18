@@ -187,8 +187,12 @@ document$.subscribe(() => {
         <div class="carrier-dialog__title">
           <h2>${esc(carrier.name)} <span class="carrier-version">${esc(carrier.version)}</span> ${beta}</h2>
           <p>${esc(carrier.blurb)}</p>
-          <a class="carrier-repo md-button md-button--primary" href="${esc(carrier.url)}"
-             data-umami-event="carrier-click:${esc(carrier.repo)}">View on GitHub</a>
+          <div class="carrier-dialog__links">
+            <a class="carrier-repo md-button md-button--primary" href="${esc(carrier.url)}"
+               data-umami-event="carrier-click:${esc(carrier.repo)}">View on GitHub</a>
+            <a class="carrier-repo md-button md-button--primary" href="${esc(carrier.hacs_url)}"
+               data-umami-event="carrier-click:${esc(carrier.repo)}">Open in HACS</a>
+          </div>
         </div>
         <button type="button" class="carrier-dialog__close" aria-label="Close">&times;</button>
       </div>
@@ -231,7 +235,7 @@ document$.subscribe(() => {
   }
 
   grid.addEventListener("click", (event) => {
-    if (event.target.closest(".carrier-github")) return;
+    if (event.target.closest(".carrier-github, .carrier-hacs")) return;
     const card = event.target.closest(".carrier-card");
     if (card) open(card.dataset.slug);
   });

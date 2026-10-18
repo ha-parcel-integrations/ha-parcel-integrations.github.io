@@ -39,6 +39,14 @@ from pathlib import Path
 import yaml
 
 ORG = "ha-parcel-integrations"
+
+
+def hacs_url(repo: str) -> str:
+    """My Home Assistant redirect that opens the repo in the visitor's own HACS."""
+    return (
+        "https://my.home-assistant.io/redirect/hacs_repository/"
+        f"?owner={ORG}&repository={repo}&category=integration"
+    )
 API = "https://api.github.com"
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -338,6 +346,7 @@ class Carrier:
     domain: str
     version: str
     url: str
+    hacs_url: str
     region: str
     countries: list[str]
     connections: tuple[Connection, ...]
@@ -681,6 +690,7 @@ def collect_carriers() -> list[Carrier]:
             # convention, but tolerate one.
             version=releases[repo].lstrip("v"),
             url=f"https://github.com/{ORG}/{repo}",
+            hacs_url=hacs_url(repo),
             region=meta["region"],
             countries=meta.get("countries") or [],
             directions=meta.get("directions", "incoming"),
@@ -857,6 +867,7 @@ def _payload(carriers: list[Carrier]) -> str:
                 "name": c.name,
                 "repo": c.repo,
                 "url": c.url,
+                "hacs_url": c.hacs_url,
                 "icon": c.icon,
                 "version": c.version,
                 "early": c.early,
@@ -998,6 +1009,8 @@ def _card(carrier: Carrier) -> str:
         "Details</button>"
         f'<a class="carrier-github" href="{carrier.url}" aria-label="{name} on GitHub" '
         f'data-umami-event="carrier-click:{carrier.repo}">{GITHUB_MARK}GitHub</a>'
+        f'<a class="carrier-hacs" href="{carrier.hacs_url}" aria-label="{name} in HACS" '
+        f'data-umami-event="carrier-click:{carrier.repo}">HACS</a>'
         "</span>"
         "</div>"
     )

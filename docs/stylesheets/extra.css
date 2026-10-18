@@ -475,8 +475,13 @@
   border-top: 1px solid var(--carrier-line);
 }
 
+.md-typeset .carrier-details {
+  grid-column: 1 / -1;
+}
+
 .md-typeset .carrier-details,
-.md-typeset .carrier-github {
+.md-typeset .carrier-github,
+.md-typeset .carrier-hacs {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -503,14 +508,18 @@
 }
 
 .md-typeset .carrier-github,
-.md-typeset .carrier-github:visited {
+.md-typeset .carrier-github:visited,
+.md-typeset .carrier-hacs,
+.md-typeset .carrier-hacs:visited {
   border: 1px solid var(--md-typeset-a-color);
   background: transparent;
   color: var(--md-typeset-a-color);
 }
 
 .md-typeset .carrier-github:hover,
-.md-typeset .carrier-github:focus {
+.md-typeset .carrier-github:focus,
+.md-typeset .carrier-hacs:hover,
+.md-typeset .carrier-hacs:focus {
   border-color: var(--md-primary-fg-color);
   background: var(--md-primary-fg-color);
   color: var(--parcel-header-bg);
@@ -520,7 +529,8 @@
    on a mouse it would make the footer the tallest thing on the tile. */
 @media (pointer: coarse) {
   .md-typeset .carrier-details,
-  .md-typeset .carrier-github {
+  .md-typeset .carrier-github,
+  .md-typeset .carrier-hacs {
     min-height: 2.2rem;
   }
 }
@@ -532,7 +542,8 @@
 }
 
 .md-typeset .carrier-details:focus-visible,
-.md-typeset .carrier-github:focus-visible {
+.md-typeset .carrier-github:focus-visible,
+.md-typeset .carrier-hacs:focus-visible {
   outline: 2px solid var(--md-accent-fg-color);
   outline-offset: 2px;
 }
@@ -695,9 +706,16 @@
 
 /* The way out to the repo is the one thing people come here to click, so it
    sits with the title rather than in a footer. */
+.md-typeset .carrier-dialog__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+
 .md-typeset .carrier-dialog .carrier-repo {
   display: inline-block;
-  margin-top: 0.6rem;
+  margin: 0;
   font-size: 0.72rem;
   font-weight: 700;
 }
