@@ -203,6 +203,7 @@ COMMUNITY_CARDS = [
             "tracker, and a **+ Add parcel** control for the account-less "
             "carriers. Visual editor, no YAML."
         ),
+        "images/screenshot-dashboard.png",
     ),
     (
         "Package Tracker Card",
@@ -214,6 +215,7 @@ COMMUNITY_CARDS = [
             "arrives through two sources, with an expandable event timeline "
             "per package and filters per carrier, status or direction."
         ),
+        "images/preview.png",
     ),
 ]
 
@@ -272,6 +274,21 @@ def hacs_default_repos() -> set[str]:
     """Lower-cased owner/repo of every integration in the HACS default list."""
     raw = _request("https://raw.githubusercontent.com/hacs/default/master/integration")
     return {entry.lower() for entry in json.loads(raw)}
+
+
+def _card_screenshot(name: str, repo: str, path: str) -> str:
+    """The card's own README screenshot, hotlinked so it stays theirs and current.
+
+    A third-party rename must not fail our deploy, so a dead URL just drops
+    the image.
+    """
+    url = f"https://raw.githubusercontent.com/{repo}/HEAD/{path}"
+    try:
+        _request(url)
+    except urllib.error.URLError:
+        print(f"warning: no screenshot for {name} at {url}", file=sys.stderr)
+        return ""
+    return f'\n\n    [![{name}]({url}){{ .card-shot loading=lazy }}]({url})'
 
 
 def gh_json(path: str) -> object:
@@ -1403,7 +1420,8 @@ def render_dashboards() -> str:
     cards = "\n\n".join(
         f"-   **[{name}](https://github.com/{repo})** — by "
         f"[{author}](https://github.com/{author})\n\n    {does}"
-        for name, repo, author, does in COMMUNITY_CARDS
+        f"{_card_screenshot(name, repo, shot)}"
+        for name, repo, author, does, shot in COMMUNITY_CARDS
     )
     out.append(COMMUNITY_CARDS_SECTION.format(cards=cards, rows="\n".join(rows)))
     return "\n".join(out) + "\n"

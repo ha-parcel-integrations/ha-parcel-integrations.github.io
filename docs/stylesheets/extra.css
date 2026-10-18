@@ -715,6 +715,18 @@
   margin-top: 0.6rem;
 }
 
+/* The two screenshots are a wide banner and a near-square list; a height cap
+   keeps the square one from taking a whole screen. */
+.md-typeset img.card-shot {
+  display: block;
+  max-height: 16rem;
+  width: auto;
+  max-width: 100%;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.4rem;
+  margin-bottom: 1rem;
+}
+
 .md-typeset .carrier-dialog__title .carrier-dialog__hint {
   margin-top: 0.5rem;
   font-size: 0.7rem;
