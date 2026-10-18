@@ -475,7 +475,8 @@
   border-top: 1px solid var(--carrier-line);
 }
 
-.md-typeset .carrier-details {
+.md-typeset .carrier-details,
+.md-typeset .carrier-github:last-child {
   grid-column: 1 / -1;
 }
 

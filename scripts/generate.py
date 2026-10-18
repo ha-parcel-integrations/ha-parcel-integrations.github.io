@@ -268,6 +268,12 @@ def _request(url: str) -> bytes:
         raise
 
 
+def hacs_default_repos() -> set[str]:
+    """Lower-cased owner/repo of every integration in the HACS default list."""
+    raw = _request("https://raw.githubusercontent.com/hacs/default/master/integration")
+    return {entry.lower() for entry in json.loads(raw)}
+
+
 def gh_json(path: str) -> object:
     return json.loads(_request(f"{API}{path}"))
 
@@ -635,6 +641,7 @@ def collect_carriers() -> list[Carrier]:
     domains: dict[str, str] = {}
     releases: dict[str, str] = {}
     unreleased: list[str] = []
+    in_hacs = hacs_default_repos()
     for repo in candidates:
         domain = _domain_of(repo)
         if not domain:  # no custom_components/<one dir> → not an integration repo
@@ -690,7 +697,9 @@ def collect_carriers() -> list[Carrier]:
             # convention, but tolerate one.
             version=releases[repo].lstrip("v"),
             url=f"https://github.com/{ORG}/{repo}",
-            hacs_url=hacs_url(repo),
+            # Only repos HACS lists by default: for the rest the redirect would
+            # offer a custom-repository add, which is not what a plain button promises.
+            hacs_url=hacs_url(repo) if f"{ORG}/{repo}".lower() in in_hacs else "",
             region=meta["region"],
             countries=meta.get("countries") or [],
             directions=meta.get("directions", "incoming"),
@@ -993,6 +1002,13 @@ def _card(carrier: Carrier) -> str:
             f'<span class="carrier-more">+{rest} more</span>'
         )
 
+    hacs_link = (
+        f'<a class="carrier-hacs" href="{carrier.hacs_url}" aria-label="{name} in HACS" '
+        f'data-umami-event="carrier-click:{carrier.repo}">{HA_MARK}HACS</a>'
+        if carrier.hacs_url
+        else ""
+    )
+
     return (
         f'<div class="carrier-card" data-slug="{_slug(carrier)}" '
         f'data-kinds="{" ".join(kinds)}" '
@@ -1015,8 +1031,7 @@ def _card(carrier: Carrier) -> str:
         "Details</button>"
         f'<a class="carrier-github" href="{carrier.url}" aria-label="{name} on GitHub" '
         f'data-umami-event="carrier-click:{carrier.repo}">{GITHUB_MARK}GitHub</a>'
-        f'<a class="carrier-hacs" href="{carrier.hacs_url}" aria-label="{name} in HACS" '
-        f'data-umami-event="carrier-click:{carrier.repo}">{HA_MARK}HACS</a>'
+        f"{hacs_link}"
         "</span>"
         "</div>"
     )

@@ -190,8 +190,12 @@ document$.subscribe(() => {
           <div class="carrier-dialog__links">
             <a class="carrier-repo md-button md-button--primary" href="${esc(carrier.url)}"
                data-umami-event="carrier-click:${esc(carrier.repo)}">View on GitHub</a>
-            <a class="carrier-repo md-button md-button--primary" href="${esc(carrier.hacs_url)}"
-               data-umami-event="carrier-click:${esc(carrier.repo)}">Open in HACS</a>
+            ${
+              carrier.hacs_url
+                ? `<a class="carrier-repo md-button md-button--primary" href="${esc(carrier.hacs_url)}"
+               data-umami-event="carrier-click:${esc(carrier.repo)}">Open in HACS</a>`
+                : ""
+            }
           </div>
         </div>
         <button type="button" class="carrier-dialog__close" aria-label="Close">&times;</button>
