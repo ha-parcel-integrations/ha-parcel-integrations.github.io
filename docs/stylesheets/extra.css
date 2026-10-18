@@ -140,9 +140,12 @@
   box-shadow: 0 0 0.4rem rgba(65, 189, 245, 0.25);
 }
 
-/* The hero buttons sit tighter together than Material's default. */
-.md-typeset .md-button + .md-button {
-  margin-left: 0.4rem;
+/* The hero buttons sit tighter together than Material's default, and as a
+   gap rather than a margin so a wrapped button lines up with the first. */
+.md-typeset p:has(> .md-button) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
 /* ------------------------------------------------------------------ *
@@ -656,6 +659,12 @@
   line-height: 1.6;
 }
 
+/* The dialog is the last child of the content, where Material zeroes
+   margin-bottom — which pins it to the bottom of the screen. */
+.md-content__inner > .carrier-dialog {
+  margin: auto;
+}
+
 .carrier-dialog:focus {
   outline: none;
 }
@@ -815,6 +824,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+}
+
+/* Material indents lists with [dir=ltr] rules that outrank the reset above. */
+[dir] .md-typeset .carrier-connections,
+[dir] .md-typeset .carrier-connections li {
+  margin-left: 0;
 }
 
 .carrier-connections li {
@@ -1140,13 +1155,22 @@
 /* --- header title on a phone ---------------------------------------- */
 
 /* "Home Assistant parcel integrations" is 34 characters and the header has
-   room for about 20 at 375px, so Material truncated it to "Home Assistant
-   parce…" on every page. Wrapping loses nothing; the two lines still clear
-   the 2.4rem header. */
+   room for about 20 at 375px: truncated it read "Home Assistant parce…",
+   wrapped it was two cramped lines. A phone gets the short name instead —
+   the hero right below says Home Assistant anyway. */
 @media screen and (max-width: 30em) {
-  .md-header__topic > .md-ellipsis {
-    white-space: normal;
-    font-size: 0.68rem;
-    line-height: 1.15;
+  .md-header__topic:first-child > .md-ellipsis {
+    font-size: 0;
+  }
+
+  .md-header__topic:first-child > .md-ellipsis::after {
+    content: "Parcel integrations";
+    font-size: 0.9rem;
+  }
+
+  /* Stacked buttons of two different widths look accidental. */
+  .md-typeset p:has(> .md-button) > .md-button {
+    flex: 1 1 100%;
+    text-align: center;
   }
 }
