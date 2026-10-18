@@ -925,6 +925,12 @@ def _searchable(carrier: Carrier) -> str:
     return text if stripped == text else f"{text} {stripped}"
 
 
+# simple-icons "homeassistant" (CC0), the same family the site's footer icons come from.
+HA_MARK = (
+    '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" '
+    'd="M22.939 10.627 13.061.749a1.505 1.505 0 0 0-2.121 0l-9.879 9.878C.478 11.21 0 12.363 0 13.187v9c0 .826.675 1.5 1.5 1.5h9.227l-4.063-4.062a2 2 0 0 1-.664.113c-1.13 0-2.05-.92-2.05-2.05s.92-2.05 2.05-2.05 2.05.92 2.05 2.05c0 .233-.041.456-.113.665l3.163 3.163V9.928a2.05 2.05 0 0 1-1.15-1.84c0-1.13.92-2.05 2.05-2.05s2.05.92 2.05 2.05a2.05 2.05 0 0 1-1.15 1.84v8.127l3.146-3.146A2.05 2.05 0 0 1 18 12.239c1.13 0 2.05.92 2.05 2.05s-.92 2.05-2.05 2.05a2 2 0 0 1-.709-.13L12.9 20.602v3.088h9.6c.825 0 1.5-.675 1.5-1.5v-9c0-.825-.477-1.977-1.061-2.561z"/></svg>'
+)
+
 GITHUB_MARK = (
     '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" '
     'd="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49'
@@ -1010,7 +1016,7 @@ def _card(carrier: Carrier) -> str:
         f'<a class="carrier-github" href="{carrier.url}" aria-label="{name} on GitHub" '
         f'data-umami-event="carrier-click:{carrier.repo}">{GITHUB_MARK}GitHub</a>'
         f'<a class="carrier-hacs" href="{carrier.hacs_url}" aria-label="{name} in HACS" '
-        f'data-umami-event="carrier-click:{carrier.repo}">HACS</a>'
+        f'data-umami-event="carrier-click:{carrier.repo}">{HA_MARK}HACS</a>'
         "</span>"
         "</div>"
     )

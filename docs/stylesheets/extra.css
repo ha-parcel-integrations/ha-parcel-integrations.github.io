@@ -535,7 +535,8 @@
   }
 }
 
-.md-typeset .carrier-github svg {
+.md-typeset .carrier-github svg,
+.md-typeset .carrier-hacs svg {
   width: 0.75rem;
   height: 0.75rem;
   flex: none;
