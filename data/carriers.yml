@@ -544,6 +544,14 @@ ha-packeta:
       countries: ["CZ"]
       blurb: Zásilkovna — Packeta's own brand name in Czechia, same backend and "Z" tracking codes
 
+ha-pdn-express:
+  region: Netherlands
+  countries: ["NL"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: PDN Express — the last-mile courier behind many marketplace orders delivered in the Netherlands, tracked without an account
+
 ha-planzer:
   region: Switzerland & Liechtenstein
   countries: ["CH", "LI"]
