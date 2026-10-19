@@ -331,6 +331,14 @@ ha-dynalogic:
   directions: incoming
   blurb: Dynalogic last-mile deliveries, including those sold as MediaMarkt, Samsung, Nespresso and Menken
 
+ha-early-bird:
+  region: Sweden
+  countries: ["SE"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Early Bird — Swedish early-morning and evening home delivery, tracked without an account
+
 ha-econt:
   region: Bulgaria
   countries: ["BG"]
