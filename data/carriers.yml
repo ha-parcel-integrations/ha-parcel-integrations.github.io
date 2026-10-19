@@ -231,6 +231,14 @@ ha-colis-prive:
   directions: incoming
   blurb: Colis Privé — the last-mile courier behind many Amazon deliveries, tracked with the delivery postcode
 
+ha-colisweb:
+  region: France
+  countries: ["FR"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Colisweb — appointed home delivery of bulky goods for retailers, tracked with the number from your delivery SMS or e-mail
+
 ha-correos:
   region: Spain
   countries: ["ES"]
