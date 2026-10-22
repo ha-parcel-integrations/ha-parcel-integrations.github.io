@@ -202,6 +202,14 @@ ha-canpar:
   directions: incoming
   blurb: Canpar Express — Canadian parcel delivery and pickup-point tracking
 
+ha-cargus:
+  region: Romania
+  countries: ["RO"]
+  auth: trackingnr
+  input: tracking code (AWB)
+  directions: incoming
+  blurb: Cargus — Romanian courier and SHIP & GO pickup-point network, tracked with the AWB number from your shipping confirmation
+
 ha-cdl-last-mile:
   region: United States
   countries: ["US"]
