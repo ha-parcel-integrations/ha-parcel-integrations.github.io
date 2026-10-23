@@ -205,9 +205,13 @@ ha-canpar:
 ha-cargus:
   region: Romania
   countries: ["RO"]
-  auth: trackingnr
-  input: tracking code (AWB)
-  directions: incoming
+  auth:
+    Tracking:
+      kind: trackingnr
+      input: tracking code (AWB)
+    Account:
+      kind: account
+  directions: incoming; incoming+outgoing with a MyCargus account
   blurb: Cargus — Romanian courier and SHIP & GO pickup-point network, tracked with the AWB number from your shipping confirmation
 
 ha-cdl-last-mile:
