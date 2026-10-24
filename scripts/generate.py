@@ -172,8 +172,10 @@ CAPABILITIES_RE = re.compile(
 CAPABILITIES_BY_VARIANT_RE = re.compile(
     r"^CAPABILITIES_BY_VARIANT\s*=\s*\{(.*?)\n\}", re.DOTALL | re.MULTILINE
 )
+# An empty variant (``frozenset()`` or ``frozenset[str]()``) is a real claim —
+# that backend populates none of the optional fields — so it must parse too.
 CAPABILITIES_VARIANT_ENTRY_RE = re.compile(
-    r'"([^"]+)"\s*:\s*frozenset\(\s*\{(.*?)\}\s*\)', re.DOTALL
+    r'"([^"]+)"\s*:\s*frozenset(?:\[[^\]]*\])?\(\s*(?:\{(.*?)\})?\s*\)', re.DOTALL
 )
 
 # Fields a carrier has not been able to confirm yet (no real parcel to check
