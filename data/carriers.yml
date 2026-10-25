@@ -613,6 +613,14 @@ ha-posta-slovenije:
   directions: incoming+outgoing
   blurb: Pošta Slovenije — Slovenia's national post, by tracking code or through your MojaPošta account
 
+ha-posta-srbije:
+  region: Serbia
+  countries: ["RS"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Pošta Srbije — Serbia's national post, tracked without an account
+
 ha-poste-italiane:
   region: Italy
   countries: ["IT"]
