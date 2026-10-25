@@ -601,6 +601,18 @@ ha-poczta-polska:
   directions: incoming
   blurb: Poczta Polska — Poland's national post, including Pocztex, tracked without an account
 
+ha-posta-slovenije:
+  region: Slovenia
+  countries: ["SI"]
+  auth:
+    Tracking:
+      kind: trackingnr
+      input: tracking code
+    Account:
+      kind: account
+  directions: incoming+outgoing
+  blurb: Pošta Slovenije — Slovenia's national post, by tracking code or through your MojaPošta account
+
 ha-poste-italiane:
   region: Italy
   countries: ["IT"]
