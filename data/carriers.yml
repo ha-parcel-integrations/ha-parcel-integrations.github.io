@@ -443,6 +443,14 @@ ha-hermes:
   directions: incoming
   blurb: Hermes Paket, by tracking code or by Hermes account login — an account finds your parcels by itself and names who sent them, and a parcel routed to a PaketShop shows that shop as the pickup point
 
+ha-hrvatska-posta:
+  region: Croatia
+  countries: ["HR"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Hrvatska pošta — Croatia's national post, including parcels delivered to a parcel locker, tracked without an account
+
 ha-ics-courier:
   region: Canada
   countries: ["CA"]
