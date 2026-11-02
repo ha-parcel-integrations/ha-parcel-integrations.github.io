@@ -399,6 +399,14 @@ ha-fedex:
   directions: incoming
   blurb: FedEx parcels worldwide, through FedEx's official tracking API with a developer key you provide yourself
 
+ha-geniki-taxydromiki:
+  region: Greece, Cyprus and Bulgaria
+  countries: ["GR", "CY", "BG"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Geniki Taxydromiki parcels, tracked without an account
+
 ha-gls:
   region: 24 countries — Austria, Belgium, Croatia, Czechia, Denmark, Finland, France, Hungary, Ireland, Italy, Liechtenstein, Luxembourg, Romania, Serbia, Slovakia, Slovenia and Switzerland share GLS's pan-EU tracker; Canada, Germany, the Netherlands, Poland, Portugal, Spain and the United States use national backends
   countries: ["NL", "DE", "AT", "BE", "CH", "HR", "CZ", "DK", "FI", "FR", "HU", "IE", "IT", "LI", "LU", "RO", "RS", "SK", "SI", "CA", "US", "PL", "ES", "PT"]
