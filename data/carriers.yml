@@ -375,6 +375,14 @@ ha-elta-courier:
   directions: incoming
   blurb: ELTA Courier — the courier arm of Greece's national post, tracked without an account
 
+ha-emile:
+  region: Canada
+  countries: ["CA"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: eMile parcels, tracked without an account
+
 ha-evri:
   region: United Kingdom
   countries: ["GB"]
