@@ -563,6 +563,14 @@ ha-oesterreichische-post:
   directions: incoming
   blurb: Österreichische Post — Austria's national postal operator
 
+ha-omniva:
+  region: Estonia, Latvia and Lithuania
+  countries: ["EE", "LV", "LT"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Omniva parcels to a parcel machine, post office or your door, tracked without an account
+
 ha-ontrac:
   region: United States
   countries: ["US"]
