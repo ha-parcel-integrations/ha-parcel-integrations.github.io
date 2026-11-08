@@ -211,20 +211,6 @@ COMMUNITY_CARDS = [
         "images/v2-detail-pickup-dark.png",
     ),
     (
-        "HKI Parcels Card",
-        "jonisnet/hki-parcels-card",
-        "jonisnet",
-        (
-            "The first version of the card above, still maintained alongside "
-            "it. Every carrier you run in one card, with tabs for in transit, "
-            "delivered, sent and PostNL letterbox scans, a per-parcel delivery "
-            "tracker, and a **+ Add parcel** control for the account-less "
-            "carriers. Visual editor, no YAML. It has its own card type, so it "
-            "and HA Parcel Card can sit on the same dashboard."
-        ),
-        "images/screenshot-dashboard.png",
-    ),
-    (
         "Package Tracker Card",
         "klaptafel/ha-package-tracker-card",
         "klaptafel",
@@ -1236,7 +1222,7 @@ Like the automations, they are carrier-agnostic: they read the aggregator's
 merged sensors and the canonical parcel fields, so a card keeps working when you
 add a carrier — no new rows to write.
 
-Would rather not write YAML at all? Three community projects package all of
+Would rather not write YAML at all? Two community projects package all of
 this into a finished card that finds your sensors by itself — see [ready-made
 parcel cards](#ready-made-parcel-cards) below.
 
@@ -1257,7 +1243,7 @@ COMMUNITY_CARDS_SECTION = """\
 
 The snippets above are deliberately plain — they use cards Home Assistant already
 ships, so nothing extra has to be installed. If you would rather have a finished
-parcel card, three community projects build one on top of these same sensors
+parcel card, two community projects build one on top of these same sensors
 and detect your carriers automatically:
 
 {cards}
