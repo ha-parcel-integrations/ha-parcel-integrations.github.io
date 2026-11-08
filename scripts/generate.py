@@ -190,20 +190,37 @@ PENDING_BY_VARIANT_RE = re.compile(
 )
 
 # Finished Lovelace cards, built by other people, that read this suite's
-# sensors on their own. Every carrier README links these two under "Community
+# sensors on their own. Every carrier README links these three under "Community
 # Lovelace cards"; the site says the same thing in one place so the credit is
 # not buried in 23 READMEs. Keep this list in step with the READMEs and with
 # ha-carrier-template/scaffold/README.md.
 COMMUNITY_CARDS = [
     (
+        "HA Parcel Card",
+        "jonisnet/ha-parcel-card",
+        "jonisnet",
+        (
+            "Every carrier in one card, each with its own logo and brand "
+            "colour, and an illustrated delivery tracker — registered, "
+            "sorting centre, out for delivery, pickup point, delivered — "
+            "drawn in that carrier's colours. Tabs for in transit, delivered, "
+            "sent and PostNL letterbox scans, a **+ Add parcel** control for "
+            "the account-less carriers, a name of your own per parcel, and a "
+            "visual editor with live preview."
+        ),
+        "images/v2-detail-pickup-dark.png",
+    ),
+    (
         "HKI Parcels Card",
         "jonisnet/hki-parcels-card",
         "jonisnet",
         (
-            "Every carrier you run in one card, with tabs for in transit, "
+            "The first version of the card above, still maintained alongside "
+            "it. Every carrier you run in one card, with tabs for in transit, "
             "delivered, sent and PostNL letterbox scans, a per-parcel delivery "
             "tracker, and a **+ Add parcel** control for the account-less "
-            "carriers. Visual editor, no YAML."
+            "carriers. Visual editor, no YAML. It has its own card type, so it "
+            "and HA Parcel Card can sit on the same dashboard."
         ),
         "images/screenshot-dashboard.png",
     ),
@@ -1219,9 +1236,9 @@ Like the automations, they are carrier-agnostic: they read the aggregator's
 merged sensors and the canonical parcel fields, so a card keeps working when you
 add a carrier — no new rows to write.
 
-Would rather not write YAML at all? Two community projects package all of this
-into a finished card that finds your sensors by itself — see [ready-made parcel
-cards](#ready-made-parcel-cards) below.
+Would rather not write YAML at all? Three community projects package all of
+this into a finished card that finds your sensors by itself — see [ready-made
+parcel cards](#ready-made-parcel-cards) below.
 
 !!! note "Not running the aggregator?"
     These work per carrier too. Swap the aggregator's sensors for the carrier's
@@ -1240,16 +1257,18 @@ COMMUNITY_CARDS_SECTION = """\
 
 The snippets above are deliberately plain — they use cards Home Assistant already
 ships, so nothing extra has to be installed. If you would rather have a finished
-parcel card, two community projects build one on top of these same sensors and
-detect your carriers automatically:
+parcel card, three community projects build one on top of these same sensors
+and detect your carriers automatically:
 
 {cards}
 
-Install either through **HACS → Custom repositories**, category **Dashboard**.
+Install any of them through **HACS → Custom repositories**, category
+**Dashboard**.
 
-Both are independent projects, built and maintained by their authors and not by
-this org. The credit for them is theirs — and so are the bug reports and feature
-requests, which belong in their own trackers rather than in a carrier repo here.
+All three are independent projects, built and maintained by their authors and
+not by this org. The credit for them is theirs — and so are the bug reports and
+feature requests, which belong in their own trackers rather than in a carrier
+repo here.
 
 ## Plugins the snippets use
 
