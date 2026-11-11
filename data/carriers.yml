@@ -273,12 +273,25 @@ ha-ctt:
       countries: ["ES"]
       blurb: CTT's Spanish parcel arm — its codes go into the same integration as CTT and are tracked through CTT Express's own tracker
 
+ha-danske-fragtmaend:
+  region: Denmark
+  countries: ["DK"]
+  auth: trackingnr
+  input: tracking link or consignment number
+  directions: incoming
+  blurb: Danske Fragtmænd's larger, less-frequent deliveries, tracked by the link from your own tracking message, no account needed
+
 ha-dao:
   region: Denmark
   countries: ["DK"]
-  auth: account
-  directions: incoming
-  blurb: DAO — sign in once and every parcel DAO's own app or site already links to your account shows up automatically
+  auth:
+    Tracking codes:
+      kind: trackingnr
+      input: tracking code
+    Account:
+      kind: account
+  directions: incoming; incoming+outgoing with a DAO account
+  blurb: DAO parcels — follow one by its tracking code without an account, or sign in and have every parcel DAO already links to your account show up by itself
 
 ha-delhivery:
   region: India
