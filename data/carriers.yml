@@ -533,8 +533,8 @@ ha-matkahuolto:
   blurb: Matkahuolto — Finnish parcel and logistics tracking, without an account
 
 ha-meest:
-  region: Ukraine, Poland, the United States & Canada
-  countries: ["UA", "PL", "US", "CA"]
+  region: Ukraine
+  countries: ["UA"]
   auth:
     Tracking:
       kind: trackingnr
@@ -542,7 +542,7 @@ ha-meest:
     Account:
       kind: account
   directions: incoming+outgoing
-  blurb: Meest parcels to and from Ukraine, by tracking number or imported from your own Meest account
+  blurb: Meest parcels on its Ukrainian network, domestic or arriving from abroad, by tracking number or imported from your own Meest account
 
 ha-mondial-relay:
   region: France, Belgium, the Netherlands, Spain & Portugal
