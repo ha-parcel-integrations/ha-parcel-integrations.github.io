@@ -782,12 +782,12 @@ ha-seur:
   blurb: SEUR package and parcel deliveries, imported from your miSEUR account
 
 ha-shopee-xpress:
-  region: Brazil, Indonesia, Malaysia, the Philippines, Thailand & Vietnam
-  countries: ["BR", "ID", "MY", "PH", "TH", "VN"]
+  region: Brazil, Indonesia, Malaysia, the Philippines, Taiwan, Thailand & Vietnam
+  countries: ["BR", "ID", "MY", "PH", "TW", "TH", "VN"]
   auth: trackingnr
   input: tracking code
   directions: incoming
-  blurb: Shopee Xpress (SPX) — Shopee's own in-house last-mile carrier for its Southeast Asian and South American markets
+  blurb: Shopee Xpress (SPX) — Shopee's own in-house last-mile carrier for its Asian and South American markets
 
 ha-slovak-parcel-service:
   region: Slovakia

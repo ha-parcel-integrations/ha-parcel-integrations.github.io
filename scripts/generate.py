@@ -133,6 +133,7 @@ COUNTRY_NAMES = {
     "SI": "Slovenia",
     "SK": "Slovakia",
     "TH": "Thailand",
+    "TW": "Taiwan",
     "UA": "Ukraine",
     "US": "United States",
     "VN": "Vietnam",
