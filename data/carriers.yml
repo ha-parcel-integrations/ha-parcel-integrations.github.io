@@ -899,3 +899,11 @@ ha-vinted-go:
   auth: account
   directions: incoming+outgoing
   blurb: Vinted Go (formerly Homerr) — passwordless e-mail login, locker and parcel-shop network
+
+ha-xlcourier:
+  region: United Kingdom
+  countries: ["GB"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: XLCourier's extra-large and heavy deliveries across the UK, such as furniture, appliances and e-bikes, tracked by code with no account needed
