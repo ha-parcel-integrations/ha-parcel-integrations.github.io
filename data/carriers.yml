@@ -81,8 +81,8 @@ ha-acs-courier:
   blurb: ACS Courier — one of Greece's largest couriers, tracked without an account
 
 ha-airmee:
-  region: Sweden
-  countries: ["SE"]
+  region: Sweden and Denmark
+  countries: ["SE", "DK"]
   auth:
     Tracking:
       kind: trackingnr
@@ -90,7 +90,7 @@ ha-airmee:
     Account:
       kind: account
   directions: incoming
-  blurb: Airmee — Swedish last-mile delivery, by tracking link or by logging in with an SMS code
+  blurb: Airmee — last-mile delivery in Sweden and Denmark, by tracking link or by logging in with an SMS code
 
 ha-amazon:
   region: Amazon's own storefronts — one sign-in per country you shop on
