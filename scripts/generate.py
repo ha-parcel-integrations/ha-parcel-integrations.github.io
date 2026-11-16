@@ -353,6 +353,11 @@ def org_repos() -> list[dict]:
 # --------------------------------------------------------------------------
 
 
+# A carrier with one label per country (GLS) cannot name a single tracking
+# backend, so this key stands for every backend the mapping does not name.
+REST_OF_BACKENDS = "*"
+
+
 @dataclass(frozen=True)
 class Connection:
     """One way to connect a carrier: an auth kind and what the user types.
@@ -589,8 +594,13 @@ def _connections_of(
             f"{repo}: `input` belongs inside each backend when `auth` is "
             "variant-keyed, not next to it"
         )
+    if REST_OF_BACKENDS in auth and len(auth) == 1:
+        raise GenerateError(
+            f"{repo}: `auth` with only {REST_OF_BACKENDS!r} is the scalar form — "
+            "write `auth: <kind>` instead"
+        )
     if isinstance(capabilities, dict):
-        unknown = sorted(set(auth) - set(capabilities))
+        unknown = sorted(set(auth) - set(capabilities) - {REST_OF_BACKENDS})
         if unknown:
             raise GenerateError(
                 f"{repo}: `auth` names backend(s) {', '.join(unknown)}, which "
@@ -609,7 +619,7 @@ def _connections_of(
             Connection(
                 auth=_checked_auth(repo, spec["kind"]),
                 input=spec.get("input"),
-                variant=label,
+                variant=None if label == REST_OF_BACKENDS else label,
             )
         )
     # Account first, then tracking code, then API key — whatever order the

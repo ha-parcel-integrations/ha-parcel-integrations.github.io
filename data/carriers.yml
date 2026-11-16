@@ -27,6 +27,9 @@
 #                    API Tracking:
 #                      kind: apikey
 #                      input: tracking code
+#              The key "*" (quoted) stands for every backend the mapping does
+#              not name, shown without a label — for a carrier whose labels
+#              are per country rather than per source (ha-gls).
 #              Only reach for that when the auth kinds genuinely differ —
 #              one backend needing an extra field is `input` prose, not a
 #              second entry.
@@ -431,10 +434,14 @@ ha-geniki-taxydromiki:
 ha-gls:
   region: 25 countries — Austria, Belgium, Croatia, Czechia, Denmark, Finland, France, Hungary, Ireland, Italy, Liechtenstein, Luxembourg, Romania, Serbia, Slovakia, Slovenia, Sweden and Switzerland share GLS's pan-EU tracker; Canada, Germany, the Netherlands, Poland, Portugal, Spain and the United States use national backends
   countries: ["NL", "DE", "AT", "BE", "CH", "HR", "CZ", "DK", "FI", "FR", "HU", "IE", "IT", "LI", "LU", "RO", "RS", "SE", "SK", "SI", "CA", "US", "PL", "ES", "PT"]
-  auth: trackingnr
-  input: tracking code + postal code (US and PL need only the tracking code; Spain and Portugal need both to match)
+  auth:
+    Denmark (account):
+      kind: account
+    "*":
+      kind: trackingnr
+      input: tracking code + postal code (US and PL need only the tracking code; Spain and Portugal need both to match)
   directions: incoming
-  blurb: GLS parcels, just like the gls-info.nl website
+  blurb: GLS parcels by tracking code in 25 countries, or found automatically from a Danish GLS account
 
 ha-gobolt:
   region: Canada and the United States
