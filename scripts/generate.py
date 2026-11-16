@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Generate the pages that must never be hand-written.
 
-Three pages on this site describe things that already have a source of truth
+Four pages on this site describe things that already have a source of truth
 somewhere else in the org:
 
 * ``docs/carriers.md``      — every carrier repo, its version and its icon,
   plus the capabilities its own ``const.py`` declares, shown per carrier
 * ``docs/automations.md``   — the aggregator's ``examples/automations/`` folder
 * ``docs/dashboards.md``    — the aggregator's ``examples/dashboards/`` folder
+* ``docs/works-with.md``    — the community projects below, with each one's
+  own screenshot hotlinked from its repo
 
 All of them are rebuilt from the GitHub API on every deploy. Nothing here is
 committed; a stale copy in git is worse than no copy at all, because the
@@ -222,6 +224,44 @@ COMMUNITY_CARDS = [
             "per package and filters per carrier, status or direction."
         ),
         "images/preview.png",
+    ),
+]
+
+# Whole dashboards and apps, built by other people, that show this suite's
+# parcels among everything else they do. Same shape as COMMUNITY_CARDS.
+COMMUNITY_DASHBOARDS = [
+    (
+        "HausPanel",
+        "alpacalabs-de/hauspanel",
+        "alpacalabs-de",
+        (
+            "A dashboard that lays itself out from your rooms, for wall "
+            "tablets, phones and a camera screen. A **Parcels** status chip on "
+            "Home shows when the next parcel comes or how many are on the "
+            "way; a tap lists them with sender, carrier, status and delivery "
+            "time, plus the ones delivered in the last two days, and opens a "
+            "parcel's tracking page. Uses the aggregator when it is there, "
+            "otherwise every carrier's own sensors."
+        ),
+        "images/screenshots/tablet-home.png",
+    ),
+]
+
+COMMUNITY_APPS = [
+    (
+        "HKI 7",
+        "jimz011/android-hki7",
+        "jimz011",
+        (
+            "A Home Assistant companion app for Android with a **Parcels** "
+            "widget: incoming, delivered and outgoing parcels with carrier "
+            "logos, delivery windows and tracking history, and adding a "
+            "parcel by tracking number for carriers that offer "
+            "`track_parcel`. The app names and badges the carriers it "
+            "knows; others show up as a generic parcel. Install from "
+            "[Google Play](https://play.google.com/store/apps/details?id=com.jimz011apps.hki7)."
+        ),
+        "store-assets/play_feature_graphic_1024x500.png",
     ),
 ]
 
@@ -1233,9 +1273,9 @@ Like the automations, they are carrier-agnostic: they read the aggregator's
 merged sensors and the canonical parcel fields, so a card keeps working when you
 add a carrier — no new rows to write.
 
-Would rather not write YAML at all? Two community projects package all of
-this into a finished card that finds your sensors by itself — see [ready-made
-parcel cards](#ready-made-parcel-cards) below.
+Would rather not write YAML at all? Community projects package all of this
+into a finished card that finds your sensors by itself — see [Works
+with](works-with.md#dashboard-cards).
 
 !!! note "Not running the aggregator?"
     These work per carrier too. Swap the aggregator's sensors for the carrier's
@@ -1254,18 +1294,10 @@ COMMUNITY_CARDS_SECTION = """\
 
 The snippets above are deliberately plain — they use cards Home Assistant already
 ships, so nothing extra has to be installed. If you would rather have a finished
-parcel card, two community projects build one on top of these same sensors
-and detect your carriers automatically:
-
-{cards}
-
-Install any of them through **HACS → Custom repositories**, category
-**Dashboard**.
-
-All three are independent projects, built and maintained by their authors and
-not by this org. The credit for them is theirs — and so are the bug reports and
-feature requests, which belong in their own trackers rather than in a carrier
-repo here.
+parcel card, {names} build one on top of these same sensors and detect your
+carriers automatically. They are listed, with screenshots, on [Works
+with](works-with.md#dashboard-cards), next to whole dashboards and apps that
+show your parcels.
 
 ## Plugins the snippets use
 
@@ -1433,16 +1465,79 @@ def render_dashboards() -> str:
         f"| [{author}](https://github.com/{repo.split('/')[0]}) | {does} |"
         for name, (repo, author, does) in sorted(CUSTOM_CARDS.items())
     ]
-    # A card list wants room for a sentence about each one; the plugins below
-    # fit a table because there is only one thing to say about them.
-    cards = "\n\n".join(
+    names = " and ".join(
+        f"[{name}](https://github.com/{repo})" for name, repo, *_ in COMMUNITY_CARDS
+    )
+    out.append(COMMUNITY_CARDS_SECTION.format(names=names, rows="\n".join(rows)))
+    return "\n".join(out) + "\n"
+
+
+# --------------------------------------------------------------------------
+# Page: works with
+# --------------------------------------------------------------------------
+
+WORKS_WITH = """\
+---
+description: >-
+  Community Lovelace cards, dashboards and apps that show the parcels from
+  these Home Assistant integrations.
+---
+
+# Works with
+
+Projects by other people that read the same parcel sensors and show your
+parcels without any YAML of your own. They follow the [parcel
+contract](contract.md), so they pick up a carrier as soon as you install it.
+
+All of them are independent projects, built and maintained by their authors and
+not by this org. The credit for them is theirs — and so are the bug reports and
+feature requests, which belong in their own trackers rather than in a carrier
+repo here.
+
+## Dashboard cards
+
+A finished card to drop on a dashboard you already have. Install through
+**HACS → Custom repositories**, category **Dashboard**.
+
+{cards}
+
+## Dashboards
+
+A whole dashboard, with parcels as one part of it. Install through **HACS →
+Custom repositories**, category **Integration**.
+
+{dashboards}
+
+## Apps
+
+{apps}
+
+## Built something?
+
+If your card, dashboard or app reads these sensors, [tell us in Show and
+tell](https://github.com/{org}/.github/discussions/new?category=show-and-tell)
+and it goes on this page. Prefer writing your own? The [dashboard
+cards](dashboards.md) are a plain starting point.
+"""
+
+
+def _community_list(projects: list[tuple[str, str, str, str, str]]) -> str:
+    # A sentence or three about each one does not fit a table.
+    return "\n\n".join(
         f"-   **[{name}](https://github.com/{repo})** — by "
         f"[{author}](https://github.com/{author})\n\n    {does}"
         f"{_card_screenshot(name, repo, shot)}"
-        for name, repo, author, does, shot in COMMUNITY_CARDS
+        for name, repo, author, does, shot in projects
     )
-    out.append(COMMUNITY_CARDS_SECTION.format(cards=cards, rows="\n".join(rows)))
-    return "\n".join(out) + "\n"
+
+
+def render_works_with() -> str:
+    return WORKS_WITH.format(
+        org=ORG,
+        cards=_community_list(COMMUNITY_CARDS),
+        dashboards=_community_list(COMMUNITY_DASHBOARDS),
+        apps=_community_list(COMMUNITY_APPS),
+    )
 
 
 # --------------------------------------------------------------------------
@@ -1515,6 +1610,7 @@ def main() -> int:
         (DOCS / "carriers.md").write_text(render_carriers(carriers), encoding="utf-8")
         (DOCS / "automations.md").write_text(render_automations(), encoding="utf-8")
         (DOCS / "dashboards.md").write_text(render_dashboards(), encoding="utf-8")
+        (DOCS / "works-with.md").write_text(render_works_with(), encoding="utf-8")
         BUILD.mkdir(parents=True, exist_ok=True)
         (BUILD / "profile-README.md").write_text(render_profile(), encoding="utf-8")
         # Consumed by scripts/sync_org.py to point each repo's About box here.
@@ -1531,6 +1627,7 @@ def main() -> int:
     print(f"✓ docs/carriers.md          ({len(carriers)} carriers)")
     print("✓ docs/automations.md")
     print("✓ docs/dashboards.md")
+    print("✓ docs/works-with.md")
     print("✓ build/profile-README.md   (pushed by scripts/sync_org.py)")
     return 0
 

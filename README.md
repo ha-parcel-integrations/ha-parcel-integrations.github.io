@@ -18,6 +18,7 @@ rather than copying it.
 | `docs/carriers.md` | Every `ha-*` repo in the org: manifest, release, icon |
 | `docs/automations.md` | `ha-parcel-aggregator/examples/automations/**` |
 | `docs/dashboards.md` | `ha-parcel-aggregator/examples/dashboards/**` |
+| `docs/works-with.md` | The community lists in `scripts/generate.py`, screenshots hotlinked from each project |
 | `docs/assets/icons/*.png` | Each carrier's `custom_components/<domain>/brand/icon.png` |
 | `build/profile-README.md` | A general project introduction with links to the website |
 

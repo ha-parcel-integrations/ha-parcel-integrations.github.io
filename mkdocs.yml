@@ -111,6 +111,7 @@ nav:
   - Build something:
       - Automation cookbook: automations.md
       - Dashboard cards: dashboards.md
+      - Works with: works-with.md
       - Track from e-mail: email.md
   - Reference:
       - Parcel contract: contract.md
