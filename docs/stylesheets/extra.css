@@ -472,7 +472,7 @@
    the logos, the same wall the beta badge was pulled back from. */
 .md-typeset .carrier-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto 1fr;
   gap: 0.3rem;
   padding-top: 0.45rem;
   border-top: 1px solid var(--carrier-line);
@@ -537,6 +537,14 @@
   .md-typeset .carrier-hacs {
     min-height: 2.2rem;
   }
+}
+
+/* "Marketplace" is the longest label in the footer; trim the side padding so
+   it fits the narrowest two-column tile. */
+.md-typeset .carrier-github,
+.md-typeset .carrier-hacs {
+  padding: 0 0.15rem;
+  gap: 0.2rem;
 }
 
 .md-typeset .carrier-github svg,

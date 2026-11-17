@@ -193,14 +193,14 @@ document$.subscribe(() => {
             ${
               carrier.hacs_url
                 ? `<a class="carrier-repo md-button md-button--primary" href="${esc(carrier.hacs_url)}"
-               data-umami-event="carrier-click:${esc(carrier.repo)}">Open in HACS</a>`
+               data-umami-event="carrier-click:${esc(carrier.repo)}">Open in Marketplace</a>`
                 : ""
             }
           </div>
           ${
             carrier.hacs_url
               ? ""
-              : `<p class="carrier-dialog__hint">Not in the HACS default list yet —
+              : `<p class="carrier-dialog__hint">Not in the Marketplace default list yet —
                <a href="/install/#1-add-the-carriers-you-use">add it as a custom repository</a>.</p>`
           }
         </div>

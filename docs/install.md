@@ -1,6 +1,6 @@
 ---
 description: >-
-  Install package tracking in Home Assistant via HACS — add the carriers that
+  Install package tracking in Home Assistant via the Marketplace — add the carriers that
   deliver to you, then optionally merge them with the Parcel Aggregator.
 ---
 
@@ -9,10 +9,11 @@ description: >-
 ## What you need
 
 - Home Assistant **2025.12** or newer
-- [HACS](https://hacs.xyz/) installed
+- The **Marketplace**, built into Home Assistant since 2026.11. On an older
+  version, install [HACS](https://hacs.xyz/) first, which is the same store
 
-Every integration in this suite installs through HACS. Many are already in the
-HACS default list; the rest are added once as a custom repository.
+Every integration in this suite installs through the Marketplace. Many are
+already in its default list; the rest are added once as a custom repository.
 
 ## 1. Add the carriers you use
 
@@ -22,14 +23,14 @@ Start by finding the carriers that deliver to you:
 
 Then repeat this for each one:
 
-1. **Get it into HACS.** Select the carrier on the [carriers page](carriers.md):
-    - With an **Open in HACS** button, it is in the HACS default list — click
-      it, or just search for the carrier's name in HACS.
-    - Without one, open **HACS → ⋮ → Custom repositories**, paste the
+1. **Get it into the Marketplace.** Select the carrier on the [carriers page](carriers.md):
+    - With an **Open in Marketplace** button, it is in the default list — click
+      it, or just search for the carrier's name in the Marketplace.
+    - Without one, open **Marketplace → ⋮ → Custom repositories**, paste the
       repository URL from its **View on GitHub** button (for example
       `https://github.com/ha-parcel-integrations/ha-postnl`) and pick type
-      **Integration**. After that it shows up in the HACS search too.
-2. **Download** it from HACS
+      **Integration**. After that it shows up in the Marketplace search too.
+2. **Download** it from the Marketplace
 3. **Restart** Home Assistant
 4. Go to **Settings → Devices & Services → Add Integration** and search for the
    carrier
@@ -51,8 +52,8 @@ and every carrier keeps working exactly as it does now.
 
 Do this once, after at least one carrier is set up.
 
-1. It is in the HACS default list: search HACS for **Parcel Aggregator**, or
-   [open it in HACS](https://my.home-assistant.io/redirect/hacs_repository/?owner=ha-parcel-integrations&repository=ha-parcel-aggregator&category=integration)
+1. It is in the default list: search the Marketplace for **Parcel Aggregator**, or
+   [open it in the Marketplace](https://my.home-assistant.io/redirect/hacs_repository/?owner=ha-parcel-integrations&repository=ha-parcel-aggregator&category=integration)
    directly
 2. Download it, restart, then add it under **Settings → Devices & Services**
 3. There is nothing to configure — no credentials, no options

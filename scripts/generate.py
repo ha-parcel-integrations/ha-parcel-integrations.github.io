@@ -44,7 +44,7 @@ ORG = "ha-parcel-integrations"
 
 
 def hacs_url(repo: str) -> str:
-    """My Home Assistant redirect that opens the repo in the visitor's own HACS."""
+    """My Home Assistant redirect that opens the repo in the visitor's own Marketplace."""
     return (
         "https://my.home-assistant.io/redirect/hacs_repository/"
         f"?owner={ORG}&repository={repo}&category=integration"
@@ -770,7 +770,7 @@ def collect_carriers() -> list[Carrier]:
             # convention, but tolerate one.
             version=releases[repo].lstrip("v"),
             url=f"https://github.com/{ORG}/{repo}",
-            # Only repos HACS lists by default: for the rest the redirect would
+            # Only repos the Marketplace lists by default: for the rest the redirect would
             # offer a custom-repository add, which is not what a plain button promises.
             hacs_url=hacs_url(repo) if f"{ORG}/{repo}".lower() in in_hacs else "",
             region=meta["region"],
@@ -1076,8 +1076,8 @@ def _card(carrier: Carrier) -> str:
         )
 
     hacs_link = (
-        f'<a class="carrier-hacs" href="{carrier.hacs_url}" aria-label="{name} in HACS" '
-        f'data-umami-event="carrier-click:{carrier.repo}">{HA_MARK}HACS</a>'
+        f'<a class="carrier-hacs" href="{carrier.hacs_url}" aria-label="{name} in the Marketplace" '
+        f'data-umami-event="carrier-click:{carrier.repo}">{HA_MARK}Marketplace</a>'
         if carrier.hacs_url
         else ""
     )
@@ -1303,7 +1303,7 @@ show your parcels.
 
 A snippet that needs more than a built-in card reaches for one of these two
 Lovelace plugins instead. They are helpers *inside* a card rather than cards of
-their own, also installed through HACS:
+their own, also installed through the Marketplace:
 
 | Plugin | By | What it adds |
 |---|---|---|
@@ -1497,13 +1497,13 @@ repo here.
 ## Dashboard cards
 
 A finished card to drop on a dashboard you already have. Install through
-**HACS → Custom repositories**, category **Dashboard**.
+**Marketplace → Custom repositories**, category **Dashboard**.
 
 {cards}
 
 ## Dashboards
 
-A whole dashboard, with parcels as one part of it. Install through **HACS →
+A whole dashboard, with parcels as one part of it. Install through **Marketplace →
 Custom repositories**, category **Integration**.
 
 {dashboards}
@@ -1559,7 +1559,7 @@ Track your parcels in [Home Assistant](https://www.home-assistant.io/), across c
 
 ## How it works
 
-Install the integrations for the carriers you use through HACS. Each works independently and provides parcel sensors and delivery events for your Home Assistant setup.
+Install the integrations for the carriers you use through the Marketplace. Each works independently and provides parcel sensors and delivery events for your Home Assistant setup.
 
 If you use several carriers, the optional **Parcel Aggregator** brings them together into combined sensors, a deliveries calendar, and shared events. Write an automation once and use it across your deliveries.
 
