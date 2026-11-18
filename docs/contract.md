@@ -23,9 +23,9 @@ came from PostNL or Sameday.
 | `registered` | The carrier knows about the label, but the parcel is not moving yet |
 | `in_transit` | Picked up; somewhere in the carrier's network |
 | `out_for_delivery` | On the delivery vehicle today |
-| `at_pickup_point` | Arrived at the chosen ServicePoint / Point / ParcelShop, ready to collect |
+| `at_pickup_point` | Arrived at a pickup point (ServicePoint / Point / ParcelShop / locker), ready to collect — also when a failed home delivery was taken there |
 | `delivered` | Handed over — to you, your mailbox, a neighbour, or collected by you |
-| `returning` | Delivery failed; on its way back to the sender |
+| `returning` | Delivery failed; on its way back to the sender, or already back there |
 | `problem` | The carrier reports an exception or needs intervention |
 | `unknown` | The carrier sent something this integration has not mapped yet |
 
@@ -54,16 +54,17 @@ has the same top-level keys.
 | `receiver` | string \| null | Recipient name |
 | `status` | `ParcelStatus` | Canonical status — see above |
 | `raw_status` | string \| null | The carrier's own status string |
-| `delivered` | bool | Whether it has been delivered |
-| `delivered_at` | ISO 8601 \| null | When, if known |
-| `planned_from` | ISO 8601 \| null | Start of the expected delivery window |
-| `planned_to` | ISO 8601 \| null | End of the expected delivery window |
-| `pickup` | bool | Headed for a pickup point rather than your address |
-| `pickup_point` | string \| null | Which one, when `pickup` is true |
+| `delivered` | bool | Whether the journey is over: delivered, or a return that is back at the sender |
+| `delivered_at` | ISO 8601 \| null | When, if known. For a pickup-point parcel: when you collected it |
+| `planned_from` | ISO 8601 \| null | Start of the expected arrival window — at your address, or at the pickup point |
+| `planned_to` | ISO 8601 \| null | End of that window |
+| `pickup` | bool | The parcel goes to a pickup point rather than your address. Stays `true` after you collected it |
+| `pickup_point` | string \| null | The pickup point's name, when `pickup` is true |
 | `url` | string \| null | Deep link to the carrier's tracking page |
 | `weight` | float \| null | Kilograms, when the carrier exposes it |
 | `dimensions` | dict \| null | `{length, width, height, text}` in centimetres; `text` is a ready-made `"L x W x H cm"` |
 | `history` | list \| null | Status timeline, oldest → newest, each `{timestamp, status, raw_status}` |
+| `raw` | dict | The carrier's own record, untouched — carrier events and sensors only |
 
 A few notes that save debugging time:
 
@@ -73,13 +74,17 @@ A few notes that save debugging time:
   see exactly which fields it populates.
 - **`history` is opt-in.** It stays `null` unless you enable *Parcel history* in
   that carrier's options — it is off by default because it grows the attribute
-  payload considerably.
-- **`raw` exists on carrier events only.** The carrier's untouched payload is
-  available on its own events; the aggregator strips it to keep the unified
-  events small.
-- **`planned_from`/`planned_to` are as precise as the carrier is.** Some give an
-  all-day window until an hour before delivery, then narrow it. Build "today /
-  tomorrow" logic on them rather than exact hours.
+  payload considerably. With the option on, a parcel without events has `[]`.
+- **`raw` is dropped by the aggregator.** The carrier's untouched payload is
+  available on its own events and sensors; the aggregator strips it to keep the
+  unified events small.
+- **`planned_from`/`planned_to` are as precise as the carrier is.** A real
+  window keeps its hours. A carrier that gives only a date becomes
+  `00:00`–`23:59:59` that day, and one that gives a single time runs from that
+  time to `23:59:59`. Build "today / tomorrow" logic on them rather than exact
+  hours.
+- **The delivery window empties when it no longer applies**: once the parcel
+  is at the pickup point, returning, or delivered, both fields are `null`.
 
 ## Events
 
@@ -91,8 +96,8 @@ optional aggregator, it subscribes to all of them and re-emits them under
 |---|---|---|
 | `…_parcel_registered` | A new parcel appears | — |
 | `…_parcel_status_changed` | `status` changes — *except* the final hop to delivered | `old_status`, `new_status` |
-| `…_parcel_delivered` | The parcel is delivered | — |
-| `…_parcel_delivery_time_changed` | The expected delivery window moves | `old_planned_from`, `new_planned_from`, `old_planned_to`, `new_planned_to` |
+| `…_parcel_delivered` | The parcel is delivered (not when a return reaches the sender) | — |
+| `…_parcel_delivery_time_changed` | The expected delivery window moves to a new time (not when it empties) | `old_planned_from`, `new_planned_from`, `old_planned_to`, `new_planned_to` |
 
 Carriers that support outgoing parcels also fire
 `…_outgoing_parcel_status_changed` and `…_outgoing_parcel_delivered`.
@@ -145,6 +150,20 @@ aggregator's just as well.
 {% set parcels = state_attr('sensor.parcel_aggregator_incoming_parcels', 'parcels') %}
 {{ parcels | selectattr('status', 'eq', 'out_for_delivery') | list | count }}
 ```
+
+Which parcel is in which sensor:
+
+| Sensor | Holds |
+|---|---|
+| Incoming parcels | Every parcel on its way to you that is not delivered yet, whatever its status |
+| Delivered parcels | Delivered parcels, and returns back at the sender, trimmed by the retention option |
+| Awaiting pickup | Parcels with status `at_pickup_point` |
+| En route to pickup point | Parcels going to a pickup point that have not arrived there yet, and are not returning |
+| Next delivery | The earliest `planned_from` among parcels whose window has not ended yet |
+| Deliveries calendar | One event per parcel with a delivery window; a whole-day window shows as an all-day event |
+
+Incoming parcels always holds everything in awaiting pickup and en route to
+pickup point. Those two never overlap, and a delivered parcel is in neither.
 
 ## Stability
 
