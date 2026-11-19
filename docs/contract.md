@@ -54,7 +54,7 @@ has the same top-level keys.
 | `receiver` | string \| null | Recipient name |
 | `status` | `ParcelStatus` | Canonical status — see above |
 | `raw_status` | string \| null | The carrier's own status string |
-| `delivered` | bool | Whether the journey is over: delivered, or a return that is back at the sender |
+| `delivered` | bool | Whether the journey is over: delivered, or a parcel sent back to its sender that is back there. A return you send yourself counts as delivered once it reaches the shop |
 | `delivered_at` | ISO 8601 \| null | When, if known. For a pickup-point parcel: when you collected it |
 | `planned_from` | ISO 8601 \| null | Start of the expected arrival window — at your address, or at the pickup point |
 | `planned_to` | ISO 8601 \| null | End of that window |
