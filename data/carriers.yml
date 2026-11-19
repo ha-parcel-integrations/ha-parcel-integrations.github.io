@@ -619,6 +619,14 @@ ha-orlen-paczka:
   directions: incoming
   blurb: ORLEN Paczka — Poland's parcel locker network, tracked without an account
 
+ha-overseas-express:
+  region: Croatia
+  countries: ["HR"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Overseas Express, Austrian Post's Croatian parcel courier, tracked by code with no account needed
+
 ha-paack:
   region: Spain, Portugal, France and Italy
   countries: ["ES", "PT", "FR", "IT"]
