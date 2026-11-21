@@ -164,6 +164,8 @@ Which parcel is in which sensor:
 
 Incoming parcels always holds everything in awaiting pickup and en route to
 pickup point. Those two never overlap, and a delivered parcel is in neither.
+A carrier that can deliver to pickup points or lockers offers both pickup sensors
+from the start; they read 0 until a parcel shows the status or pickup flag.
 
 ## Stability
 
