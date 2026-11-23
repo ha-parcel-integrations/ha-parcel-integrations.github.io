@@ -147,6 +147,7 @@ COUNTRY_NAMES = {
 # repo's own CAPABILITIES constant is validated against, this is only used to
 # label and order them on the page.
 CAPABILITY_LABELS = {
+    "contents": ("Contents", "`contents`"),
     "delivery_window": ("Delivery window", "`planned_from` / `planned_to`"),
     "pickup_point": ("Pickup point", "`pickup_point`"),
     "weight": ("Weight", "`weight`"),
