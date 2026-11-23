@@ -52,6 +52,7 @@ has the same top-level keys.
 | `barcode` | string | Tracking code |
 | `sender` | string \| null | Sender name, often the webshop |
 | `receiver` | string \| null | Recipient name |
+| `contents` | string \| null | What is in the parcel, as plain text — see [Parcel contents](#parcel-contents) |
 | `status` | `ParcelStatus` | Canonical status — see above |
 | `raw_status` | string \| null | The carrier's own status string |
 | `delivered` | bool | Whether the journey is over: delivered, or a parcel sent back to its sender that is back there. A return you send yourself counts as delivered once it reaches the shop |
@@ -85,6 +86,27 @@ A few notes that save debugging time:
   hours.
 - **The delivery window empties when it no longer applies**: once the parcel
   is at the pickup point, returning, or delivered, both fields are `null`.
+
+### Parcel contents
+
+`contents` sits right after `receiver`. It is always present: `null` when
+nothing is known, never an empty string. It is at most 120 characters with
+whitespace collapsed, and several items are joined as `"A; B"`. It is a top-level
+key, so it survives the aggregator's `raw` stripping.
+
+It comes from the first of these that has a value:
+
+1. **Your own text**, set with [`update_contents`](actions.md#update_contents) or
+   the `contents` field of `track_parcel`.
+2. **A name you gave the parcel** in the carrier's own account (Canada Post only).
+3. **The text the carrier sends.** Today that is Vinted Go; Amazon joins the
+   order's item titles. Meest, Hermes and DPD UK are awaiting data. Generic
+   carrier text counts as unknown, so you get `null` rather than "Parcel".
+
+Your own text is kept on your own Home Assistant, never sent to a carrier. It
+appears in the parcel sensors' attributes and in event payloads, and diagnostics
+redact it. Changing the contents on its own fires no event. Select a carrier on
+the [carriers page](carriers.md) to see whether it reports contents itself.
 
 ## Events
 

@@ -113,8 +113,10 @@ nav:
       - Dashboard cards: dashboards.md
       - Works with: works-with.md
       - Track from e-mail: email.md
+      - Label your parcels: contents.md
   - Reference:
       - Parcel contract: contract.md
+      - Actions: actions.md
 
 # Reachable from the landing page and the footer, but a donate link or a
 # disclaimer does not belong in the nav between the reference docs.
