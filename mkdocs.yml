@@ -114,6 +114,7 @@ nav:
       - Works with: works-with.md
       - Track from e-mail: email.md
       - Label your parcels: contents.md
+      - Build a carrier: build-a-carrier.md
   - Reference:
       - Parcel contract: contract.md
       - Actions: actions.md

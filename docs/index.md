@@ -71,6 +71,10 @@ That is the most useful thing you can tell us.
 the status vocabulary is. A request from someone who actually receives those
 parcels is worth a great deal.
 
+Comfortable with Python? [Build it yourself](build-a-carrier.md) from the
+carrier template. The page also explains how a carrier you built joins the
+suite.
+
 ## Support the project
 
 Every integration here is free and MIT-licensed, and stays that way. Sponsoring

@@ -859,6 +859,9 @@ update here.
 is. A request from someone who actually receives those parcels is worth a great
 deal, because the status vocabulary can only be confirmed against live shipments.
 
+Comfortable with Python? You can also [build it yourself](build-a-carrier.md)
+from the carrier template, and we will bring it into the family.
+
 That is also what the **Early release** badge above means: the integration works,
 but its status mapping was inferred rather than observed. If one of your parcels
 reports `unknown`, the integration logs a warning with a one-click report link —
