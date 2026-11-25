@@ -407,6 +407,14 @@ ha-evri:
   directions: incoming+outgoing
   blurb: Evri parcels and packages in the UK, tracked without an account
 
+ha-express-one:
+  region: Croatia and Bulgaria — pick your country at setup
+  countries: ["HR", "BG"]
+  auth: trackingnr
+  input: tracking code
+  directions: incoming
+  blurb: Express One parcels in Croatia and Bulgaria, tracked by code with no account needed
+
 ha-fan-courier:
   region: Romania
   countries: ["RO"]
